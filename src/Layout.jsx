@@ -7,11 +7,10 @@ import './components/i18n';
 // Apply saved theme immediately (before first render)
 try { initThemeFromStorage(); } catch(e) {}
 
-// Apply saved language
+// Apply saved language direction before first render (i18n.jsx handles subsequent changes)
 try {
   const language = localStorage.getItem('language') || 'he';
-  const isRTL = ['he', 'ar'].includes(language);
-  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
   document.documentElement.lang = language;
 } catch(e) {}
 
@@ -24,7 +23,7 @@ export default function Layout({ children, currentPageName }) {
   const [theme, setTheme] = useState('light');
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
 
   const touchStartY = useRef(0);
   const holdTimer = useRef(null);
@@ -33,10 +32,7 @@ export default function Layout({ children, currentPageName }) {
   useEffect(() => {
     setMounted(true);
     setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-    const isRTL = ['he', 'ar'].includes(i18n.language);
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-    document.documentElement.lang = i18n.language;
-  }, [i18n.language]);
+  }, []);
 
   const handleTouchStart = (e) => {
     touchStartY.current = e.touches[0].clientY;

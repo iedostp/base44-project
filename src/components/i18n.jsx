@@ -1225,4 +1225,11 @@ i18n
     }
   });
 
+// Keep document dir/lang in sync whenever the language changes
+i18n.on('languageChanged', (lng) => {
+  const isRTL = lng === 'he';
+  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.lang = lng;
+});
+
 export default i18n;
