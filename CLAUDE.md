@@ -64,3 +64,11 @@ All UI primitives are shadcn/ui components in `src/components/ui/` (Radix UI bas
 ### Data Fetching Pattern
 
 Pages use TanStack Query (`useQuery` / `useMutation`) for all Base44 entity operations. The shared `queryClientInstance` is in `src/lib/query-client.js`.
+
+## Development Guidelines
+
+### Hebrew & RTL Standards
+- **Direction:** Always ensure the UI is rendered in RTL (Right-to-Left). Use `dir="rtl"` on the root element and appropriate CSS classes.
+- **Text Alignment:** Ensure Hebrew text is displayed correctly from right to left. If needed, use manual reversal solutions for text rendering before display as per project requirements.
+- **Layout:** Verify that sidebars, icons, and navigation elements are correctly mirrored for RTL users.
+- **Validation:** After any CSS or layout changes, perform a visual check (or use Playwright) to confirm the RTL layout hasn't broken.
