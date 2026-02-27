@@ -22,7 +22,7 @@ import AppTutorial, { useTutorial } from "../components/tutorial/AppTutorial";
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const isRTL = ['he', 'ar'].includes(i18n.language);
+  const isRTL = i18n.language === 'he';
   const { show: showTutorial, dismiss: dismissTutorial } = useTutorial();
 
   // Derive all state directly from URL — a single counter forces re-render on popstate
