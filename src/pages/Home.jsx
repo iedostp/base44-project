@@ -1,0 +1,464 @@
+import React, { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { base44 } from "@/api/base44Client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Loader2, Building2, Users, FileText, Calendar, Settings, Layers, Home as HomeIcon, PieChart } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import "../components/i18n";
+
+import ProjectHeader from "../components/project/ProjectHeader";
+import DashboardSummary from "../components/project/DashboardSummary";
+import GlobalSearch from "../components/project/GlobalSearch";
+import StagesTab from "../components/project/StagesTab";
+import SuppliersTab from "../components/project/SuppliersTab";
+import BudgetTab from "../components/project/BudgetTab";
+import GanttChart from "../components/project/GanttChart";
+import ProjectCalendar from "../components/project/ProjectCalendar";
+import DocumentsTab from "../components/project/DocumentsTab";
+import SettingsTab from "../components/SettingsTab";
+import NotificationBell from "../components/notifications/NotificationBell";
+import AppTutorial, { useTutorial } from "../components/tutorial/AppTutorial";
+
+export default function Home() {
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
+  const { show: showTutorial, dismiss: dismissTutorial } = useTutorial();
+
+  // Derive all state directly from URL — a single counter forces re-render on popstate
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  useEffect(() => {
+    // Push an initial sentinel entry so Android back can exit the app
+    // rather than navigating backward within the PWA
+    const params = new URLSearchParams(window.location.search);
+    if (!params.get('tab')) {
+      params.set('tab', 'home');
+      window.history.replaceState({ tab: 'home' }, '', `?${params.toString()}`);
+    }
+
+    const handlePopState = (e) => {
+      forceUpdate();
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const getParam = (key, fallback = '') => {
+    if (typeof window === 'undefined') return fallback;
+    return new URLSearchParams(window.location.search).get(key) || fallback;
+  };
+
+  const activeTab = getParam('tab', 'home');
+  const activeModal = getParam('modal', null);
+
+  // Tab order for slide direction calculation
+  const TAB_ORDER = ['home', 'stages', 'budget', 'suppliers', 'documents', 'timeline', 'settings'];
+  const [prevTab, setPrevTab] = React.useState(activeTab);
+  const [slideDir, setSlideDir] = React.useState(0); // -1 left, 1 right
+
+  const setActiveTab = (tab) => {
+    const prevIndex = TAB_ORDER.indexOf(activeTab);
+    const nextIndex = TAB_ORDER.indexOf(tab);
+    setSlideDir(nextIndex > prevIndex ? -1 : 1);
+    setPrevTab(activeTab);
+    const params = new URLSearchParams(window.location.search);
+    params.set('tab', tab);
+    params.delete('modal');
+    // Use replaceState for tab changes so Android back button exits the app
+    // rather than cycling through every tab visited
+    window.history.replaceState({ tab }, '', `?${params.toString()}`);
+    forceUpdate();
+  };
+
+  const setModalState = (modalName) => {
+    const params = new URLSearchParams(window.location.search);
+    if (modalName) {
+      // pushState so Android back button closes the modal
+      params.set('modal', modalName);
+      window.history.pushState({ modal: modalName }, '', `?${params.toString()}`);
+    } else {
+      params.delete('modal');
+      // replaceState when closing so we don't leave a dead entry
+      window.history.replaceState({ tab: activeTab }, '', `?${params.toString()}`);
+    }
+    forceUpdate();
+  };
+  const queryClient = useQueryClient();
+
+  // Fetch current user
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => base44.auth.me(),
+    retry: false,
+  });
+
+  // Fetch project
+  const { data: projects = [], isLoading: projectsLoading } = useQuery({
+    queryKey: ['projects', user?.email],
+    queryFn: () => base44.entities.Project.filter({ created_by: user?.email }),
+    enabled: !!user?.email,
+  });
+
+  const project = projects[0];
+
+  // Fetch stages
+  const { data: stages = [] } = useQuery({
+    queryKey: ['stages', project?.id],
+    queryFn: () => base44.entities.Stage.filter({ project_id: project.id }, 'order'),
+    enabled: !!project?.id,
+  });
+
+  // Fetch tasks
+  const { data: allTasks = [] } = useQuery({
+    queryKey: ['tasks', project?.id],
+    queryFn: async () => {
+      if (!project?.id || !user?.email) return [];
+      const tasks = await base44.entities.Task.filter({ created_by: user.email }, 'order');
+      return tasks;
+    },
+    enabled: !!project?.id && !!user?.email,
+  });
+
+  // Fetch subtopics
+  const { data: allSubtopics = [] } = useQuery({
+    queryKey: ['subtopics', project?.id],
+    queryFn: async () => {
+      if (!project?.id || !user?.email) return [];
+      const subtopics = await base44.entities.Subtopic.filter({ created_by: user.email }, 'order');
+      return subtopics;
+    },
+    enabled: !!project?.id && !!user?.email,
+  });
+
+  // Fetch suppliers
+  const { data: suppliers = [] } = useQuery({
+    queryKey: ['suppliers', project?.id],
+    queryFn: () => base44.entities.Supplier.filter({ project_id: project.id }),
+    enabled: !!project?.id,
+  });
+
+  // Fetch documents
+  const { data: documents = [] } = useQuery({
+    queryKey: ['documents', project?.id],
+    queryFn: () => base44.entities.Document.filter({ project_id: project.id }, '-created_date'),
+    enabled: !!project?.id,
+  });
+
+  // Fetch expenses
+  const { data: expenses = [] } = useQuery({
+    queryKey: ['expenses', project?.id],
+    queryFn: () => base44.entities.Expense.filter({ project_id: project.id }, '-date'),
+    enabled: !!project?.id,
+  });
+
+  // Update project mutation
+  const updateProjectMutation = useMutation({
+    mutationFn: (updatedProject) => {
+      if (project?.id) {
+        return base44.entities.Project.update(project.id, updatedProject);
+      } else {
+        return base44.entities.Project.create(updatedProject);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+  });
+
+  // Update task mutation
+  const updateTaskMutation = useMutation({
+    mutationFn: ({ taskId, updates }) => base44.entities.Task.update(taskId, updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['stages'] });
+    },
+  });
+
+  // Delete document mutation
+  const deleteDocumentMutation = useMutation({
+    mutationFn: (documentId) => base44.entities.Document.delete(documentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+    },
+  });
+
+  // Calculate progress
+  const calculateProgress = () => {
+    if (allTasks.length === 0) return 0;
+    const completedTasks = allTasks.filter(t => t.done).length;
+    return Math.round((completedTasks / allTasks.length) * 100);
+  };
+
+  const calculateBudgetProgress = () => {
+    if (!project?.total_budget || stages.length === 0) return 0;
+    const completedStages = stages.filter(s => s.completed);
+    const spentPercent = completedStages.reduce((acc, stage) => {
+      return acc + (parseFloat(stage.budget_percentage) || 0);
+    }, 0);
+    return Math.round(spentPercent);
+  };
+
+  // Handle task toggle
+  const handleTaskToggle = (task) => {
+    const newDoneStatus = !task.done;
+    
+    // Optimistic update - update UI immediately with correct query key
+    queryClient.setQueryData(['tasks', project?.id], (oldTasks) => {
+      if (!oldTasks) return oldTasks;
+      return oldTasks.map(t => t.id === task.id ? { ...t, done: newDoneStatus } : t);
+    });
+
+    // Check if all tasks in stage are done
+    const stageTasks = allTasks.filter(t => t.stage_id === task.stage_id);
+    const allDone = stageTasks.every(t => 
+      t.id === task.id ? newDoneStatus : t.done
+    );
+    
+    const stage = stages.find(s => s.id === task.stage_id);
+    if (stage && stage.completed !== allDone) {
+      // Optimistic update for stage
+      queryClient.setQueryData(['stages', project?.id], (oldStages) => {
+        if (!oldStages) return oldStages;
+        return oldStages.map(s => s.id === stage.id ? { ...s, completed: allDone } : s);
+      });
+      base44.entities.Stage.update(task.stage_id, { completed: allDone });
+    }
+
+    // Update in background
+    updateTaskMutation.mutate({ 
+      taskId: task.id, 
+      updates: { done: newDoneStatus }
+    });
+  };
+
+  const handleProjectUpdate = (updatedProject) => {
+    updateProjectMutation.mutate(updatedProject);
+  };
+
+  // Auto-initialize new users
+  const initMutation = useMutation({
+    mutationFn: (projectId) => base44.functions.invoke('initNewUser', { project_id: projectId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stages'] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['suppliers'] });
+    },
+  });
+
+  React.useEffect(() => {
+    if (project?.id && stages.length === 0 && !initMutation.isPending && !initMutation.isSuccess) {
+      initMutation.mutate(project.id);
+    }
+  }, [project?.id, stages.length]);
+
+  const handleDataUpdate = () => {
+    queryClient.invalidateQueries({ queryKey: ['stages'] });
+    queryClient.invalidateQueries({ queryKey: ['expenses'] });
+  };
+
+  const handleDocumentAdded = () => {
+    queryClient.invalidateQueries({ queryKey: ['documents'] });
+  };
+
+  const handleDocumentDeleted = (document) => {
+    if (confirm(`${t('confirmDeleteDoc')} "${document.name}"?`)) {
+      deleteDocumentMutation.mutate(document.id);
+    }
+  };
+
+  if (userLoading || (projectsLoading && !!user)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center" dir={isRTL ? 'rtl' : 'ltr'}>
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 animate-spin text-blue-600 dark:text-blue-400 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-slate-300">{t('loadingData')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900" dir={isRTL ? 'rtl' : 'ltr'}>
+      <AnimatePresence>
+        {showTutorial && (
+          <AppTutorial
+            onDismiss={dismissTutorial}
+            onTabChange={setActiveTab}
+          />
+        )}
+      </AnimatePresence>
+      {/* Mobile Header */}
+      <div className="md:hidden fixed top-0 inset-x-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 z-50 shadow-sm" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+        <div className="flex items-center justify-between h-14 px-4 w-full">
+          <div className="w-10" />
+          <div className="flex items-center gap-2">
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/690514d00122f9b7b00f4a5d/cb08ea9f1_image.png" alt={t('appName')} className="w-6 h-6" />
+            <h1 className="text-lg font-bold text-gray-800 dark:text-slate-100">{t('appName')}</h1>
+          </div>
+          <NotificationBell user={user} project={project} />
+        </div>
+      </div>
+
+      <div className="p-0 md:p-8 pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-8 pb-24 md:pb-8">
+      <div className="max-w-7xl mx-auto px-0 md:px-0">
+        {project?.id ? (
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            {/* Desktop TabsList */}
+            <TabsList className="hidden md:grid w-full grid-cols-7 mb-6 bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-md border border-gray-100 dark:border-slate-700 h-auto gap-0.5" dir={isRTL ? 'rtl' : 'ltr'}>
+              <TabsTrigger value="home" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_home')}</TabsTrigger>
+              <TabsTrigger value="stages" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_stages')}</TabsTrigger>
+              <TabsTrigger value="budget" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_budget')}</TabsTrigger>
+              <TabsTrigger value="suppliers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_suppliers')}</TabsTrigger>
+              <TabsTrigger value="documents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_documents')}</TabsTrigger>
+              <TabsTrigger value="timeline" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_timeline')}</TabsTrigger>
+              <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_settings')}</TabsTrigger>
+            </TabsList>
+
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: slideDir * 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: slideDir * -60 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+            >
+              <TabsContent value="home" className="mt-0">
+                <div className="space-y-6">
+                  <DashboardSummary
+                    project={project}
+                    stages={stages}
+                    tasks={allTasks}
+                    expenses={expenses}
+                  />
+                  <div className="flex justify-center">
+                    <GlobalSearch
+                      stages={stages}
+                      tasks={allTasks}
+                      expenses={expenses}
+                      suppliers={suppliers}
+                      documents={documents}
+                      onNavigate={setActiveTab}
+                    />
+                  </div>
+                  <ProjectHeader 
+                    project={project}
+                    onUpdate={handleProjectUpdate}
+                    overallProgress={calculateProgress()}
+                    budgetProgress={calculateBudgetProgress()}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="stages" className="mt-0">
+                <StagesTab 
+                  stages={stages}
+                  tasks={allTasks}
+                  subtopics={allSubtopics}
+                  expenses={expenses}
+                  suppliers={suppliers}
+                  projectId={project.id}
+                  onTaskToggle={handleTaskToggle}
+                  onUpdate={handleDataUpdate}
+                  user={user}
+                />
+              </TabsContent>
+
+              <TabsContent value="budget" className="mt-0">
+                 <BudgetTab 
+                   project={project}
+                   stages={stages}
+                   suppliers={suppliers}
+                   expenses={expenses}
+                 />
+              </TabsContent>
+
+              <TabsContent value="suppliers" className="mt-0">
+                <SuppliersTab 
+                  suppliers={suppliers}
+                  projectId={project.id}
+                  onUpdate={() => queryClient.invalidateQueries({ queryKey: ['suppliers'] })}
+                />
+              </TabsContent>
+
+              <TabsContent value="documents" className="mt-0">
+                <DocumentsTab
+                  documents={documents}
+                  stages={stages}
+                  suppliers={suppliers}
+                  projectId={project.id}
+                  project={project}
+                  onDocumentAdded={handleDocumentAdded}
+                  onDocumentDeleted={handleDocumentDeleted}
+                />
+              </TabsContent>
+
+              <TabsContent value="timeline" className="mt-0">
+                <div className="space-y-6">
+                  <ProjectCalendar project={project} stages={stages} />
+                  <GanttChart 
+                    project={project}
+                    stages={stages}
+                    tasks={allTasks}
+                    suppliers={suppliers}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="settings" className="mt-0">
+                <SettingsTab user={user} project={project} />
+              </TabsContent>
+            </motion.div>
+          </Tabs>
+        ) : (
+          <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 mt-8">
+            <ProjectHeader 
+              project={project}
+              onUpdate={handleProjectUpdate}
+              overallProgress={calculateProgress()}
+              budgetProgress={calculateBudgetProgress()}
+            />
+            <p className="text-lg text-gray-600 dark:text-slate-300 mb-2 mt-8">👋 {t('noProject')}</p>
+            <p className="text-gray-500 dark:text-slate-400">{t('fillProjectDetails')}</p>
+          </div>
+        )}
+
+        {project?.id && (
+          <div className="mt-8 text-center hidden md:block">
+            <p className="text-gray-600 dark:text-slate-300 text-sm bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm inline-block px-6 py-3 rounded-full shadow-sm">
+              💡 {t('reminder')}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile Bottom Navigation */}
+      {project?.id && (
+        <div className="md:hidden fixed bottom-0 inset-x-0 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 shadow-lg z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          <div className="grid grid-cols-7 h-16 w-full" role="tablist" aria-label={t('appName')}>
+            {[
+              { key: 'home', Icon: HomeIcon, label: t('tab_home') },
+              { key: 'stages', Icon: Layers, label: t('tab_stages') },
+              { key: 'budget', Icon: PieChart, label: t('tab_budget') },
+              { key: 'suppliers', Icon: Users, label: t('tab_suppliers') },
+              { key: 'documents', Icon: FileText, label: t('tab_documents') },
+              { key: 'timeline', Icon: Calendar, label: t('tab_timeline') },
+              { key: 'settings', Icon: Settings, label: t('tab_settings') },
+            ].map(({ key, Icon, label }) => (
+              <button key={key} onClick={() => setActiveTab(key)}
+                aria-label={label}
+                aria-selected={activeTab === key}
+                role="tab"
+                className={`flex flex-col items-center justify-center gap-1 select-none transition-colors ${activeTab === key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-slate-400'}`}
+              >
+                <Icon className="w-6 h-6" aria-hidden="true" />
+                <span className="text-[10px] font-medium" aria-hidden="true">{label}</span>
+              </button>
+            ))}
+          </div>
+          {/* Modal backdrop - on Android back, popstate fires and URL modal param is gone → modal closes automatically */}
+        </div>
+      )}
+    </div>
+    </div>
+  );
+}
