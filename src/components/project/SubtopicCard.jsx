@@ -8,9 +8,9 @@ export default function SubtopicCard({ subtopic }) {
         <div className="bg-blue-100 p-2 rounded-lg">
           <Lightbulb className="w-4 h-4 text-blue-600" />
         </div>
-        <h5 className="font-semibold text-gray-800 flex-1 text-right">{subtopic.title}</h5>
+        <h5 className="font-semibold text-gray-800 flex-1 text-end">{subtopic.title}</h5>
       </div>
-      <p className="text-sm text-gray-600 mb-3 leading-relaxed text-right">{subtopic.description}</p>
+      <p className="text-sm text-gray-600 mb-3 leading-relaxed text-end">{subtopic.description}</p>
       <ul className="text-sm text-gray-600 space-y-2">
         {subtopic.tips?.map((tip, tipIndex) => (
           <li key={tipIndex} className="flex items-start gap-2">

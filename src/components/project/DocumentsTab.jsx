@@ -140,15 +140,15 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
               </button>
             </div>
             <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md" onClick={() => uploadModal.open()} size="sm">
-              <Plus className="w-4 h-4 ml-1" />
+              <Plus className="w-4 h-4 ms-1" />
               {t('uploadDocument')}
             </Button>
           </div>
         </div>
 
         <div className="relative mb-3">
-          <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input placeholder={t('searchDocuments')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pr-9" />
+          <Search className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input placeholder={t('searchDocuments')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pe-9" />
         </div>
 
         <div className="flex flex-wrap gap-2 mb-3">
@@ -219,7 +219,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedFolder === folder.id ? 'bg-amber-500 text-white' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100'}`}>
                 <Folder className="w-3.5 h-3.5" />{folder.name} ({folder.docIds.length})
               </button>
-              <button onClick={() => deleteFolder(folder.id)} className="absolute -top-1.5 -left-1.5 hidden group-hover:flex w-4 h-4 bg-red-500 text-white rounded-full items-center justify-center text-xs leading-none">×</button>
+              <button onClick={() => deleteFolder(folder.id)} className="absolute -top-1.5 -start-1.5 hidden group-hover:flex w-4 h-4 bg-red-500 text-white rounded-full items-center justify-center text-xs leading-none">×</button>
             </div>
           ))}
         </div>
@@ -232,7 +232,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           <div className="flex gap-2">
             <Button size="sm" variant="outline" onClick={() => setSelectedForCompare([])}>{t('clear')}</Button>
             <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => setShowCompare(true)} disabled={selectedForCompare.length < 2}>
-              <GitCompare className="w-3.5 h-3.5 ml-1" />{t('compare')}
+              <GitCompare className="w-3.5 h-3.5 ms-1" />{t('compare')}
             </Button>
           </div>
         </div>
@@ -280,7 +280,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           <p className="text-gray-500 dark:text-slate-400 mb-6">{hasActiveFilter ? t('tryChangingFilter') : t('startUploadingDocuments')}</p>
           {!hasActiveFilter && (
             <Button onClick={() => uploadModal.open()} className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white">
-              <Plus className="w-4 h-4 ml-2" />{t('uploadFirstDocument')}
+              <Plus className="w-4 h-4 ms-2" />{t('uploadFirstDocument')}
             </Button>
           )}
         </div>

@@ -264,7 +264,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               </AnimatePresence>
 
               <button onClick={() => { setSelectedFile(null); setPreviewUrl(null); setAiPhase(null); setAiSuggestions(null); }}
-                className="absolute top-2 left-2 bg-white/80 dark:bg-slate-800/80 rounded-full p-1 hover:bg-white transition-colors">
+                className="absolute top-2 start-2 bg-white/80 dark:bg-slate-800/80 rounded-full p-1 hover:bg-white transition-colors">
                 <X className="w-4 h-4 text-gray-600" />
               </button>
             </div>
@@ -367,10 +367,10 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
             >
               {uploading
-                ? <><Loader2 className="w-4 h-4 ml-2 animate-spin" />שומר...</>
+                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />שומר...</>
                 : aiPhase && aiPhase !== 'done'
-                ? <><Loader2 className="w-4 h-4 ml-2 animate-spin" />מנתח...</>
-                : <><CheckCircle2 className="w-4 h-4 ml-2" />שמור מסמך</>
+                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />מנתח...</>
+                : <><CheckCircle2 className="w-4 h-4 ms-2" />שמור מסמך</>
               }
             </Button>
           </div>

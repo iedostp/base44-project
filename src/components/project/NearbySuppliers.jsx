@@ -197,12 +197,12 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    <Loader2 className="w-4 h-4 ms-2 animate-spin" />
                     מאתר מיקום...
                   </>
                 ) : (
                   <>
-                    <Navigation className="w-4 h-4 ml-2" />
+                    <Navigation className="w-4 h-4 ms-2" />
                     אתר את המיקום שלי
                   </>
                 )}
@@ -229,7 +229,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
               {/* Radius Selector */}
               <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <label className="text-sm font-medium text-gray-700 text-right">
+                  <label className="text-sm font-medium text-gray-700 text-end">
                     רדיוס חיפוש
                   </label>
                   <span className="text-lg font-bold text-blue-600">
@@ -267,7 +267,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
               {/* Nearby Suppliers */}
               {!geocoding && nearbySuppliersData.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-bold text-gray-800 mb-4 text-right">
+                  <h3 className="text-lg font-bold text-gray-800 mb-4 text-start">
                     נמצאו {nearbySuppliersData.length} ספקים באזור שלך
                   </h3>
                   <div className="space-y-4">
@@ -284,7 +284,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
                               </span>
                             </div>
                             <div className="flex-1">
-                              <h4 className="font-bold text-lg text-gray-800 mb-1 text-right">
+                              <h4 className="font-bold text-lg text-gray-800 mb-1 text-start">
                                 {supplier.name}
                               </h4>
                               <div className="flex items-center gap-2 flex-wrap">
@@ -302,7 +302,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
                               </div>
                             </div>
                           </div>
-                          <div className="text-left">
+                          <div className="text-start">
                             <div className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
                               {supplier.distance.toFixed(1)} ק"מ
                             </div>
@@ -315,7 +315,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
                         {/* Address */}
                         <div className="flex items-start gap-2 text-sm text-gray-600 mb-3">
                           <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
-                          <span className="flex-1 text-right">{supplier.address}</span>
+                          <span className="flex-1 text-end">{supplier.address}</span>
                         </div>
 
                         {/* Contact Info */}
@@ -342,7 +342,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
                             className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
                             size="sm"
                           >
-                            <Phone className="w-3 h-3 ml-2" />
+                            <Phone className="w-3 h-3 ms-2" />
                             התקשר
                           </Button>
                           <Button
@@ -351,7 +351,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
                             className="flex-1"
                             size="sm"
                           >
-                            <ExternalLink className="w-3 h-3 ml-2" />
+                            <ExternalLink className="w-3 h-3 ms-2" />
                             נווט במפות
                           </Button>
                         </div>

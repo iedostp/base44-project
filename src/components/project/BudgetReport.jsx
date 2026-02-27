@@ -36,7 +36,7 @@ const PIE_COLORS = ["#6366f1", "#f59e0b", "#10b981", "#ef4444", "#3b82f6", "#8b5
 const makeCustomTooltip = (formatNIS) => ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl p-3 shadow-xl text-right">
+    <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl p-3 shadow-xl text-end">
       <p className="font-semibold text-gray-700 dark:text-slate-200 mb-1 text-sm">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: entry.color }} className="text-sm">
@@ -265,7 +265,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
           <TrendingUp className="w-6 h-6 text-white" />
         </div>
-        <div className="text-right">
+        <div className="text-end">
           <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">דוח תקציב אוטומטי</h2>
           <p className="text-sm text-gray-500 dark:text-slate-400">השוואה בין תכנון לביצוע</p>
         </div>
@@ -310,24 +310,24 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
 
       {/* ─── KPI Cards ───────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-end">
           <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">תקציב כולל</p>
           <p className="text-xl font-bold text-gray-800 dark:text-slate-100">{formatNIS(totalBudget)}</p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-end">
           <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{isEstimated ? "הוצאה משוערת" : "הוצאה בפועל"}</p>
           <p className="text-xl font-bold text-red-600 dark:text-red-400">{formatNIS(displaySpent)}</p>
           <p className="text-xs text-gray-400 mt-0.5">{Math.round(budgetUsagePercent)}% מהתקציב{isEstimated ? " (הערכה)" : ""}</p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-end">
           <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">יתרה</p>
           <p className={`text-xl font-bold ${totalBudget - displaySpent >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
             {formatNIS(totalBudget - displaySpent)}
           </p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-end">
           <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">סטייה ממוצע שלבים</p>
-          <p className={`text-xl font-bold text-right ${variance > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
+          <p className={`text-xl font-bold text-end ${variance > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
             {variance > 0 ? "+" : ""}{formatNIS(variance)}
           </p>
         </div>
@@ -342,7 +342,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         {/* Category Pie */}
         {categoryData.length > 0 && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-md">
-            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-right">התפלגות הוצאות לפי קטגוריה</h3>
+            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-end">התפלגות הוצאות לפי קטגוריה</h3>
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
@@ -367,7 +367,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         {/* Monthly Line Chart */}
         {monthlyData.length > 1 && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-md">
-            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-right">מגמת הוצאות חודשית</h3>
+            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-end">מגמת הוצאות חודשית</h3>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={monthlyData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -414,16 +414,16 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
             <table className="w-full text-xs md:text-sm">
               <thead className="bg-gray-50 dark:bg-slate-700">
                 <tr>
-                  <th className="text-right px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("title")}>
+                  <th className="text-end px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("title")}>
                     שלב {sortColumn === "title" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
-                  <th className="hidden md:table-cell text-right px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("planned")}>
+                  <th className="hidden md:table-cell text-end px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("planned")}>
                     מתוכנן {sortColumn === "planned" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
-                  <th className="text-right px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("actual")}>
+                  <th className="text-end px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("actual")}>
                     בפועל {sortColumn === "actual" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
-                  <th className="hidden lg:table-cell text-right px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("diff")}>
+                  <th className="hidden lg:table-cell text-end px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("diff")}>
                     סטייה {sortColumn === "diff" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
                   <th className="text-center px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("percentage")}>
@@ -436,9 +436,9 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                 {filteredAndSorted.map((s, i) => (
                   <tr key={s.id} className={`border-t border-gray-100 dark:border-slate-700 ${i % 2 === 0 ? "" : "bg-gray-50/50 dark:bg-slate-700/20"}`}>
                     <td className="px-2 md:px-4 py-2 md:py-3 font-medium text-gray-800 dark:text-slate-200">{s.title}</td>
-                    <td className="hidden md:table-cell px-4 py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.planned))}</td>
-                    <td className="px-2 md:px-4 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.actual))}</td>
-                    <td className={`hidden lg:table-cell px-4 py-3 text-right font-semibold text-xs md:text-sm ${s.diff > 0 ? "text-red-600 dark:text-red-400" : s.diff < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
+                    <td className="hidden md:table-cell px-4 py-3 text-gray-700 dark:text-slate-300 text-end text-xs md:text-sm">{formatNIS(Math.round(s.planned))}</td>
+                    <td className="px-2 md:px-4 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-end text-xs md:text-sm">{formatNIS(Math.round(s.actual))}</td>
+                    <td className={`hidden lg:table-cell px-4 py-3 text-end font-semibold text-xs md:text-sm ${s.diff > 0 ? "text-red-600 dark:text-red-400" : s.diff < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
                       {s.diff > 0 ? "+" : ""}{formatNIS(Math.round(s.diff))}
                     </td>
                     <td className="px-2 md:px-4 py-2 md:py-3 text-center">
@@ -474,20 +474,20 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                 {/* Totals Row */}
                 <tr className="border-t-2 border-gray-300 dark:border-slate-500 bg-indigo-50 dark:bg-indigo-900/20 font-bold">
                   <td className="px-2 md:px-4 py-2 md:py-3 text-gray-800 dark:text-slate-100">סה"כ</td>
-                  <td className="hidden md:table-cell px-4 py-3 text-gray-800 dark:text-slate-100 text-right text-xs md:text-sm">{formatNIS(totalBudget)}</td>
-                  <td className="px-2 md:px-4 py-2 md:py-3 text-right text-xs md:text-sm">
+                  <td className="hidden md:table-cell px-4 py-3 text-gray-800 dark:text-slate-100 text-end text-xs md:text-sm">{formatNIS(totalBudget)}</td>
+                  <td className="px-2 md:px-4 py-2 md:py-3 text-end text-xs md:text-sm">
                     <span className={displaySpent > totalBudget ? "text-red-600 dark:text-red-400" : "text-gray-800 dark:text-slate-100"}>
                       {formatNIS(Math.round(displaySpent))}{isEstimated ? " *" : ""}
                     </span>
                   </td>
-                  <td className={`hidden lg:table-cell px-4 py-3 text-right text-xs md:text-sm ${displaySpent - totalBudget > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
+                  <td className={`hidden lg:table-cell px-4 py-3 text-end text-xs md:text-sm ${displaySpent - totalBudget > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
                     {displaySpent - totalBudget > 0 ? "+" : ""}{formatNIS(Math.round(displaySpent - totalBudget))}
                   </td>
                   <td className="px-2 md:px-4 py-2 md:py-3 text-center text-xs md:text-sm text-gray-700 dark:text-slate-300">{Math.round(budgetUsagePercent)}%</td>
                   <td className="hidden md:table-cell" />
                 </tr>
                 {isEstimated && (
-                  <tr><td colSpan={6} className="px-4 py-2 text-xs text-gray-400 italic text-right">* הערכה לפי שלבים שהושלמו (אין הוצאות ידניות)</td></tr>
+                  <tr><td colSpan={6} className="px-4 py-2 text-xs text-gray-400 italic text-end">* הערכה לפי שלבים שהושלמו (אין הוצאות ידניות)</td></tr>
                 )}
               </tbody>
             </table>

@@ -130,25 +130,25 @@ export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, proje
             className="flex-1 md:flex-none bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white shadow-md text-xs md:text-sm"
             onClick={() => mapPickerModal.open()}
           >
-            <Map className="w-4 h-4 ml-2" />
+            <Map className="w-4 h-4 ms-2" />
             {t('pickLocationOnMap')}
           </Button>
           <Button 
             className="flex-1 md:flex-none bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-md text-xs md:text-sm"
             onClick={() => nearbyModal.open()}
           >
-            <MapPin className="w-4 h-4 ml-2" />
+            <MapPin className="w-4 h-4 ms-2" />
             {t('findNearbySuppliers')}
           </Button>
           <Button 
             className="flex-1 md:flex-none bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md text-xs md:text-sm"
             onClick={() => addSupplierModal.open()}
           >
-            <Plus className="w-4 h-4 ml-2" />
+            <Plus className="w-4 h-4 ms-2" />
             {t('addNewSupplier')}
           </Button>
         </div>
-        <div className="text-right">
+        <div className="text-end">
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-slate-100 mb-1">{t('supplierManagement')}</h2>
           <p className="text-gray-500 dark:text-slate-400 text-sm">{t('supplierManagementDesc')}</p>
         </div>
@@ -189,7 +189,7 @@ export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, proje
                 {t('clearAll')}
               </Button>
               <Button variant="secondary" size="sm" onClick={handleCompare} disabled={selectedForCompare.length < 2} className="bg-white text-blue-600 hover:bg-blue-50 font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
-                <GitCompare className="w-4 h-4 ml-2" />
+                <GitCompare className="w-4 h-4 ms-2" />
                 {t('compareSelected')}
               </Button>
             </div>

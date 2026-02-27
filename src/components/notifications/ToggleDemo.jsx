@@ -116,7 +116,7 @@ export default function ToggleDemo() {
       {styles.map(({ title, render }) => (
         <div key={title} className="bg-white rounded-xl shadow p-4 border border-gray-100">
           <p className="text-xs font-semibold text-gray-500 mb-3">{title}</p>
-          <div className="flex items-center justify-between text-xs text-gray-400 mb-2 text-left">
+          <div className="flex items-center justify-between text-xs text-gray-400 mb-2 text-start">
             <span></span>
             <div className="flex gap-8">
               <span>דוא״ל</span>

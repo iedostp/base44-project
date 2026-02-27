@@ -171,7 +171,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="border-blue-500 text-blue-700 hover:bg-blue-50"
               >
-                <Edit className="w-4 h-4 ml-2" />
+                <Edit className="w-4 h-4 ms-2" />
                 {t('editStage')}
               </Button>
               <Button
@@ -179,7 +179,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
               >
-                <Plus className="w-4 h-4 ml-2" />
+                <Plus className="w-4 h-4 ms-2" />
                 {t('addTask')}
               </Button>
               <Button
@@ -187,16 +187,16 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
               >
-                <Plus className="w-4 h-4 ml-2" />
+                <Plus className="w-4 h-4 ms-2" />
                 {t('addExpense')}
               </Button>
               <Button
                 onClick={(e) => { e.stopPropagation(); setConfirmDelete(true); }}
                 variant="outline"
                 size="sm"
-                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 mr-auto"
+                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 me-auto"
               >
-                <Trash2 className="w-4 h-4 ml-2" />
+                <Trash2 className="w-4 h-4 ms-2" />
                 מחק שלב
               </Button>
             </div>
@@ -222,7 +222,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                     onClick={(e) => { e.stopPropagation(); handleDeleteStage(); }}
                     className="bg-red-600 hover:bg-red-700 text-white"
                   >
-                    <Trash2 className="w-4 h-4 ml-1" />
+                    <Trash2 className="w-4 h-4 ms-1" />
                     כן, מחק
                   </Button>
                 </div>

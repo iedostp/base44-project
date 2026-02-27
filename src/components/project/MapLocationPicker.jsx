@@ -171,12 +171,12 @@ export default function MapLocationPicker({ isOpen, onClose, suppliers }) {
               >
                 {isSearching ? (
                   <>
-                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    <Loader2 className="w-4 h-4 ms-2 animate-spin" />
                     מחפש...
                   </>
                 ) : (
                   <>
-                    <MapPin className="w-4 h-4 ml-2" />
+                    <MapPin className="w-4 h-4 ms-2" />
                     חפש ספקים
                   </>
                 )}
@@ -219,7 +219,7 @@ export default function MapLocationPicker({ isOpen, onClose, suppliers }) {
                         <h4 className="font-bold text-gray-800">{supplier.name}</h4>
                         <p className="text-sm text-gray-600">{getCategoryLabel(supplier.category)}</p>
                       </div>
-                      <div className="text-left">
+                      <div className="text-start">
                         <p className="text-sm font-semibold text-blue-600">
                           {supplier.distance.toFixed(1)} ק"מ
                         </p>

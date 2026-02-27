@@ -60,7 +60,7 @@ export default function Home() {
   const setActiveTab = (tab) => {
     const prevIndex = TAB_ORDER.indexOf(activeTab);
     const nextIndex = TAB_ORDER.indexOf(tab);
-    setSlideDir(nextIndex > prevIndex ? -1 : 1);
+    setSlideDir(nextIndex > prevIndex ? (isRTL ? 1 : -1) : (isRTL ? -1 : 1));
     setPrevTab(activeTab);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', tab);

@@ -78,7 +78,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
                   )}
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <p className="font-bold text-lg text-gray-900 dark:text-slate-100">
                   {expense.amount.toLocaleString()} ₪
                 </p>
