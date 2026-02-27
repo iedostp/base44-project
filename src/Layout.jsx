@@ -24,7 +24,7 @@ export default function Layout({ children, currentPageName }) {
   const [theme, setTheme] = useState('light');
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const touchStartY = useRef(0);
   const holdTimer = useRef(null);
@@ -35,6 +35,7 @@ export default function Layout({ children, currentPageName }) {
     setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     const isRTL = ['he', 'ar'].includes(i18n.language);
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
   const handleTouchStart = (e) => {
@@ -113,7 +114,7 @@ export default function Layout({ children, currentPageName }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                   </svg>
-                  <span>מרענן...</span>
+                  <span>{t('pullRefreshing')}</span>
                 </>
               ) : (
                 <>
@@ -124,7 +125,7 @@ export default function Layout({ children, currentPageName }) {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
-                  <span>{ready ? 'החזק לרענון...' : 'משוך לרענון'}</span>
+                  <span>{ready ? t('pullHold') : t('pullToRefresh')}</span>
                 </>
               )}
             </div>

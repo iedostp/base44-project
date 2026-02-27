@@ -38,7 +38,10 @@ const resources = {
       error: 'שגיאה',
       success: 'הצלחה',
       note: 'הערה',
-      
+      pullRefreshing: 'מרענן...',
+      pullToRefresh: 'משוך לרענון',
+      pullHold: 'החזק לרענון...',
+
       // Project Header
       projectName: 'שם הפרויקט',
       plotNumber: 'מספר חלקה',
@@ -351,6 +354,9 @@ const resources = {
       error: 'Error',
       success: 'Success',
       note: 'Note',
+      pullRefreshing: 'Refreshing...',
+      pullToRefresh: 'Pull to refresh',
+      pullHold: 'Hold to refresh...',
 
       // Project Header
       projectName: 'Project Name',
@@ -646,6 +652,9 @@ const resources = {
       error: 'خطأ',
       success: 'نجاح',
       note: 'ملاحظة',
+      pullRefreshing: 'جارٍ التحديث...',
+      pullToRefresh: 'اسحب للتحديث',
+      pullHold: 'اثبت للتحديث...',
 
       // Project Header
       projectName: 'اسم المشروع',
@@ -941,6 +950,9 @@ const resources = {
       error: 'Ошибка',
       success: 'Успех',
       note: 'Заметка',
+      pullRefreshing: 'Обновление...',
+      pullToRefresh: 'Потяните для обновления',
+      pullHold: 'Удержите для обновления...',
 
       // Project Header
       projectName: 'Название проекта',
