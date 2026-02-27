@@ -67,7 +67,7 @@ export default function NotificationBell({ user, project }) {
       >
         <Bell className="w-6 h-6 text-gray-600 dark:text-slate-300" />
         {unread.length > 0 && (
-          <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+          <span className="absolute top-1 end-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
             {unread.length > 9 ? '9+' : unread.length}
           </span>
         )}

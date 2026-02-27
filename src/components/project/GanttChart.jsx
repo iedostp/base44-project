@@ -218,7 +218,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
         </div>
 
         {/* Mobile Vertical View */}
-        <div className="md:hidden relative border-r-2 border-gray-100 pr-6 mr-3 space-y-8 pb-4">
+        <div className="md:hidden relative border-s-2 border-gray-100 ps-6 ms-3 space-y-8 pb-4">
           {timelineData.stages.map((stage, index) => {
             const isActive = stage.status === 'in-progress';
             const isDone = stage.status === 'completed';
@@ -227,7 +227,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
             return (
               <div key={stage.id} className="relative">
                 {/* Timeline Dot */}
-                <div className={`absolute -right-[31px] top-4 w-4 h-4 rounded-full border-2 border-white shadow-sm z-10 ${
+                <div className={`absolute -start-[31px] top-4 w-4 h-4 rounded-full border-2 border-white shadow-sm z-10 ${
                    isDone ? 'bg-emerald-500' : 
                    isActive ? 'bg-blue-500 animate-pulse' : 
                    isOverdue ? 'bg-red-500' : 'bg-gray-300'
@@ -393,7 +393,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
                               width: `${((differenceInDays(timelineData.stages[index + 1].startDate, stage.endDate) / timelineData.totalDays) * 100)}%`
                             }}
                           >
-                            <ChevronLeft className="absolute left-0 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
+                            <ChevronLeft className="absolute start-0 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400 rtl:rotate-180" />
                           </div>
                         )}
                       </div>
