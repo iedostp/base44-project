@@ -135,7 +135,7 @@ export default function MapLocationPicker({ isOpen, onClose, suppliers }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0" dir="rtl">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
         <DialogHeader className="p-6 pb-4">
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
             <MapPin className="w-6 h-6 text-blue-600" />

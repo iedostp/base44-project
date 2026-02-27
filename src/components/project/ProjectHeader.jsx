@@ -113,7 +113,7 @@ export default function ProjectHeader({ project, onUpdate, overallProgress, budg
         </div>
       </div>
 
-      <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-r-4 border-blue-500 dark:border-blue-600 rounded-xl p-4 flex items-start gap-3">
+      <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-s-4 border-blue-500 dark:border-blue-600 rounded-xl p-4 flex items-start gap-3">
         <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
         <div>
           <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-1">{t('importantTip')}</h3>

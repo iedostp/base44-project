@@ -23,7 +23,7 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onTo
   })[cat] || 'bg-gray-100 text-gray-800';
 
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-blue-400 bg-blue-50' : 'border-gray-100 bg-white hover:bg-gray-50'}`} dir="rtl">
+    <div className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-blue-400 bg-blue-50' : 'border-gray-100 bg-white hover:bg-gray-50'}`}>
       <input type="checkbox" className="rounded" checked={isSelected} onChange={() => onToggleCompare && onToggleCompare(document)} />
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-gray-800 text-sm truncate">{document.name}</p>
@@ -124,7 +124,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
   return (
     <div className="space-y-4 w-full overflow-x-hidden">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-5 border border-gray-100 dark:border-slate-700" dir="rtl">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-5 border border-gray-100 dark:border-slate-700">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-3">
           <div>
             <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">{t('documentManagement')}</h2>
@@ -148,7 +148,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
         <div className="relative mb-3">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input placeholder={t('searchDocuments')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pr-9" dir="rtl" />
+          <Input placeholder={t('searchDocuments')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pr-9" />
         </div>
 
         <div className="flex flex-wrap gap-2 mb-3">
@@ -163,7 +163,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
         <div className="flex flex-wrap items-center gap-2">
           {stages.length > 0 && (
             <select value={selectedStage} onChange={(e) => setSelectedStage(e.target.value)}
-              className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300" dir="rtl">
+              className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300">
               <option value="all">{t('allStages')}</option>
               {stages.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
             </select>
@@ -192,7 +192,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
       </div>
 
       {/* Folders */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 shadow-sm" dir="rtl">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-700 dark:text-slate-200 text-sm flex items-center gap-2">
             <Folder className="w-4 h-4 text-amber-500" />{t('folders')}
@@ -203,7 +203,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
         </div>
         {showNewFolder && (
           <div className="flex items-center gap-2 mb-3">
-            <Input value={newFolderName} onChange={e => setNewFolderName(e.target.value)} placeholder={t('folderName')} className="h-8 text-sm" dir="rtl" onKeyDown={e => e.key === 'Enter' && addFolder()} autoFocus />
+            <Input value={newFolderName} onChange={e => setNewFolderName(e.target.value)} placeholder={t('folderName')} className="h-8 text-sm" onKeyDown={e => e.key === 'Enter' && addFolder()} autoFocus />
             <Button size="sm" onClick={addFolder} className="h-8 bg-blue-600 hover:bg-blue-700 text-white">{t('add')}</Button>
             <Button size="sm" variant="ghost" onClick={() => { setShowNewFolder(false); setNewFolderName(''); }} className="h-8">{t('cancel')}</Button>
           </div>
@@ -227,7 +227,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
       {/* Compare bar */}
       {selectedForCompare.length > 0 && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-3 flex items-center justify-between gap-3" dir="rtl">
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-3 flex items-center justify-between gap-3">
           <span className="text-sm text-blue-800 dark:text-blue-300 font-medium">{selectedForCompare.length} {t('documentsSelectedForCompare')}</span>
           <div className="flex gap-2">
             <Button size="sm" variant="outline" onClick={() => setSelectedForCompare([])}>{t('clear')}</Button>
@@ -250,7 +250,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
                   <DocumentCard document={doc} stage={stage} supplier={supplier} project={project} stages={stages} onDelete={onDocumentDeleted} isSelected={!!selectedForCompare.find(d => d.id === doc.id)} onToggleCompare={toggleCompare} />
                   {folders.length > 0 && (
                     <select value={folders.find(f => f.docIds.includes(doc.id))?.id || ''} onChange={e => e.target.value === '' ? removeDocFromFolders(doc.id) : assignDocToFolder(doc.id, e.target.value)}
-                      className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300 mt-1" dir="rtl">
+                      className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300 mt-1">
                       <option value="">ללא תיקייה</option>
                       {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
                     </select>
@@ -261,7 +261,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           </div>
         ) : (
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm overflow-hidden">
-            <div className="p-3 bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-600 flex items-center justify-between" dir="rtl">
+            <div className="p-3 bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-600 flex items-center justify-between">
               <span className="text-sm font-semibold text-gray-700 dark:text-slate-200">{filteredDocuments.length} {t('documents')}</span>
             </div>
             <div className="p-3 space-y-2">

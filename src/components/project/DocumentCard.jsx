@@ -44,7 +44,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
 
   return (
     <>
-      <div className={`bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border overflow-hidden ${isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200'}`} dir="rtl">
+      <div className={`bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border overflow-hidden ${isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200'}`}>
         <div className="p-5">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">

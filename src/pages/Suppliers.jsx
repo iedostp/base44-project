@@ -97,7 +97,7 @@ export default function SuppliersPage() {
 
   if (!selectedProject) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-2">ניהול ספקים</h1>
@@ -109,7 +109,7 @@ export default function SuppliersPage() {
               <button
                 key={project.id}
                 onClick={() => setSelectedProject(project.id)}
-                className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all text-right border border-gray-100 dark:border-slate-700"
+                className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all text-start border border-gray-100 dark:border-slate-700"
               >
                 <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">{project.name}</h2>
                 <p className="text-sm text-gray-600 dark:text-slate-400 mb-2">{project.location}</p>
@@ -131,18 +131,18 @@ export default function SuppliersPage() {
   const project = projects.find((p) => p.id === selectedProject);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 flex-row-reverse">
-          <div className="text-right flex-1">
+          <div className="text-start flex-1">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-1">ניהול ספקים</h1>
             <p className="text-gray-600 dark:text-slate-400">{project?.name}</p>
           </div>
           <Button
             onClick={() => setSelectedProject(null)}
             variant="outline"
-            className="mr-4 text-right"
+            className="me-4"
           >
             חזור לפרויקטים
           </Button>
@@ -157,7 +157,7 @@ export default function SuppliersPage() {
                 placeholder="חיפוש לפי שם או טלפון"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pr-10 text-right"
+                className="pr-10 text-start"
               />
             </div>
             <select
@@ -179,7 +179,7 @@ export default function SuppliersPage() {
               }}
               className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
             >
-              <Plus className="w-4 h-4 ml-2" />
+              <Plus className="w-4 h-4 me-2" />
               ספק חדש
             </Button>
           </div>

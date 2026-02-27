@@ -116,7 +116,7 @@ export default function AppTutorial({ onDismiss, onTabChange }) {
   const handleFinish = () => onDismiss(neverShow);
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center" dir="rtl">
+    <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center">
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -178,7 +178,7 @@ export default function AppTutorial({ onDismiss, onTabChange }) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: dir * -40 }}
               transition={{ duration: 0.2 }}
-              className="text-right"
+              className="text-start"
             >
               <div className="text-4xl mb-3">{current.icon}</div>
               <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100 mb-2">

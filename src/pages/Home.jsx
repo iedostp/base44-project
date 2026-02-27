@@ -95,9 +95,11 @@ export default function Home() {
 
   // Fetch project
   const { data: projects = [], isLoading: projectsLoading } = useQuery({
-    queryKey: ['projects', user?.email],
-    queryFn: () => base44.entities.Project.filter({ created_by: user?.email }),
-    enabled: !!user?.email,
+    queryKey: ['projects'],
+    queryFn: () => user?.email
+      ? base44.entities.Project.filter({ created_by: user.email })
+      : base44.entities.Project.list(),
+    enabled: true,
   });
 
   const project = projects[0];
@@ -113,22 +115,26 @@ export default function Home() {
   const { data: allTasks = [] } = useQuery({
     queryKey: ['tasks', project?.id],
     queryFn: async () => {
-      if (!project?.id || !user?.email) return [];
-      const tasks = await base44.entities.Task.filter({ created_by: user.email }, 'order');
-      return tasks;
+      if (!project?.id) return [];
+      if (user?.email) {
+        return base44.entities.Task.filter({ created_by: user.email }, 'order');
+      }
+      return base44.entities.Task.filter({ project_id: project.id }, 'order');
     },
-    enabled: !!project?.id && !!user?.email,
+    enabled: !!project?.id,
   });
 
   // Fetch subtopics
   const { data: allSubtopics = [] } = useQuery({
     queryKey: ['subtopics', project?.id],
     queryFn: async () => {
-      if (!project?.id || !user?.email) return [];
-      const subtopics = await base44.entities.Subtopic.filter({ created_by: user.email }, 'order');
-      return subtopics;
+      if (!project?.id) return [];
+      if (user?.email) {
+        return base44.entities.Subtopic.filter({ created_by: user.email }, 'order');
+      }
+      return base44.entities.Subtopic.filter({ project_id: project.id }, 'order');
     },
-    enabled: !!project?.id && !!user?.email,
+    enabled: !!project?.id,
   });
 
   // Fetch suppliers

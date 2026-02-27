@@ -88,7 +88,7 @@ export default function EditSupplierDialog({ isOpen, onClose, supplier, onSuppli
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" dir="rtl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">עדכן ספק</DialogTitle>
         </DialogHeader>

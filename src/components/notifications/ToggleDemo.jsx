@@ -111,7 +111,7 @@ export default function ToggleDemo() {
   ];
 
   return (
-    <div className="p-6 max-w-md mx-auto space-y-4" dir="rtl">
+    <div className="p-6 max-w-md mx-auto space-y-4">
       <h2 className="text-xl font-bold text-gray-800 mb-4">סגנונות כפתורים</h2>
       {styles.map(({ title, render }) => (
         <div key={title} className="bg-white rounded-xl shadow p-4 border border-gray-100">

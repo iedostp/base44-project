@@ -184,7 +184,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto" dir="rtl">
+      <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2">
             <Upload className="w-5 h-5 text-blue-600" />

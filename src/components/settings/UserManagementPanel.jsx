@@ -85,39 +85,39 @@ export default function UserManagementPanel({ user }) {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700">
-       <div className="flex items-center gap-3 mb-6" dir="rtl">
+       <div className="flex items-center gap-3 mb-6">
           <div className="bg-indigo-100 dark:bg-indigo-900 p-3 rounded-xl flex-shrink-0">
             <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-300" />
           </div>
-          <div className="text-right flex-1">
+          <div className="text-start flex-1">
             <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">ניהול משתמשים</h2>
             <p className="text-sm text-gray-500 dark:text-slate-400">הזמן משתמשים והקצה תפקידים</p>
           </div>
         </div>
 
       {/* Role legend */}
-      <div className="mb-5" dir="rtl">
+      <div className="mb-5">
         <button
-          className="text-xs text-indigo-600 dark:text-indigo-400 underline mb-2 block text-right"
+          className="text-xs text-indigo-600 dark:text-indigo-400 underline mb-2 block text-start"
           onClick={() => setShowRoleInfo(!showRoleInfo)}
         >
           <Shield className="w-3.5 h-3.5 inline mr-1" />
           {showRoleInfo ? "הסתר הסבר תפקידים" : "הצג הסבר תפקידים"}
         </button>
         {showRoleInfo && (
-          <div className="grid gap-3" dir="rtl">
+          <div className="grid gap-3">
             {ROLES.map(role => {
               const Icon = role.icon;
               return (
-                <div key={role.value} className={`rounded-xl p-3 border ${role.bg}`} dir="rtl">
-                   <div className="flex items-center gap-2 justify-between mb-0 flex-row" dir="rtl">
+                <div key={role.value} className={`rounded-xl p-3 border ${role.bg}`}>
+                   <div className="flex items-center gap-2 justify-between mb-0 flex-row">
                      <div className="flex items-center gap-2 flex-row-reverse">
                        <Icon className={`w-4 h-4 ${role.color}`} />
                        <span className="font-semibold text-sm text-gray-800 dark:text-slate-100">{role.label}</span>
                        <span className="text-xs text-gray-500 dark:text-slate-400">— {role.description}</span>
                      </div>
                    </div>
-                   <div className="flex flex-wrap gap-x-2 gap-y-1 justify-end mt-2 flex-row-reverse" dir="rtl">
+                   <div className="flex flex-wrap gap-x-2 gap-y-1 justify-end mt-2 flex-row-reverse">
                      {role.permissions.map((p, i) => (
                        <span key={i} className="text-xs text-gray-600 dark:text-slate-400 flex items-center gap-1 flex-row whitespace-nowrap">
                          {p}<Check className="w-3 h-3 text-green-500" />
@@ -132,17 +132,17 @@ export default function UserManagementPanel({ user }) {
       </div>
 
       {/* Invite new user */}
-      <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 border border-indigo-200 dark:border-indigo-700 mb-5" dir="rtl">
-        <p className="text-sm font-semibold text-gray-800 dark:text-slate-100 text-right mb-3 flex items-center gap-2 justify-end flex-row-reverse">
+      <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 border border-indigo-200 dark:border-indigo-700 mb-5">
+        <p className="text-sm font-semibold text-gray-800 dark:text-slate-100 text-start mb-3 flex items-center gap-2 justify-end flex-row-reverse">
           הזמן משתמש חדש
           <UserPlus className="w-4 h-4 text-indigo-600" />
         </p>
-        <div className="flex flex-col gap-2" dir="rtl">
+        <div className="flex flex-col gap-2">
           <Input
             placeholder="כתובת אימייל"
             value={inviteEmail}
             onChange={e => setInviteEmail(e.target.value)}
-            className="text-right"
+            className="text-start"
             dir="ltr"
           />
           <div className="flex gap-2 flex-row-reverse">
@@ -175,15 +175,15 @@ export default function UserManagementPanel({ user }) {
       </div>
 
       {/* Users list */}
-      <div className="space-y-2" dir="rtl">
-        <p className="text-sm font-semibold text-gray-700 dark:text-slate-300 text-right mb-3">משתמשים קיימים</p>
+      <div className="space-y-2">
+        <p className="text-sm font-semibold text-gray-700 dark:text-slate-300 text-start mb-3">משתמשים קיימים</p>
         {users.map(u => {
           const roleInfo = getRoleInfo(u.role === "admin" ? "admin" : u.role || "viewer");
           const Icon = roleInfo.icon;
           const isCurrentUser = u.email === user?.email;
           return (
-            <div key={u.id} className="flex flex-col md:flex-row md:items-center gap-3 bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600" dir="rtl">
-              <div className="flex-1 text-right min-w-0">
+            <div key={u.id} className="flex flex-col md:flex-row md:items-center gap-3 bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
+              <div className="flex-1 text-start min-w-0">
                 <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm truncate">
                   {u.full_name || u.email}
                   {isCurrentUser && <span className="text-xs text-gray-400 mr-1">(אתה)</span>}

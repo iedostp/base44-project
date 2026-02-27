@@ -127,7 +127,7 @@ export default function ImportStagesDialog({ isOpen, onClose, projectId, current
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-lg" dir="rtl">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl font-bold">
             <FileSpreadsheet className="w-5 h-5 text-green-600" />

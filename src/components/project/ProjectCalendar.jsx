@@ -85,7 +85,7 @@ function CalendarView({ stagesWithDates, project, currentDate, setCurrentDate, c
   }, [days, stagesWithDates]);
 
   return (
-    <div dir="rtl" className="w-full">
+    <div className="w-full">
       {/* Nav */}
       <div className="flex items-center justify-between mb-3">
         <Button variant="outline" size="sm" onClick={() => setCurrentDate(addDays(currentDate, -7))}>
@@ -147,7 +147,7 @@ function CalendarView({ stagesWithDates, project, currentDate, setCurrentDate, c
 
       {/* Legend */}
       {visibleStages.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-2" dir="rtl">
+        <div className="mt-3 flex flex-wrap gap-2">
           {visibleStages.map(({ stage, index }) => (
             <div key={stage.id} className="flex items-center gap-1 text-xs text-gray-600 dark:text-slate-400">
               <div className={`w-2.5 h-2.5 rounded-full ${STAGE_COLORS[index % STAGE_COLORS.length].bg}`} />
@@ -177,7 +177,7 @@ function ListView({ stagesWithDates, project, currentDate, setCurrentDate }) {
   }, [days, stagesWithDates, project]);
 
   return (
-    <div dir="rtl">
+    <div>
       <div className="flex items-center justify-between mb-4">
         <Button variant="outline" size="sm" onClick={() => setCurrentDate(addDays(currentDate, -7))}>
           <ChevronRight className="w-4 h-4" />
@@ -253,7 +253,7 @@ export default function ProjectCalendar({ project, stages }) {
   // Landscape mobile → fullscreen overlay
   if (isLandscape && isMobile) {
     return (
-      <div className="fixed inset-0 z-40 bg-white dark:bg-slate-900 overflow-auto" dir="rtl">
+      <div className="fixed inset-0 z-40 bg-white dark:bg-slate-900 overflow-auto">
         <div className="p-3 h-full flex flex-col">
           <div className="flex items-center justify-between mb-2 flex-shrink-0">
             <h2 className="text-base font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2">
@@ -305,7 +305,7 @@ export default function ProjectCalendar({ project, stages }) {
 
   // Portrait mobile or desktop → normal card
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-5" dir="rtl">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-5">
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-500" />

@@ -6,7 +6,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
   if (expenses.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-        <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-right">
+        <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-start">
           היסטוריית הוצאות
         </h3>
         <p className="text-center text-gray-600 dark:text-slate-400">אין הוצאות עבור ספק זה</p>
@@ -18,11 +18,11 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
   const avgExpense = totalSpending / expenses.length;
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 overflow-hidden" dir="rtl">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white">
         <div className="flex items-start justify-between flex-row-reverse">
-          <div className="text-right">
+          <div className="text-start">
             <h3 className="font-bold text-lg mb-1">היסטוריית הוצאות</h3>
             <p className="text-sm opacity-90">{supplier.name}</p>
           </div>
@@ -32,17 +32,17 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 p-6 border-b border-gray-100 dark:border-slate-700">
-        <div className="text-right">
+        <div className="text-start">
           <p className="text-xs text-gray-600 dark:text-slate-400 mb-1">סה"כ הוצאות</p>
           <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
             {totalSpending.toLocaleString()} ₪
           </p>
         </div>
-        <div className="text-right">
+        <div className="text-start">
           <p className="text-xs text-gray-600 dark:text-slate-400 mb-1">מספר הוצאות</p>
           <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{expenses.length}</p>
         </div>
-        <div className="text-right">
+        <div className="text-start">
           <p className="text-xs text-gray-600 dark:text-slate-400 mb-1">ממוצע הוצאה</p>
           <p className="text-lg font-bold text-purple-600 dark:text-purple-400">
             {Math.round(avgExpense).toLocaleString()} ₪
@@ -61,7 +61,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
             className="p-4 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
           >
             <div className="flex items-start justify-between flex-row-reverse gap-4">
-              <div className="text-right flex-1">
+              <div className="text-start flex-1">
                 <p className="font-medium text-gray-900 dark:text-slate-100">{expense.description}</p>
                 <div className="flex gap-3 mt-2 flex-row-reverse justify-end">
                   <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-slate-400">

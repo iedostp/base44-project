@@ -95,19 +95,19 @@ export default function NotificationSettingsPanel({ user }) {
   if (isLoading) return null;
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700" dir="rtl">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700">
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-xl flex-shrink-0">
           <Bell className="w-6 h-6 text-blue-600 dark:text-blue-300" />
         </div>
-        <div className="text-right flex-1">
+        <div className="text-start flex-1">
           <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">הגדרות התראות</h2>
           <p className="text-sm text-gray-500 dark:text-slate-400">התאם אישית את סוג ואופן ההתראות שלך</p>
         </div>
       </div>
 
       {/* Channel legend */}
-      <div className="flex items-center justify-start gap-6 mb-4 text-xs text-gray-500 dark:text-slate-400" dir="rtl">
+      <div className="flex items-center justify-start gap-6 mb-4 text-xs text-gray-500 dark:text-slate-400">
         <div className="flex items-center gap-1.5 flex-row-reverse">
           <Mail className="w-3.5 h-3.5" />
           דוא"ל
@@ -120,9 +120,9 @@ export default function NotificationSettingsPanel({ user }) {
 
       <div className="space-y-3">
         {notifTypes.map(({ key, label, description }) => (
-          <div key={key} className="bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600" dir="rtl">
+          <div key={key} className="bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
             <div className="flex items-center gap-3 flex-row-reverse justify-end">
-              <div className="flex-1 text-right">
+              <div className="flex-1 text-start">
                 <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm">{label}</p>
                 <p className="text-xs text-gray-500 dark:text-slate-400">{description}</p>
               </div>
@@ -143,9 +143,9 @@ export default function NotificationSettingsPanel({ user }) {
         ))}
 
         {/* Days ahead setting */}
-        <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600" dir="rtl">
+        <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
           <div className="flex items-center gap-3 flex-row-reverse justify-end">
-            <div className="flex-1 text-right">
+            <div className="flex-1 text-start">
               <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm">תזכורת מוקדמת</p>
               <p className="text-xs text-gray-500 dark:text-slate-400">כמה ימים לפני המועד לשלוח תזכורת</p>
             </div>

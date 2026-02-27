@@ -80,7 +80,7 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" dir="rtl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">הוסף ספק חדש</DialogTitle>
         </DialogHeader>

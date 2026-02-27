@@ -169,9 +169,9 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
       />
 
       {/* Gantt Chart */}
-      <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 border border-gray-100" dir="rtl">
+      <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 border border-gray-100">
         <div className="flex flex-col gap-4">
-          <h3 className="text-xl md:text-2xl font-bold text-gray-800 text-right">ציר זמן - תצוגת גאנט</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-gray-800 text-start">ציר זמן - תצוגת גאנט</h3>
           <div className="flex items-center justify-center md:justify-start gap-2">
             <Button
               variant="outline"
@@ -439,12 +439,12 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
     </div>
 
       {/* Critical Path Info */}
-      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-r-4 border-amber-500 rounded-xl p-5 text-right" dir="rtl">
+      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-s-4 border-amber-500 rounded-xl p-5 text-start">
         <div className="flex flex-row-reverse items-start gap-3">
           <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
-          <div className="text-right w-full">
-            <h4 className="font-semibold text-amber-900 mb-2 text-right">נתיב קריטי</h4>
-            <p className="text-sm text-amber-800 leading-relaxed mb-3 text-right">
+          <div className="text-start w-full">
+            <h4 className="font-semibold text-amber-900 mb-2 text-start">נתיב קריטי</h4>
+            <p className="text-sm text-amber-800 leading-relaxed mb-3 text-start">
               כל השלבים בפרויקט מתוכננים ברצף. עיכוב בשלב אחד ישפיע על כל השלבים הבאים.
             </p>
             <div className="flex flex-wrap gap-2 justify-start">

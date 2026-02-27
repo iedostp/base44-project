@@ -36,7 +36,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 text-white">
         <div className="flex items-start justify-between flex-row-reverse mb-2">
-          <div className="text-right flex-1">
+          <div className="text-start flex-1">
             <h3 className="font-bold text-lg">{supplier.name}</h3>
             <p className="text-sm opacity-90">{categoryLabel}</p>
           </div>
@@ -47,7 +47,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-4" dir="rtl">
+      <div className="p-6 space-y-4">
         {/* Rating */}
         <div className="flex items-center justify-between flex-row-reverse">
           <span className="text-sm text-gray-600 dark:text-slate-400">דירוג</span>
@@ -103,7 +103,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
             <TrendingUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span className="text-sm text-gray-700 dark:text-slate-300">סה"כ הוצאות</span>
           </div>
-          <div className="text-right">
+          <div className="text-start">
             <p className="font-bold text-blue-600 dark:text-blue-400">
               {stats.spending.toLocaleString()} ₪
             </p>

@@ -58,66 +58,66 @@ export default function AddTaskDialog({ isOpen, onClose, stageId, onTaskAdded })
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md" dir="rtl">
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">הוסף משימה חדשה</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 text-right">
+            <label className="block text-sm font-medium text-gray-700 mb-2 text-start">
               תיאור המשימה <span className="text-red-500">*</span>
             </label>
             <Input
               placeholder="תיאור המשימה"
               value={taskData.text}
               onChange={(e) => setTaskData({ ...taskData, text: e.target.value })}
-              className="text-right"
+              className="text-start"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 text-right">
+            <label className="block text-sm font-medium text-gray-700 mb-2 text-start">
               משך זמן משוער
             </label>
             <Input
               placeholder="למשל: 2-3 שבועות"
               value={taskData.duration}
               onChange={(e) => setTaskData({ ...taskData, duration: e.target.value })}
-              className="text-right"
+              className="text-start"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 text-right">תאריך יעד</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2 text-start">תאריך יעד</label>
               <input
                 type="date"
                 value={taskData.due_date}
                 onChange={(e) => setTaskData({ ...taskData, due_date: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-start"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 text-right">שעת יעד</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2 text-start">שעת יעד</label>
               <input
                 type="time"
                 value={taskData.due_time}
                 onChange={(e) => setTaskData({ ...taskData, due_time: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-start"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="task-priority" className="block text-sm font-medium text-gray-700 mb-2 text-right">עדיפות</label>
+              <label htmlFor="task-priority" className="block text-sm font-medium text-gray-700 mb-2 text-start">עדיפות</label>
               <select
                 id="task-priority"
                 aria-label="עדיפות משימה"
                 value={taskData.priority}
                 onChange={(e) => setTaskData({ ...taskData, priority: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
               >
                 <option value="נמוכה">נמוכה</option>
                 <option value="בינונית">בינונית</option>
@@ -125,13 +125,13 @@ export default function AddTaskDialog({ isOpen, onClose, stageId, onTaskAdded })
               </select>
             </div>
             <div>
-              <label htmlFor="task-status" className="block text-sm font-medium text-gray-700 mb-2 text-right">סטטוס</label>
+              <label htmlFor="task-status" className="block text-sm font-medium text-gray-700 mb-2 text-start">סטטוס</label>
               <select
                 id="task-status"
                 aria-label="סטטוס משימה"
                 value={taskData.status}
                 onChange={(e) => setTaskData({ ...taskData, status: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
               >
                 <option value="טרם התחיל">טרם התחיל</option>
                 <option value="בתהליך">בתהליך</option>

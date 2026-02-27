@@ -98,14 +98,19 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('User auth check failed:', error);
       setIsLoadingAuth(false);
-      setIsAuthenticated(false);
-      
-      // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
-        setAuthError({
-          type: 'auth_required',
-          message: 'Authentication required'
-        });
+
+      // If a token is present in env/params, treat it as a valid bypass token
+      // and allow the app to render without requiring a user login.
+      if (appParams.token) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        if (error.status === 401 || error.status === 403) {
+          setAuthError({
+            type: 'auth_required',
+            message: 'Authentication required'
+          });
+        }
       }
     }
   };

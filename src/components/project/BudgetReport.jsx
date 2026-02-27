@@ -36,7 +36,7 @@ const PIE_COLORS = ["#6366f1", "#f59e0b", "#10b981", "#ef4444", "#3b82f6", "#8b5
 const makeCustomTooltip = (formatNIS) => ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl p-3 shadow-xl text-right" dir="rtl">
+    <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl p-3 shadow-xl text-right">
       <p className="font-semibold text-gray-700 dark:text-slate-200 mb-1 text-sm">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: entry.color }} className="text-sm">
@@ -250,7 +250,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
 
   if (!totalBudget) {
     return (
-      <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-6 text-center" dir="rtl">
+      <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-6 text-center">
         <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
         <p className="text-amber-800 dark:text-amber-300 font-semibold">לא הוגדר תקציב לפרויקט</p>
         <p className="text-amber-600 dark:text-amber-400 text-sm mt-1">הגדר תקציב בהגדרות הפרויקט כדי להציג דוח תקציב</p>
@@ -259,7 +259,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
   }
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       {/* ─── Title ───────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3">
         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
@@ -273,7 +273,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
 
       {/* ─── Alert Banners ───────────────────────────────────────────── */}
       {budgetUsagePercent >= 90 && (
-        <div className="bg-red-50 dark:bg-red-900/20 border-r-4 border-red-500 rounded-xl p-4 flex items-start gap-3" dir="rtl">
+        <div className="bg-red-50 dark:bg-red-900/20 border-s-4 border-red-500 rounded-xl p-4 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-red-800 dark:text-red-300">⚠️ חריגת תקציב קריטית!</p>
@@ -285,7 +285,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         </div>
       )}
       {budgetUsagePercent >= 75 && budgetUsagePercent < 90 && (
-        <div className="bg-amber-50 dark:bg-amber-900/20 border-r-4 border-amber-500 rounded-xl p-4 flex items-start gap-3" dir="rtl">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border-s-4 border-amber-500 rounded-xl p-4 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-amber-800 dark:text-amber-300">התראת תקציב</p>
@@ -296,7 +296,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         </div>
       )}
       {overrunStages.length > 0 && (
-        <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-xl p-4" dir="rtl">
+        <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-xl p-4">
           <p className="font-semibold text-orange-800 dark:text-orange-300 mb-2">שלבים עם חריגת תקציב:</p>
           <div className="flex flex-wrap gap-2">
             {overrunStages.map((s) => (
@@ -383,11 +383,11 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
 
       {/* ─── Detailed Table ──────────────────────────────────────────── */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-md overflow-hidden">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-5 border-b border-gray-100 dark:border-slate-700 gap-3" dir="rtl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-5 border-b border-gray-100 dark:border-slate-700 gap-3">
           <span className="font-bold text-gray-800 dark:text-slate-100">טבלת פירוט לפי שלב</span>
           <div className="flex flex-wrap items-center gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-32" dir="rtl">
+              <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -411,19 +411,19 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         </div>
         {showTable && (
           <div className="overflow-x-auto">
-            <table className="w-full text-xs md:text-sm" dir="rtl">
+            <table className="w-full text-xs md:text-sm">
               <thead className="bg-gray-50 dark:bg-slate-700">
                 <tr>
                   <th className="text-right px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("title")}>
                     שלב {sortColumn === "title" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
-                  <th className="hidden md:table-cell text-left px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("planned")}>
+                  <th className="hidden md:table-cell text-right px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("planned")}>
                     מתוכנן {sortColumn === "planned" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
-                  <th className="text-left px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("actual")}>
+                  <th className="text-right px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("actual")}>
                     בפועל {sortColumn === "actual" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
-                  <th className="hidden lg:table-cell text-left px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("diff")}>
+                  <th className="hidden lg:table-cell text-right px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("diff")}>
                     סטייה {sortColumn === "diff" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
                   <th className="text-center px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("percentage")}>
@@ -436,9 +436,9 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                 {filteredAndSorted.map((s, i) => (
                   <tr key={s.id} className={`border-t border-gray-100 dark:border-slate-700 ${i % 2 === 0 ? "" : "bg-gray-50/50 dark:bg-slate-700/20"}`}>
                     <td className="px-2 md:px-4 py-2 md:py-3 font-medium text-gray-800 dark:text-slate-200">{s.title}</td>
-                    <td className="hidden md:table-cell px-4 py-3 text-gray-700 dark:text-slate-300 text-left text-xs md:text-sm">{formatNIS(Math.round(s.planned))}</td>
-                    <td className="px-2 md:px-4 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-left text-xs md:text-sm">{formatNIS(Math.round(s.actual))}</td>
-                    <td className={`hidden lg:table-cell px-4 py-3 text-left font-semibold text-xs md:text-sm ${s.diff > 0 ? "text-red-600 dark:text-red-400" : s.diff < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
+                    <td className="hidden md:table-cell px-4 py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.planned))}</td>
+                    <td className="px-2 md:px-4 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.actual))}</td>
+                    <td className={`hidden lg:table-cell px-4 py-3 text-right font-semibold text-xs md:text-sm ${s.diff > 0 ? "text-red-600 dark:text-red-400" : s.diff < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
                       {s.diff > 0 ? "+" : ""}{formatNIS(Math.round(s.diff))}
                     </td>
                     <td className="px-2 md:px-4 py-2 md:py-3 text-center">
@@ -474,13 +474,13 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                 {/* Totals Row */}
                 <tr className="border-t-2 border-gray-300 dark:border-slate-500 bg-indigo-50 dark:bg-indigo-900/20 font-bold">
                   <td className="px-2 md:px-4 py-2 md:py-3 text-gray-800 dark:text-slate-100">סה"כ</td>
-                  <td className="hidden md:table-cell px-4 py-3 text-gray-800 dark:text-slate-100 text-left text-xs md:text-sm">{formatNIS(totalBudget)}</td>
-                  <td className="px-2 md:px-4 py-2 md:py-3 text-left text-xs md:text-sm">
+                  <td className="hidden md:table-cell px-4 py-3 text-gray-800 dark:text-slate-100 text-right text-xs md:text-sm">{formatNIS(totalBudget)}</td>
+                  <td className="px-2 md:px-4 py-2 md:py-3 text-right text-xs md:text-sm">
                     <span className={displaySpent > totalBudget ? "text-red-600 dark:text-red-400" : "text-gray-800 dark:text-slate-100"}>
                       {formatNIS(Math.round(displaySpent))}{isEstimated ? " *" : ""}
                     </span>
                   </td>
-                  <td className={`hidden lg:table-cell px-4 py-3 text-left text-xs md:text-sm ${displaySpent - totalBudget > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
+                  <td className={`hidden lg:table-cell px-4 py-3 text-right text-xs md:text-sm ${displaySpent - totalBudget > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
                     {displaySpent - totalBudget > 0 ? "+" : ""}{formatNIS(Math.round(displaySpent - totalBudget))}
                   </td>
                   <td className="px-2 md:px-4 py-2 md:py-3 text-center text-xs md:text-sm text-gray-700 dark:text-slate-300">{Math.round(budgetUsagePercent)}%</td>

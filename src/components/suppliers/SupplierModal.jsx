@@ -51,7 +51,7 @@ export default function SupplierModal({ isOpen, supplier, projectId, categories,
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl" dir="rtl">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>{supplier ? "עריכת ספק" : "ספק חדש"}</DialogTitle>
         </DialogHeader>
@@ -64,7 +64,7 @@ export default function SupplierModal({ isOpen, supplier, projectId, categories,
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="שם הספק"
-              className="text-right"
+              className="text-start"
             />
           </div>
 
@@ -92,7 +92,7 @@ export default function SupplierModal({ isOpen, supplier, projectId, categories,
                 value={formData.contact_phone}
                 onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
                 placeholder="0501234567"
-                className="text-right"
+                className="text-start"
               />
             </div>
             <div>
@@ -101,7 +101,7 @@ export default function SupplierModal({ isOpen, supplier, projectId, categories,
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="info@supplier.com"
-                className="text-right"
+                className="text-start"
               />
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function SupplierModal({ isOpen, supplier, projectId, categories,
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               placeholder="רחוב 123, עיר"
-              className="text-right"
+              className="text-start"
             />
           </div>
 
@@ -175,7 +175,7 @@ export default function SupplierModal({ isOpen, supplier, projectId, categories,
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               placeholder="הערות נוספות על הספק..."
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 resize-none h-24 text-right"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 resize-none h-24 text-start"
             />
           </div>
         </div>

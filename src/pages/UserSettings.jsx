@@ -36,9 +36,9 @@ function Toggle({ checked, onChange }) {
 function Section({ icon, color, title, subtitle, children }) {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 overflow-hidden">
-      <div className={`flex items-center gap-3 p-5 border-b border-gray-100 dark:border-slate-700`} dir="rtl">
+      <div className={`flex items-center gap-3 p-5 border-b border-gray-100 dark:border-slate-700`}>
         <div className={`${color} p-2.5 rounded-xl flex-shrink-0`}>{icon}</div>
-        <div className="text-right">
+        <div className="text-start">
           <h2 className="font-bold text-gray-800 dark:text-slate-100">{title}</h2>
           {subtitle && <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
         </div>
@@ -174,18 +174,18 @@ export default function UserSettings() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen" dir="rtl">
+      <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-4 md:p-8 pb-24 md:pb-8" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-4 md:p-8 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto space-y-6">
 
         {/* Page Title */}
-        <div className="text-right">
+        <div className="text-start">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-slate-100">הגדרות משתמש</h1>
           <p className="text-gray-500 dark:text-slate-400 text-sm mt-1">ניהול פרופיל, התראות ועיצוב</p>
         </div>
@@ -200,11 +200,11 @@ export default function UserSettings() {
           <div className="space-y-4">
             {/* Read-only fields */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-3 border border-gray-100 dark:border-slate-600 text-right">
+              <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-3 border border-gray-100 dark:border-slate-600 text-start">
                 <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">שם מלא</p>
                 <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm">{user.full_name || "לא זמין"}</p>
               </div>
-              <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-3 border border-gray-100 dark:border-slate-600 text-right">
+              <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-3 border border-gray-100 dark:border-slate-600 text-start">
                 <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">כתובת אימייל</p>
                 <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm truncate">{user.email}</p>
               </div>
@@ -212,7 +212,7 @@ export default function UserSettings() {
 
             {/* Editable fields */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="text-right">
+              <div className="text-start">
                 <label htmlFor="phone-input" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">טלפון</label>
                 <input
                   id="phone-input"
@@ -221,11 +221,11 @@ export default function UserSettings() {
                   value={profile.phone}
                   onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))}
                   placeholder="050-0000000"
-                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
-                  dir="rtl"
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
+                 
                 />
               </div>
-              <div className="text-right">
+              <div className="text-start">
                 <label htmlFor="job-input" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">תפקיד</label>
                 <input
                   id="job-input"
@@ -234,8 +234,8 @@ export default function UserSettings() {
                   value={profile.job_title}
                   onChange={e => setProfile(p => ({ ...p, job_title: e.target.value }))}
                   placeholder="לדוגמה: בעל בית / קבלן"
-                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
-                  dir="rtl"
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
+                 
                 />
               </div>
             </div>
@@ -270,7 +270,7 @@ export default function UserSettings() {
           subtitle="בחר כיצד ומתי לקבל התראות"
         >
           {/* Channel headers */}
-          <div className="flex items-center justify-end gap-6 mb-3 text-xs text-gray-500 dark:text-slate-400" dir="rtl">
+          <div className="flex items-center justify-end gap-6 mb-3 text-xs text-gray-500 dark:text-slate-400">
             <div className="flex items-center gap-1">
               <span>דוא״ל</span>
               <Mail className="w-3.5 h-3.5" />
@@ -283,8 +283,8 @@ export default function UserSettings() {
 
           <div className="space-y-3">
             {NOTIF_TYPES.map(({ key, label, desc, icon }) => (
-              <div key={key} className="flex items-center gap-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600" dir="rtl">
-                <div className="flex items-center gap-1.5 flex-1 min-w-0 text-right">
+              <div key={key} className="flex items-center gap-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
+                <div className="flex items-center gap-1.5 flex-1 min-w-0 text-start">
                   {icon}
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-slate-100">{label}</p>
@@ -305,8 +305,8 @@ export default function UserSettings() {
             ))}
 
             {/* Days ahead */}
-            <div className="flex items-center gap-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600" dir="rtl">
-              <div className="flex items-center gap-1.5 flex-1 text-right">
+            <div className="flex items-center gap-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
+              <div className="flex items-center gap-1.5 flex-1 text-start">
                 <Clock className="w-4 h-4 text-gray-400" />
                 <label htmlFor="days-ahead-select" className="cursor-pointer flex-1">
                   <p className="text-sm font-medium text-gray-800 dark:text-slate-100">תזכורת מוקדמת</p>
@@ -357,17 +357,17 @@ export default function UserSettings() {
 
         {/* ── Danger Zone ───────────────────────────────────────────────── */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border-2 border-red-200 dark:border-red-900 overflow-hidden">
-          <div className="flex items-center gap-3 p-5 border-b border-red-100 dark:border-red-900/50" dir="rtl">
+          <div className="flex items-center gap-3 p-5 border-b border-red-100 dark:border-red-900/50">
             <div className="bg-red-100 dark:bg-red-900/50 p-2.5 rounded-xl flex-shrink-0">
               <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
             </div>
-            <div className="text-right">
+            <div className="text-start">
               <h2 className="font-bold text-red-800 dark:text-red-300">אזור מסוכן</h2>
               <p className="text-xs text-red-500 dark:text-red-400 mt-0.5">פעולות בלתי הפיכות</p>
             </div>
           </div>
-          <div className="p-5" dir="rtl">
-            <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 text-right leading-relaxed">
+          <div className="p-5">
+            <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 text-start leading-relaxed">
               מחיקת חשבון תסיר לצמיתות את כל הנתונים שלך, כולל פרויקטים, שלבים, משימות, ספקים, מסמכים והוצאות.
             </p>
             <Button
@@ -384,17 +384,17 @@ export default function UserSettings() {
 
       {/* Delete Dialog */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent className="dark:bg-slate-800 dark:border-slate-700" dir="rtl">
+        <DialogContent className="dark:bg-slate-800 dark:border-slate-700">
           <DialogHeader>
-            <DialogTitle className="flex flex-row-reverse items-center gap-2 text-red-600 dark:text-red-400 text-right">
+            <DialogTitle className="flex flex-row-reverse items-center gap-2 text-red-600 dark:text-red-400 text-start">
               <AlertTriangle className="w-5 h-5" />
               אישור מחיקת חשבון
             </DialogTitle>
-            <DialogDescription className="text-gray-600 dark:text-slate-300 text-right">
+            <DialogDescription className="text-gray-600 dark:text-slate-300 text-start">
               האם אתה בטוח? פעולה זו תמחק לצמיתות את כל הנתונים שלך ולא ניתן יהיה לשחזר אותם.
             </DialogDescription>
           </DialogHeader>
-          <div className="bg-red-50 dark:bg-red-950 rounded-lg p-4 my-2 text-right border border-red-200 dark:border-red-900">
+          <div className="bg-red-50 dark:bg-red-950 rounded-lg p-4 my-2 text-start border border-red-200 dark:border-red-900">
             <p className="text-sm text-red-800 dark:text-red-300 font-semibold">⚠️ זוהי אזהרה אחרונה!</p>
           </div>
           <DialogFooter className="gap-2">

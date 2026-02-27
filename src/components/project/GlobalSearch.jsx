@@ -73,7 +73,7 @@ export default function GlobalSearch({ stages, tasks, expenses, suppliers, docum
   ].filter(g => g.items.length > 0) : [];
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-lg" dir="rtl">
+    <div ref={containerRef} className="relative w-full max-w-lg">
       <div className="relative">
         <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
         <input
@@ -107,7 +107,7 @@ export default function GlobalSearch({ stages, tasks, expenses, suppliers, docum
                   <button
                     key={item.id}
                     onClick={() => handleSelect(item)}
-                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors text-right"
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors text-start"
                   >
                     <div className="flex-shrink-0">{item.icon}</div>
                     <div className="flex-1 min-w-0">

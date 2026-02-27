@@ -74,7 +74,7 @@ export default function NotificationBell({ user, project }) {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-12 w-96 max-w-[90vw] bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50" dir="rtl">
+        <div className="absolute end-0 top-12 w-96 max-w-[90vw] bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-slate-700">
             <h3 className="font-bold text-gray-800 dark:text-slate-100">התראות</h3>

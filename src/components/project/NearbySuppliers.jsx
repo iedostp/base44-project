@@ -168,7 +168,7 @@ export default function NearbySuppliers({ suppliers, isOpen, onClose }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" dir="rtl">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2 justify-center text-center">
             <MapPin className="w-6 h-6 text-blue-600" />

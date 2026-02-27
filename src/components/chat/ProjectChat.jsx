@@ -86,7 +86,7 @@ export default function ProjectChat({ projectId, user }) {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 h-[500px] flex flex-col" dir="rtl">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 h-[500px] flex flex-col">
       {/* Header */}
       <div className="border-b border-gray-100 dark:border-slate-700 p-4 flex items-center justify-between">
         <div className="flex items-center gap-2">

@@ -235,7 +235,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').length} ספקים �
   return (
     <div className="space-y-6">
       {/* Header & Analyze Button */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-5 text-white shadow-xl" dir="rtl">
+      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-5 text-white shadow-xl">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <div className="bg-white/20 p-2.5 rounded-xl flex-shrink-0">

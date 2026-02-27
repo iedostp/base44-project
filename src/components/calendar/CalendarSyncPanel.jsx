@@ -42,7 +42,7 @@ function QuickEventForm({ onClose, onCreated }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" dir="rtl">
+    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-slate-700">
         <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-slate-700">
           <h3 className="font-bold text-gray-800 dark:text-slate-100">יצירת אירוע ביומן</h3>
@@ -56,7 +56,7 @@ function QuickEventForm({ onClose, onCreated }) {
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
               placeholder="לדוגמה: ישיבת תיאום עם קבלן"
               className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500"
-              dir="rtl"
+             
             />
           </div>
           <div>
@@ -67,7 +67,7 @@ function QuickEventForm({ onClose, onCreated }) {
               placeholder="פרטים נוספים..."
               rows={2}
               className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 resize-none"
-              dir="rtl"
+             
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -95,7 +95,7 @@ function QuickEventForm({ onClose, onCreated }) {
               ))}
             </div>
           </div>
-          {error && <p className="text-sm text-red-600 text-right">{error}</p>}
+          {error && <p className="text-sm text-red-600 text-start">{error}</p>}
         </div>
         <div className="flex gap-3 p-5 pt-0">
           <Button onClick={onClose} variant="outline" className="flex-1">ביטול</Button>
@@ -221,7 +221,7 @@ export default function CalendarSyncPanel({ user, project }) {
       )}
 
       {showDisconnectConfirm && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" dir="rtl">
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-4 border border-gray-100 dark:border-slate-700">
             <div className="flex items-center gap-3">
               <div className="bg-red-100 p-2 rounded-xl"><Trash2 className="w-5 h-5 text-red-600" /></div>
@@ -238,7 +238,7 @@ export default function CalendarSyncPanel({ user, project }) {
         </div>
       )}
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden" dir="rtl">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-700 dark:to-slate-700 border-b border-gray-100 dark:border-slate-700">
           <div className="flex items-center gap-3">
@@ -272,7 +272,7 @@ export default function CalendarSyncPanel({ user, project }) {
           {!enabled ? (
             /* Not connected - setup panel */
             <div className="space-y-5">
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-700 dark:to-slate-700 rounded-2xl p-5 text-right border border-blue-100 dark:border-slate-600">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-700 dark:to-slate-700 rounded-2xl p-5 text-start border border-blue-100 dark:border-slate-600">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="bg-blue-100 dark:bg-blue-900/40 p-2 rounded-xl">
                     <Upload className="w-5 h-5 text-blue-600 dark:text-blue-300" />
@@ -297,7 +297,7 @@ export default function CalendarSyncPanel({ user, project }) {
             /* Connected - sync panel */
             <div className="space-y-4">
               {/* Status card */}
-              <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800 text-right">
+              <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800 text-start">
                 <div className="flex items-center gap-2 mb-1">
                   <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
                   <p className="text-sm font-semibold text-green-800 dark:text-green-300">הסנכרון פעיל</p>
@@ -322,7 +322,7 @@ export default function CalendarSyncPanel({ user, project }) {
 
               {/* Sync result */}
               {syncResult && (
-                <div className={`p-3 rounded-xl text-sm text-right border ${
+                <div className={`p-3 rounded-xl text-sm text-start border ${
                   syncResult.success
                     ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800'
                     : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800'
@@ -369,7 +369,7 @@ export default function CalendarSyncPanel({ user, project }) {
           )}
 
           {/* Outlook note */}
-          <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl text-right">
+          <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl text-start">
             <p className="text-xs text-amber-700 dark:text-amber-300 font-medium mb-1">📌 Outlook Calendar</p>
             <p className="text-xs text-amber-600 dark:text-amber-400">
               לסנכרון עם Outlook: לאחר הסנכרון ל-Google, פתח Outlook → הגדרות → הוסף יומן → Google Calendar.

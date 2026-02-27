@@ -64,7 +64,7 @@ export default function SupplierCard({ supplier, onStatusChange, isSelected, onT
   return (
     <div className={`border rounded-2xl p-5 transition-all duration-300 bg-white dark:bg-slate-800 relative select-none flex flex-col ${
       isSelected ? 'border-blue-500 dark:border-blue-400 shadow-xl ring-2 ring-blue-200 dark:ring-blue-700' : 'border-gray-200 dark:border-slate-700 hover:shadow-xl'
-    }`} dir="rtl">
+    }`}>
       {/* Compare Checkbox */}
       <div className="absolute top-4 right-4 z-10">
         <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-2 shadow-md border border-gray-200">

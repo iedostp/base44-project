@@ -40,7 +40,7 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl" dir="rtl">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-2xl font-bold text-gray-800 text-right">

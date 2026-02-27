@@ -84,7 +84,7 @@ export default function CommentsPanel({ refType, refId, projectId, user }) {
   }, [open]);
 
   return (
-    <div className="mt-2" dir="rtl" onClick={(e) => e.stopPropagation()}>
+    <div className="mt-2" onClick={(e) => e.stopPropagation()}>
       {/* Toggle button */}
       <button
         onClick={(e) => { e.stopPropagation(); setOpen(o => !o); }}

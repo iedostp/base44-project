@@ -111,7 +111,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
 
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-xl" dir="rtl">
+        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-xl">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
@@ -121,7 +121,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
           <p className="text-2xl font-bold text-right">{currencySymbol}{totalBudget.toLocaleString()}</p>
         </div>
 
-        <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-4 text-white shadow-xl" dir="rtl">
+        <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-4 text-white shadow-xl">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
@@ -132,7 +132,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
           <p className="text-xs opacity-90 mt-1 text-right">{spentPercentage}% מהתקציב</p>
         </div>
 
-        <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl p-4 text-white shadow-xl" dir="rtl">
+        <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl p-4 text-white shadow-xl">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
@@ -145,7 +145,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       </div>
 
       {/* Budget Breakdown */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700" dir="rtl">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-bold text-xl text-gray-800 dark:text-slate-100 flex items-center gap-2">
             <span className="text-2xl font-bold text-blue-600">{currencySymbol}</span>
@@ -205,7 +205,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       </div>
 
       {/* Progress Visualization */}
-      <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100" dir="rtl">
+      <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
         <h3 className="font-bold text-xl text-gray-800 mb-6 text-center">התפלגות תקציב</h3>
         <div className="w-full bg-gray-200 rounded-full h-8 overflow-hidden shadow-inner">
           <div 

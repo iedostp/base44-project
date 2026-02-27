@@ -134,7 +134,7 @@ export default function InitializeTasks() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">נדרשת התחברות</h2>
@@ -146,7 +146,7 @@ export default function InitializeTasks() {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">לא נמצא פרויקט</h2>
@@ -160,7 +160,7 @@ export default function InitializeTasks() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">אתחול משימות לפרויקט</h1>
@@ -168,7 +168,7 @@ export default function InitializeTasks() {
             דף זה יאפשר לך להוסיף באופן אוטומטי את כל המשימות התקניות לשלבים השונים בפרויקט שלך.
           </p>
 
-          <div className="bg-blue-50 border-r-4 border-blue-500 p-4 mb-6 rounded-lg">
+          <div className="bg-blue-50 border-s-4 border-blue-500 p-4 mb-6 rounded-lg">
             <h3 className="font-bold text-blue-900 mb-2">מידע חשוב</h3>
             <ul className="text-sm text-blue-800 space-y-1">
               <li>• הפעולה תוסיף {tasksTemplate.length} משימות לשלבים השונים</li>

@@ -41,7 +41,7 @@ function OptionButton({ active, onClick, children }) {
 
 function SectionTitle({ children }) {
   return (
-    <p className="text-sm font-semibold text-gray-500 dark:text-slate-400 mb-3 text-right">
+    <p className="text-sm font-semibold text-gray-500 dark:text-slate-400 mb-3 text-start">
       {children}
     </p>
   );
@@ -52,13 +52,13 @@ export default function AppearanceSettings() {
   if (!mounted) return null;
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700" dir="rtl">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-xl flex-shrink-0">
           <Sun className="w-6 h-6 text-purple-600 dark:text-purple-300" />
         </div>
-        <div className="text-right flex-1">
+        <div className="text-start flex-1">
           <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">עיצוב ומראה</h2>
           <p className="text-sm text-gray-500 dark:text-slate-400">התאם את האפליקציה לטעמך</p>
         </div>
@@ -138,7 +138,7 @@ export default function AppearanceSettings() {
           layout
           className="rounded-xl border-2 border-dashed border-gray-200 dark:border-slate-600 p-4 bg-gray-50 dark:bg-slate-700/30"
         >
-          <p className="text-xs text-gray-400 dark:text-slate-500 text-right mb-2">תצוגה מקדימה</p>
+          <p className="text-xs text-gray-400 dark:text-slate-500 text-start mb-2">תצוגה מקדימה</p>
           <div className={`bg-white dark:bg-slate-800 rounded-xl p-3 border border-gray-100 dark:border-slate-600 ${prefs.compactMode ? "space-y-1" : "space-y-2"}`}>
             <div className="flex items-center justify-between">
               <div className="w-5 h-5 rounded-full" style={{ background: "var(--accent-primary)" }} />

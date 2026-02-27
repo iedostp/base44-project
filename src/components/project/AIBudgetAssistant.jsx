@@ -225,7 +225,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
   return (
     <div className="space-y-6">
       {/* Header & Analyze Button */}
-      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl p-4 md:p-6 text-white shadow-xl" dir="rtl">
+      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl p-4 md:p-6 text-white shadow-xl">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="bg-white/20 p-2.5 rounded-xl shrink-0">

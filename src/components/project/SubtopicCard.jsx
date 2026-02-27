@@ -3,7 +3,7 @@ import { Lightbulb } from "lucide-react";
 
 export default function SubtopicCard({ subtopic }) {
   return (
-    <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl p-5 shadow-sm border border-blue-100 hover:shadow-md transition-all duration-200" dir="rtl">
+    <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl p-5 shadow-sm border border-blue-100 hover:shadow-md transition-all duration-200">
       <div className="flex items-start gap-3 mb-3">
         <div className="bg-blue-100 p-2 rounded-lg">
           <Lightbulb className="w-4 h-4 text-blue-600" />

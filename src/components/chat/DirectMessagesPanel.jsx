@@ -68,7 +68,7 @@ export default function DirectMessagesPanel({ projectId, user }) {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700" dir="rtl">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700">
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="w-5 h-5 text-indigo-600" />
         <h3 className="font-bold text-gray-800 dark:text-slate-100">הודעות ישירות</h3>

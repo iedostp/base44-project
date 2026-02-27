@@ -18,7 +18,7 @@ const languages = [
 ];
 
 export default function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState('he');
   const [isSaving, setIsSaving] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -36,23 +36,24 @@ export default function LanguageSwitcher() {
     window.location.reload();
   };
 
-  const selectedLanguageLabel = languages.find(lang => lang.code === selectedLanguage)?.label;
-  const currentLanguageLabel = languages.find(lang => lang.code === i18n.language)?.label;
-
   if (!mounted) return null;
 
+  const selectedLangLabel = languages.find(l => l.code === selectedLanguage)?.label;
+
   return (
-    <div className="space-y-4" dir="rtl">
+    <div className="space-y-4">
       {/* Language Selector */}
       <div>
-        <label htmlFor="language-select" className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-2 text-right">שפה</label>
+        <label htmlFor="language-select" className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-2 text-start">
+          {t('languageLabel')}
+        </label>
         <Select value={selectedLanguage} onValueChange={setSelectedLanguage} name="language-select">
-          <SelectTrigger id="language-select" className="w-full" aria-label="בחר שפה">
-            <SelectValue placeholder="בחר שפה" />
+          <SelectTrigger id="language-select" className="w-full" aria-label={t('chooseLanguage')}>
+            <SelectValue placeholder={t('chooseLanguage')} />
           </SelectTrigger>
           <SelectContent>
             {languages.map((lang) => (
-              <SelectItem key={lang.code} value={lang.code} className="text-right">
+              <SelectItem key={lang.code} value={lang.code}>
                 {lang.label}
               </SelectItem>
             ))}
@@ -66,14 +67,14 @@ export default function LanguageSwitcher() {
         disabled={selectedLanguage === i18n.language || isSaving}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white"
       >
-        {isSaving ? 'עדכון...' : 'אישור'}
+        {isSaving ? t('updatingLanguage') : t('confirmLanguage')}
       </Button>
 
       {/* Preview */}
       {selectedLanguage !== i18n.language && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-sm text-right">
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-sm text-start">
           <p className="text-gray-700 dark:text-slate-300">
-            יתשנה ל{languages.find(l => l.code === selectedLanguage)?.label}
+            {t('willChangeTo')}: {selectedLangLabel}
           </p>
         </div>
       )}

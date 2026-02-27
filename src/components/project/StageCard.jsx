@@ -97,7 +97,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
         className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300" 
-        dir="rtl"
+       
       >
         <div 
           className={`p-4 cursor-pointer transition-all ${
