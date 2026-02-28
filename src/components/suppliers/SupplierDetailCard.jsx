@@ -67,7 +67,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
 
         {/* Contact Info */}
         {supplier.contact_phone && (
-          <div className="flex items-center gap-3 text-sm justify-end">
+          <div className="flex items-center gap-3 text-sm justify-start">
             <Phone className="w-4 h-4 text-blue-500 flex-shrink-0" />
             <a href={`tel:${supplier.contact_phone}`} className="text-blue-600 dark:text-blue-400 hover:underline">
               {supplier.contact_phone}
@@ -76,7 +76,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
         )}
 
         {supplier.email && (
-          <div className="flex items-center gap-3 text-sm justify-end">
+          <div className="flex items-center gap-3 text-sm justify-start">
             <Mail className="w-4 h-4 text-green-500 flex-shrink-0" />
             <a href={`mailto:${supplier.email}`} className="text-blue-600 dark:text-blue-400 hover:underline truncate">
               {supplier.email}
@@ -85,7 +85,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
         )}
 
         {supplier.address && (
-          <div className="flex items-center gap-3 text-sm justify-end">
+          <div className="flex items-center gap-3 text-sm justify-start">
             <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
             <span className="text-gray-700 dark:text-slate-300">{supplier.address}</span>
           </div>
@@ -103,7 +103,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
             <TrendingUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span className="text-sm text-gray-700 dark:text-slate-300">סה"כ הוצאות</span>
           </div>
-          <div className="text-start">
+          <div className="text-end">
             <p className="font-bold text-blue-600 dark:text-blue-400">
               {stats.spending.toLocaleString()} ₪
             </p>
@@ -145,12 +145,11 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
       {showDeleteConfirm && (
         <div className="border-t border-gray-100 dark:border-slate-700 p-4 bg-red-50 dark:bg-red-900/10">
           <p className="text-sm text-gray-700 dark:text-slate-300 mb-3">האם אתה בטוח שברצונך למחוק?</p>
-          <div className="flex gap-2">
+          <div className="flex justify-between">
             <Button
               onClick={() => setShowDeleteConfirm(false)}
               variant="outline"
               size="sm"
-              className="flex-1"
             >
               ביטול
             </Button>
@@ -160,7 +159,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
                 setShowDeleteConfirm(false);
               }}
               size="sm"
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+              className="bg-red-500 hover:bg-red-600 text-white"
             >
               מחק
             </Button>
