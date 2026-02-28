@@ -254,12 +254,12 @@ ${suppliers.filter(s => s.status === 'under_consideration').length} ספקים �
           >
             {analyzing ? (
               <>
-                <Loader2 className="w-4 h-4 ml-1.5 animate-spin" />
+                <Loader2 className="w-4 h-4 me-1.5 animate-spin" />
                 מנתח...
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 ml-1.5" />
+                <Sparkles className="w-4 h-4 me-1.5" />
                 נתח תזמון
               </>
             )}
@@ -337,7 +337,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').length} ספקים �
                         <p className="text-sm text-gray-600 mb-2">{alert.action_required}</p>
                         {alert.deadline && (
                           <p className="text-xs text-gray-500">
-                            <Clock className="w-3 h-3 inline ml-1" />
+                            <Clock className="w-3 h-3 inline me-1" />
                             דדליין: {alert.deadline}
                           </p>
                         )}
@@ -400,12 +400,12 @@ ${suppliers.filter(s => s.status === 'under_consideration').length} ספקים �
                 >
                   {applying ? (
                     <>
-                      <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                      <Loader2 className="w-4 h-4 me-2 animate-spin" />
                       מחיל...
                     </>
                   ) : (
                     <>
-                      <CheckCircle2 className="w-4 h-4 ml-2" />
+                      <CheckCircle2 className="w-4 h-4 me-2" />
                       החל אופטימיזציה
                     </>
                   )}

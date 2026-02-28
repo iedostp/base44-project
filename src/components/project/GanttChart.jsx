@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Calendar, Clock, CheckCircle2, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { format, addDays, addMonths, differenceInDays, parseISO, isAfter, isBefore, isWithinInterval } from "date-fns";
 import { he } from "date-fns/locale";
@@ -7,6 +8,8 @@ import AISchedulingAssistant from "./AISchedulingAssistant";
 import { Button } from "@/components/ui/button";
 
 export default function GanttChart({ project, stages, tasks, suppliers }) {
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === 'he';
   const [dateOffset, setDateOffset] = useState(0);
   const [hoveredStageId, setHoveredStageId] = useState(null);
 
@@ -292,7 +295,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
 
         {/* Desktop Horizontal View */}
         <div className="hidden md:block pb-4">
-          <div className="w-full pr-2">
+          <div className="w-full pe-2">
 
             {/* Stages */}
             <div className="space-y-4 relative">
@@ -322,7 +325,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
                         {todayPosition >= 0 && todayPosition <= timelineData.totalDays && (
                           <div 
                             className="absolute top-0 bottom-0 w-0.5 bg-red-500 z-10"
-                            style={{ right: `${todayPercentage}%` }}
+                            style={{ [isRTL ? 'right' : 'left']: `${todayPercentage}%` }}
                           >
                             {index === 0 && (
                               <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg">
@@ -337,7 +340,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
                           className="absolute top-1 h-10 rounded-lg shadow-md cursor-pointer"
                           style={{
                             width: `${width}%`,
-                            right: `${startPosition}%`,
+                            [isRTL ? 'right' : 'left']: `${startPosition}%`,
                           }}
                           layout
                           transition={{
@@ -389,7 +392,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
                           <div
                             className="absolute top-1/2 transform -translate-y-1/2 h-0.5 bg-gray-300"
                             style={{
-                              right: `${startPosition + width}%`,
+                              [isRTL ? 'right' : 'left']: `${startPosition + width}%`,
                               width: `${((differenceInDays(timelineData.stages[index + 1].startDate, stage.endDate) / timelineData.totalDays) * 100)}%`
                             }}
                           >
@@ -440,7 +443,7 @@ export default function GanttChart({ project, stages, tasks, suppliers }) {
 
       {/* Critical Path Info */}
       <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-s-4 border-amber-500 rounded-xl p-5 text-start">
-        <div className="flex flex-row-reverse items-start gap-3">
+        <div className="flex items-start gap-3">
           <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
           <div className="text-start w-full">
             <h4 className="font-semibold text-amber-900 mb-2 text-start">נתיב קריטי</h4>

@@ -108,11 +108,11 @@ export default function NotificationSettingsPanel({ user }) {
 
       {/* Channel legend */}
       <div className="flex items-center justify-start gap-6 mb-4 text-xs text-gray-500 dark:text-slate-400">
-        <div className="flex items-center gap-1.5 flex-row-reverse">
+        <div className="flex items-center gap-1.5">
           <Mail className="w-3.5 h-3.5" />
           דוא"ל
         </div>
-        <div className="flex items-center gap-1.5 flex-row-reverse">
+        <div className="flex items-center gap-1.5">
           <Smartphone className="w-3.5 h-3.5" />
           באפליקציה
         </div>
@@ -121,7 +121,7 @@ export default function NotificationSettingsPanel({ user }) {
       <div className="space-y-3">
         {notifTypes.map(({ key, label, description }) => (
           <div key={key} className="bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
-            <div className="flex items-center gap-3 flex-row-reverse justify-end">
+            <div className="flex items-center gap-3 justify-end">
               <div className="flex-1 text-start">
                 <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm">{label}</p>
                 <p className="text-xs text-gray-500 dark:text-slate-400">{description}</p>
@@ -144,7 +144,7 @@ export default function NotificationSettingsPanel({ user }) {
 
         {/* Days ahead setting */}
         <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
-          <div className="flex items-center gap-3 flex-row-reverse justify-end">
+          <div className="flex items-center gap-3 justify-end">
             <div className="flex-1 text-start">
               <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm">תזכורת מוקדמת</p>
               <p className="text-xs text-gray-500 dark:text-slate-400">כמה ימים לפני המועד לשלוח תזכורת</p>
@@ -172,7 +172,7 @@ export default function NotificationSettingsPanel({ user }) {
       >
         {saved ? '✓ נשמר בהצלחה' : (
           <>
-            <Save className="w-4 h-4 ml-2" />
+            <Save className="w-4 h-4 me-2" />
             שמור הגדרות
           </>
         )}

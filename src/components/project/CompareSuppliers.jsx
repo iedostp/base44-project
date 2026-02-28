@@ -511,7 +511,7 @@ ${i + 1}. ${s.name}
                 {supplier.contact_phone && (
                   <div className="flex items-center gap-2 text-xs text-gray-600">
                     <Phone className="w-3 h-3 text-gray-400 flex-shrink-0" />
-                    <span dir="ltr" className="flex-1 text-right">{supplier.contact_phone}</span>
+                    <span dir="ltr" className="flex-1 text-end">{supplier.contact_phone}</span>
                   </div>
                 )}
                 {supplier.email && (
@@ -551,19 +551,19 @@ ${i + 1}. ${s.name}
           <div className="grid md:grid-cols-3 gap-4 text-sm">
             <div>
               <span className="text-gray-600">דירוג ממוצע:</span>
-              <span className="font-bold text-gray-800 mr-2">
+              <span className="font-bold text-gray-800 me-2">
                 {(suppliers.reduce((sum, s) => sum + (s.rating || 0), 0) / suppliers.length).toFixed(1)}
               </span>
             </div>
             <div>
               <span className="text-gray-600">דירוג הגבוה ביותר:</span>
-              <span className="font-bold text-gray-800 mr-2">
+              <span className="font-bold text-gray-800 me-2">
                 {bestRating}
               </span>
             </div>
             <div>
               <span className="text-gray-600">מספר ספקים שנבחרו:</span>
-              <span className="font-bold text-gray-800 mr-2">
+              <span className="font-bold text-gray-800 me-2">
                 {suppliers.filter(s => s.status === 'selected').length}
               </span>
             </div>

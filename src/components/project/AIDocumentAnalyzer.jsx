@@ -259,7 +259,7 @@ ${stages?.map((s, i) => `${i + 1}. ${s.title} (${s.budget_percentage} מהתקצ
                 className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white shadow-lg"
                 size="lg"
               >
-                <Sparkles className="w-5 h-5 ml-2" />
+                <Sparkles className="w-5 h-5 me-2" />
                 התחל ניתוח
               </Button>
             </div>

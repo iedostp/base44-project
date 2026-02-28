@@ -279,9 +279,9 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                   <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
                   <p className="text-sm font-semibold text-purple-800 dark:text-purple-300">AI זיהה וקישר אוטומטית</p>
                 </div>
-                <p className="text-xs text-purple-600 dark:text-purple-400 pr-6">{aiSuggestions.reason}</p>
+                <p className="text-xs text-purple-600 dark:text-purple-400 pe-6">{aiSuggestions.reason}</p>
                 {extractedData?.amount && (
-                  <p className="text-xs text-purple-700 dark:text-purple-400 pr-6 font-medium">
+                  <p className="text-xs text-purple-700 dark:text-purple-400 pe-6 font-medium">
                     💰 סכום שזוהה: ₪{extractedData.amount.toLocaleString('he-IL')}
                     {extractedData.reference_number && ` · מס׳ ${extractedData.reference_number}`}
                   </p>
@@ -310,7 +310,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
                   קטגוריה *
-                  {aiSuggestions && <span className="text-purple-500 text-xs mr-1">✨</span>}
+                  {aiSuggestions && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.category} onValueChange={v => setDocumentData(p => ({ ...p, category: v }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
@@ -323,7 +323,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
                   שלב
-                  {aiSuggestions?.stage_id && <span className="text-purple-500 text-xs mr-1">✨</span>}
+                  {aiSuggestions?.stage_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.stage_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, stage_id: v === '_none' ? '' : v }))}>
                   <SelectTrigger><SelectValue placeholder="בחר שלב" /></SelectTrigger>
@@ -339,7 +339,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
                   ספק
-                  {aiSuggestions?.supplier_id && <span className="text-purple-500 text-xs mr-1">✨</span>}
+                  {aiSuggestions?.supplier_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.supplier_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, supplier_id: v === '_none' ? '' : v }))}>
                   <SelectTrigger><SelectValue placeholder="בחר ספק" /></SelectTrigger>

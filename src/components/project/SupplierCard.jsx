@@ -84,7 +84,7 @@ export default function SupplierCard({ supplier, onStatusChange, isSelected, onT
       </div>
 
       {/* Supplier name - right aligned */}
-      <h3 className="font-bold text-xl text-gray-800 dark:text-slate-100 text-right mt-8 mb-3">{supplier.name}</h3>
+      <h3 className="font-bold text-xl text-gray-800 dark:text-slate-100 text-end mt-8 mb-3">{supplier.name}</h3>
 
       {/* Category, rating, price range, status - all on one row */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">

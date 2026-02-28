@@ -231,7 +231,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
             <div className="bg-white/20 p-2.5 rounded-xl shrink-0">
               <Sparkles className="w-6 h-6" />
             </div>
-            <div className="min-w-0 text-right">
+            <div className="min-w-0 text-end">
               <h3 className="text-lg font-bold leading-tight">יועץ AI חכם לתקציב</h3>
               <p className="text-purple-100 text-xs mt-0.5">ניתוח מתקדם של דפוסי הוצאה והמלצות אישיות</p>
             </div>
@@ -244,12 +244,12 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
           >
             {analyzing ? (
               <>
-                <Loader2 className="w-4 h-4 ml-1 animate-spin" />
+                <Loader2 className="w-4 h-4 me-1 animate-spin" />
                 מנתח...
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 ml-1" />
+                <Sparkles className="w-4 h-4 me-1" />
                 נתח תקציב
               </>
             )}
@@ -410,10 +410,10 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
                 <table className="w-full">
                   <thead>
                     <tr className="border-b-2 border-gray-200">
-                      <th className="text-right py-3 px-4 font-semibold text-gray-700">שלב</th>
-                      <th className="text-right py-3 px-4 font-semibold text-gray-700">עלות חזויה</th>
-                      <th className="text-right py-3 px-4 font-semibold text-gray-700">רמת ביטחון</th>
-                      <th className="text-right py-3 px-4 font-semibold text-gray-700">הערות</th>
+                      <th className="text-end py-3 px-4 font-semibold text-gray-700">שלב</th>
+                      <th className="text-end py-3 px-4 font-semibold text-gray-700">עלות חזויה</th>
+                      <th className="text-end py-3 px-4 font-semibold text-gray-700">רמת ביטחון</th>
+                      <th className="text-end py-3 px-4 font-semibold text-gray-700">הערות</th>
                     </tr>
                   </thead>
                   <tbody>

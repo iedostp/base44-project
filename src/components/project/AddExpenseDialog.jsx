@@ -89,7 +89,7 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-bold text-gray-800 text-right">
+            <DialogTitle className="text-2xl font-bold text-gray-800 text-end">
               הוסף הוצאה {stage && `- ${stage.title}`}
             </DialogTitle>
             <Button
@@ -106,7 +106,7 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
         <div className="space-y-6 mt-4">
           {/* Description */}
           <div>
-            <Label htmlFor="description" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+            <Label htmlFor="description" className="text-sm font-medium text-gray-700 mb-2 block text-end">
               תיאור ההוצאה *
             </Label>
             <Input
@@ -114,14 +114,14 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
               value={expenseData.description}
               onChange={(e) => setExpenseData(prev => ({ ...prev, description: e.target.value }))}
               placeholder="למשל: רכישת חול ומלט"
-              className="text-right"
+              className="text-end"
             />
           </div>
 
           {/* Amount and Date */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="amount" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+              <Label htmlFor="amount" className="text-sm font-medium text-gray-700 mb-2 block text-end">
                 סכום (₪) *
               </Label>
               <Input
@@ -130,11 +130,11 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
                 value={expenseData.amount}
                 onChange={(e) => setExpenseData(prev => ({ ...prev, amount: e.target.value }))}
                 placeholder="0"
-                className="text-right"
+                className="text-end"
               />
             </div>
             <div>
-              <Label htmlFor="date" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+              <Label htmlFor="date" className="text-sm font-medium text-gray-700 mb-2 block text-end">
                 תאריך
               </Label>
               <Input
@@ -142,7 +142,7 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
                 type="date"
                 value={expenseData.date}
                 onChange={(e) => setExpenseData(prev => ({ ...prev, date: e.target.value }))}
-                className="text-right"
+                className="text-end"
               />
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
 
           {/* Invoice Number */}
           <div>
-            <Label htmlFor="invoice" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+            <Label htmlFor="invoice" className="text-sm font-medium text-gray-700 mb-2 block text-end">
               מספר חשבונית (אופציונלי)
             </Label>
             <Input
@@ -229,13 +229,13 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
               value={expenseData.invoice_number}
               onChange={(e) => setExpenseData(prev => ({ ...prev, invoice_number: e.target.value }))}
               placeholder="מספר חשבונית"
-              className="text-right"
+              className="text-end"
             />
           </div>
 
           {/* Notes */}
           <div>
-            <Label htmlFor="notes" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+            <Label htmlFor="notes" className="text-sm font-medium text-gray-700 mb-2 block text-end">
               הערות
             </Label>
             <Textarea
@@ -244,7 +244,7 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
               onChange={(e) => setExpenseData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="הערות נוספות..."
               rows={3}
-              className="text-right"
+              className="text-end"
             />
           </div>
 
@@ -276,12 +276,12 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
             >
               {saving ? (
                 <>
-                  <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                  <Loader2 className="w-4 h-4 me-2 animate-spin" />
                   שומר...
                 </>
               ) : (
                 <>
-                  <Plus className="w-4 h-4 ml-2" />
+                  <Plus className="w-4 h-4 me-2" />
                   הוסף הוצאה
                 </>
               )}

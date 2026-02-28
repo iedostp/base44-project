@@ -155,7 +155,7 @@ export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, proje
       </div>
 
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 mb-6 pb-6 border-b border-gray-200 flex-row-reverse justify-end">
+      <div className="flex flex-wrap gap-2 mb-6 pb-6 border-b border-gray-200">
         {categories.map(cat => (
           <button
             key={cat.value}

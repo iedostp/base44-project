@@ -172,7 +172,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${hasDateFilter ? 'border-blue-400 bg-blue-50 text-blue-700' : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300'}`}>
             <Calendar className="w-3.5 h-3.5" />
             {hasDateFilter ? t('activeDateRange') : t('filterByDate')}
-            {hasDateFilter && <span className="mr-1 text-red-500" onClick={(e) => { e.stopPropagation(); setDateFrom(''); setDateTo(''); }}>×</span>}
+            {hasDateFilter && <span className="me-1 text-red-500" onClick={(e) => { e.stopPropagation(); setDateFrom(''); setDateTo(''); }}>×</span>}
           </button>
         </div>
 

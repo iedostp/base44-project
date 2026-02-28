@@ -26,7 +26,7 @@ function Toggle({ checked, onChange }) {
       }`}
     >
       <span className={`inline-block w-4 h-4 mt-1 rounded-full bg-white shadow transition-transform duration-200 ${
-        checked ? "translate-x-6 mr-0.5" : "translate-x-1"
+        checked ? "translate-x-6 me-0.5" : "translate-x-1"
       }`} />
     </button>
   );
@@ -247,15 +247,15 @@ export default function UserSettings() {
                 className={`flex-1 transition-all ${profileSaved ? "bg-green-500 hover:bg-green-600" : "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"} text-white`}
               >
                 {profileSaved ? (
-                  <><Check className="w-4 h-4 ml-1.5" /> נשמר</>
+                  <><Check className="w-4 h-4 me-1.5" /> נשמר</>
                 ) : saveProfileMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <><Save className="w-4 h-4 ml-1.5" /> שמור פרופיל</>
+                  <><Save className="w-4 h-4 me-1.5" /> שמור פרופיל</>
                 )}
               </Button>
               <Button variant="outline" onClick={() => base44.auth.logout()} className="select-none">
-                <LogOut className="w-4 h-4 ml-1.5" />
+                <LogOut className="w-4 h-4 me-1.5" />
                 התנתק
               </Button>
             </div>
@@ -333,11 +333,11 @@ export default function UserSettings() {
             className={`w-full mt-4 transition-all ${notifSaved ? "bg-green-500 hover:bg-green-600" : "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"} text-white`}
           >
             {notifSaved ? (
-              <><Check className="w-4 h-4 ml-1.5" /> נשמר בהצלחה</>
+              <><Check className="w-4 h-4 me-1.5" /> נשמר בהצלחה</>
             ) : saveNotifMutation.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <><Save className="w-4 h-4 ml-1.5" /> שמור הגדרות התראות</>
+              <><Save className="w-4 h-4 me-1.5" /> שמור הגדרות התראות</>
             )}
           </Button>
         </Section>
@@ -375,7 +375,7 @@ export default function UserSettings() {
               className="w-full select-none"
               onClick={() => setShowDeleteDialog(true)}
             >
-              <Trash2 className="w-4 h-4 ml-2" />
+              <Trash2 className="w-4 h-4 me-2" />
               מחק את החשבון שלי לצמיתות
             </Button>
           </div>
@@ -386,7 +386,7 @@ export default function UserSettings() {
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent className="dark:bg-slate-800 dark:border-slate-700">
           <DialogHeader>
-            <DialogTitle className="flex flex-row-reverse items-center gap-2 text-red-600 dark:text-red-400 text-start">
+            <DialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400 text-start">
               <AlertTriangle className="w-5 h-5" />
               אישור מחיקת חשבון
             </DialogTitle>
