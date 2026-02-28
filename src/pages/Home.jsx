@@ -296,13 +296,14 @@ export default function Home() {
       </AnimatePresence>
       {/* Mobile Header */}
       <div className="md:hidden fixed top-0 inset-x-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 z-50 shadow-sm" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-        <div className="flex items-center justify-between h-14 px-4 w-full">
-          <div className="w-10" />
+        <div className="relative flex items-center justify-center h-14 px-4 w-full">
           <div className="flex items-center gap-2">
             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/690514d00122f9b7b00f4a5d/cb08ea9f1_image.png" alt={t('appName')} className="w-6 h-6" />
             <h1 className="text-lg font-bold text-gray-800 dark:text-slate-100">{t('appName')}</h1>
           </div>
-          <NotificationBell user={user} project={project} />
+          <div className="absolute end-2 inset-y-0 flex items-center">
+            <NotificationBell user={user} project={project} />
+          </div>
         </div>
       </div>
 

@@ -23,7 +23,7 @@ export default function Layout({ children, currentPageName }) {
   const [theme, setTheme] = useState('light');
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const touchStartY = useRef(0);
   const holdTimer = useRef(null);
@@ -83,6 +83,7 @@ export default function Layout({ children, currentPageName }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <div
+        dir={i18n.language === 'he' ? 'rtl' : 'ltr'}
         className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -91,7 +92,7 @@ export default function Layout({ children, currentPageName }) {
         {/* Pull-to-refresh indicator */}
         {(pullDistance > 0 || isRefreshing) && (
           <div
-            className="fixed top-0 left-0 right-0 z-[100] flex justify-center items-center transition-all duration-150"
+            className="fixed inset-x-0 top-0 z-[100] flex justify-center items-center transition-all duration-150"
             style={{ height: isRefreshing ? 56 : pullDistance, overflow: 'hidden' }}
           >
             <div
@@ -130,7 +131,7 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Refreshing top bar */}
         {isRefreshing && (
-          <div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 z-50 animate-pulse" />
+          <div className="fixed inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 z-50 animate-pulse" />
         )}
 
         <div
