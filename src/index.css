@@ -156,3 +156,32 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+/* ── RTL Global Baseline ─────────────────────────────────────────────────────
+   Placed outside @layer so these defaults sit above Tailwind's base layer
+   but below element-level utility classes (text-center etc. still win).
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Body text aligns to the logical start when document is RTL */
+html[dir='rtl'] body {
+  text-align: right;
+}
+
+/* Form controls: text and placeholder follow document direction */
+html[dir='rtl'] input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+html[dir='rtl'] textarea,
+html[dir='rtl'] select {
+  text-align: right;
+  direction: rtl;
+}
+
+html[dir='rtl'] ::placeholder {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Tables: every cell aligns to the start (right) in RTL */
+html[dir='rtl'] th,
+html[dir='rtl'] td {
+  text-align: right;
+}
