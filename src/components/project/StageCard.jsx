@@ -215,7 +215,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2 justify-end">
+                <div className="flex justify-between">
                   <Button variant="outline" size="sm" onClick={(e) => { e.stopPropagation(); setConfirmDelete(false); }}>
                     ביטול
                   </Button>

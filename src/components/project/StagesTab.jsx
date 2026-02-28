@@ -61,7 +61,7 @@ export default function StagesTab({ stages, tasks, subtopics, expenses, supplier
       onTouchEnd={handleTouchEnd}
     >
       {/* Toolbar */}
-      <div className="flex justify-end">
+      <div className="flex justify-start">
         <Button
           variant="outline"
           size="sm"
