@@ -135,7 +135,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
           </div>
 
           {/* Progress row */}
-          <div className={`flex items-center justify-between gap-2 mb-1.5 ${i18n.language === 'he' || i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
+          <div className="flex flex-row items-center justify-between gap-2 mb-1.5">
             <div className="text-xs text-gray-500 dark:text-slate-400">{t('progress')}</div>
             <div className="flex items-center gap-1">
               <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{progressPercent}%</span>
@@ -196,7 +196,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 ms-auto"
               >
-                <Trash2 className="w-4 h-4 ms-2" />
+                <Trash2 className="w-4 h-4 me-2" />
                 מחק שלב
               </Button>
             </div>
