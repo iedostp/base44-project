@@ -43,15 +43,15 @@ export default function TaskItem({ task, onToggle, onDelete, projectId, user }) 
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-sm transition-all duration-200 p-2.5">
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-row items-start gap-2">
         <div
-          className="flex flex-row items-center gap-2 cursor-pointer select-none flex-1"
+          className="flex flex-row items-start gap-2 cursor-pointer select-none flex-1"
           onClick={handleClick}
         >
           {optimisticDone ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
           ) : (
-            <Circle className="w-5 h-5 text-gray-300 flex-shrink-0 hover:text-blue-400 transition-colors" />
+            <Circle className="w-5 h-5 text-gray-300 flex-shrink-0 hover:text-blue-400 transition-colors mt-0.5" />
           )}
           <div className="flex-1 min-w-0">
             <span className={`text-sm text-right block ${optimisticDone ? 'line-through text-gray-400 dark:text-slate-500' : 'text-gray-700 dark:text-slate-200 font-medium'} transition-all`}>
@@ -89,25 +89,25 @@ export default function TaskItem({ task, onToggle, onDelete, projectId, user }) 
                 </span>
               )}
             </div>
+            {projectId && user && (
+              <CommentsPanel
+                refType="task"
+                refId={task.id}
+                projectId={projectId}
+                user={user}
+              />
+            )}
           </div>
         </div>
         {onDelete && (
           <button
             onClick={(e) => { e.stopPropagation(); onDelete(task); }}
-            className="flex-shrink-0 p-1 text-gray-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400 transition-colors rounded"
+            className="flex-shrink-0 p-1 text-gray-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400 transition-colors rounded mt-0.5"
           >
             <Trash2 className="w-4 h-4" />
           </button>
         )}
       </div>
-      {projectId && user && (
-        <CommentsPanel
-          refType="task"
-          refId={task.id}
-          projectId={projectId}
-          user={user}
-        />
-      )}
     </div>
   );
 }

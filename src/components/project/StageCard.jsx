@@ -161,40 +161,42 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
             className="p-6 bg-gradient-to-b from-gray-50 dark:from-slate-700 to-white dark:to-slate-800 border-t border-gray-100 dark:border-slate-700"
           >
             {/* Action Buttons */}
-            <div className="flex gap-2 mb-6 flex-wrap">
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowEditDialog(true);
-                }}
-                variant="outline"
-                size="sm"
-                className="border-blue-500 text-blue-700 hover:bg-blue-50"
-              >
-                <Edit className="w-4 h-4 me-2" />
-                {t('editStage')}
-              </Button>
-              <Button
-                onClick={(e) => { e.stopPropagation(); setShowAddTaskDialog(true); }}
-                size="sm"
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
-              >
-                <Plus className="w-4 h-4 me-2" />
-                {t('addTask')}
-              </Button>
-              <Button
-                onClick={(e) => { e.stopPropagation(); setShowExpenseDialog(true); }}
-                size="sm"
-                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
-              >
-                <Plus className="w-4 h-4 me-2" />
-                {t('addExpense')}
-              </Button>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowEditDialog(true);
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                >
+                  <Edit className="w-4 h-4 me-2" />
+                  {t('editStage')}
+                </Button>
+                <Button
+                  onClick={(e) => { e.stopPropagation(); setShowAddTaskDialog(true); }}
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
+                >
+                  <Plus className="w-4 h-4 me-2" />
+                  {t('addTask')}
+                </Button>
+                <Button
+                  onClick={(e) => { e.stopPropagation(); setShowExpenseDialog(true); }}
+                  size="sm"
+                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                >
+                  <Plus className="w-4 h-4 me-2" />
+                  {t('addExpense')}
+                </Button>
+              </div>
               <Button
                 onClick={(e) => { e.stopPropagation(); setConfirmDelete(true); }}
                 variant="outline"
                 size="sm"
-                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 ms-auto"
+                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
               >
                 <Trash2 className="w-4 h-4 me-2" />
                 מחק שלב
