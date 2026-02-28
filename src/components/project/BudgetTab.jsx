@@ -216,8 +216,8 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
           </div>
         </div>
         <div className="flex justify-between mt-3 text-sm text-gray-600">
-          <span>הוצאה משוערת</span>
           <span>יתרה</span>
+          <span>הוצאה משוערת</span>
         </div>
       </div>
 

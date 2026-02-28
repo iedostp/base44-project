@@ -120,12 +120,12 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
       </div>
 
       {/* Actions */}
-      <div className="border-t border-gray-100 dark:border-slate-700 p-4 flex gap-2">
+      <div className="border-t border-gray-100 dark:border-slate-700 p-4 flex items-center justify-between">
         <Button
           onClick={onEdit}
           variant="outline"
           size="sm"
-          className="flex-1 text-blue-600 border-blue-300"
+          className="text-blue-600 border-blue-300"
         >
           <Edit className="w-4 h-4 me-2" />
           עריכה
@@ -134,7 +134,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
           onClick={() => setShowDeleteConfirm(true)}
           variant="outline"
           size="sm"
-          className="flex-1 text-red-600 border-red-300"
+          className="text-red-600 border-red-300"
         >
           <Trash2 className="w-4 h-4 me-2" />
           מחיקה
