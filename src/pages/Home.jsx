@@ -22,7 +22,7 @@ import AppTutorial, { useTutorial } from "../components/tutorial/AppTutorial";
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const isRTL = ['he', 'ar'].includes(i18n.language);
+  const isRTL = i18n.language === 'he';
   const { show: showTutorial, dismiss: dismissTutorial } = useTutorial();
 
   // Derive all state directly from URL — a single counter forces re-render on popstate
@@ -60,7 +60,7 @@ export default function Home() {
   const setActiveTab = (tab) => {
     const prevIndex = TAB_ORDER.indexOf(activeTab);
     const nextIndex = TAB_ORDER.indexOf(tab);
-    setSlideDir(nextIndex > prevIndex ? -1 : 1);
+    setSlideDir(nextIndex > prevIndex ? (isRTL ? 1 : -1) : (isRTL ? -1 : 1));
     setPrevTab(activeTab);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', tab);
@@ -296,13 +296,14 @@ export default function Home() {
       </AnimatePresence>
       {/* Mobile Header */}
       <div className="md:hidden fixed top-0 inset-x-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 z-50 shadow-sm" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-        <div className="flex items-center justify-between h-14 px-4 w-full">
-          <div className="w-10" />
+        <div className="relative flex items-center justify-center h-14 px-4 w-full">
           <div className="flex items-center gap-2">
             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/690514d00122f9b7b00f4a5d/cb08ea9f1_image.png" alt={t('appName')} className="w-6 h-6" />
             <h1 className="text-lg font-bold text-gray-800 dark:text-slate-100">{t('appName')}</h1>
           </div>
-          <NotificationBell user={user} project={project} />
+          <div className="absolute end-2 inset-y-0 flex items-center">
+            <NotificationBell user={user} project={project} />
+          </div>
         </div>
       </div>
 

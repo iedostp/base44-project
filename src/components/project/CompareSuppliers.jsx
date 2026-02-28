@@ -211,7 +211,7 @@ ${i + 1}. ${s.name}
                   onClick={saveComparisonReport}
                   className="border-green-500 text-green-700 hover:bg-green-50"
                 >
-                  <Download className="w-4 h-4 ml-2" />
+                  <Download className="w-4 h-4 ms-2" />
                   שמור דוח
                 </Button>
               )}
@@ -235,8 +235,8 @@ ${i + 1}. ${s.name}
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="font-semibold text-lg text-right">ניתוח AI חכם</h4>
-              <p className="text-xs text-purple-100 text-right">קבל המלצות מקצועיות ונקודות למשא ומתן</p>
+              <h4 className="font-semibold text-lg text-end">ניתוח AI חכם</h4>
+              <p className="text-xs text-purple-100 text-end">קבל המלצות מקצועיות ונקודות למשא ומתן</p>
             </div>
             </div>
             <Button
@@ -246,12 +246,12 @@ ${i + 1}. ${s.name}
             >
               {analyzing ? (
                 <>
-                  <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                  <Loader2 className="w-4 h-4 ms-2 animate-spin" />
                   מנתח...
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 ml-2" />
+                  <Sparkles className="w-4 h-4 ms-2" />
                   נתח ספקים
                 </>
               )}
@@ -280,8 +280,8 @@ ${i + 1}. ${s.name}
                     <Target className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-bold text-xl text-gray-800 mb-1 text-right">המלצה סופית</h4>
-                    <p className="text-sm text-gray-600 text-right">
+                    <h4 className="font-bold text-xl text-gray-800 mb-1 text-end">המלצה סופית</h4>
+                    <p className="text-sm text-gray-600 text-end">
                       רמת ביטחון: <span className="font-semibold">{
                         aiInsights.final_recommendation.confidence_level === 'high' ? 'גבוהה' :
                         aiInsights.final_recommendation.confidence_level === 'medium' ? 'בינונית' : 'נמוכה'
@@ -290,13 +290,13 @@ ${i + 1}. ${s.name}
                   </div>
                 </div>
                 <div className="bg-white rounded-xl p-4 mb-3">
-                  <p className="font-bold text-emerald-900 text-lg mb-2 text-right">
+                  <p className="font-bold text-emerald-900 text-lg mb-2 text-end">
                     מומלץ: {aiInsights.final_recommendation.recommended_supplier}
                   </p>
-                  <p className="text-gray-700 leading-relaxed text-right">{aiInsights.final_recommendation.reasoning}</p>
+                  <p className="text-gray-700 leading-relaxed text-end">{aiInsights.final_recommendation.reasoning}</p>
                 </div>
                 {aiInsights.final_recommendation.alternative && (
-                  <p className="text-sm text-gray-700 text-right">
+                  <p className="text-sm text-gray-700 text-end">
                     <span className="font-semibold">חלופה:</span> {aiInsights.final_recommendation.alternative}
                   </p>
                 )}
@@ -316,7 +316,7 @@ ${i + 1}. ${s.name}
                       <div className="flex items-center justify-between mb-3">
                         <h5 className="font-bold text-lg text-gray-800">{score.supplier_name}</h5>
                         <div className="flex items-center gap-2">
-                          <div className="text-right">
+                          <div className="text-end">
                             <div className="text-3xl font-bold text-blue-600">{score.score}</div>
                             <div className="text-xs text-gray-500">מתוך 100</div>
                           </div>
@@ -511,7 +511,7 @@ ${i + 1}. ${s.name}
                 {supplier.contact_phone && (
                   <div className="flex items-center gap-2 text-xs text-gray-600">
                     <Phone className="w-3 h-3 text-gray-400 flex-shrink-0" />
-                    <span dir="ltr" className="flex-1 text-right">{supplier.contact_phone}</span>
+                    <span dir="ltr" className="flex-1 text-end">{supplier.contact_phone}</span>
                   </div>
                 )}
                 {supplier.email && (
@@ -538,7 +538,7 @@ ${i + 1}. ${s.name}
                 className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md"
                 onClick={() => window.open(`tel:${supplier.contact_phone}`)}
               >
-                <Phone className="w-4 h-4 ml-2" />
+                <Phone className="w-4 h-4 ms-2" />
                 צור קשר
               </Button>
             </div>
@@ -551,19 +551,19 @@ ${i + 1}. ${s.name}
           <div className="grid md:grid-cols-3 gap-4 text-sm">
             <div>
               <span className="text-gray-600">דירוג ממוצע:</span>
-              <span className="font-bold text-gray-800 mr-2">
+              <span className="font-bold text-gray-800 me-2">
                 {(suppliers.reduce((sum, s) => sum + (s.rating || 0), 0) / suppliers.length).toFixed(1)}
               </span>
             </div>
             <div>
               <span className="text-gray-600">דירוג הגבוה ביותר:</span>
-              <span className="font-bold text-gray-800 mr-2">
+              <span className="font-bold text-gray-800 me-2">
                 {bestRating}
               </span>
             </div>
             <div>
               <span className="text-gray-600">מספר ספקים שנבחרו:</span>
-              <span className="font-bold text-gray-800 mr-2">
+              <span className="font-bold text-gray-800 me-2">
                 {suppliers.filter(s => s.status === 'selected').length}
               </span>
             </div>

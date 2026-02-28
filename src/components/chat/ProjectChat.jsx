@@ -120,7 +120,7 @@ export default function ProjectChat({ projectId, user }) {
             <div
               key={msg.id}
               className={`flex gap-2 ${
-                msg.sender_email === user.email ? "flex-row-reverse" : ""
+                msg.sender_email === user.email ? "ltr:justify-end rtl:justify-start" : ""
               }`}
             >
               <div

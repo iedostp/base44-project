@@ -21,7 +21,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white">
-        <div className="flex items-start justify-between flex-row-reverse">
+        <div className="flex items-start justify-between">
           <div className="text-start">
             <h3 className="font-bold text-lg mb-1">היסטוריית הוצאות</h3>
             <p className="text-sm opacity-90">{supplier.name}</p>
@@ -60,10 +60,10 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
             transition={{ delay: idx * 0.05 }}
             className="p-4 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
           >
-            <div className="flex items-start justify-between flex-row-reverse gap-4">
+            <div className="flex items-start justify-between gap-4">
               <div className="text-start flex-1">
                 <p className="font-medium text-gray-900 dark:text-slate-100">{expense.description}</p>
-                <div className="flex gap-3 mt-2 flex-row-reverse justify-end">
+                <div className="flex gap-3 mt-2 justify-end">
                   <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-slate-400">
                     <Calendar className="w-3 h-3" />
                     {new Date(expense.date).toLocaleDateString("he-IL")}
@@ -78,7 +78,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
                   )}
                 </div>
               </div>
-              <div className="text-left">
+              <div className="text-start">
                 <p className="font-bold text-lg text-gray-900 dark:text-slate-100">
                   {expense.amount.toLocaleString()} ₪
                 </p>

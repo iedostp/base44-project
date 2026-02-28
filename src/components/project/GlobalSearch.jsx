@@ -87,8 +87,7 @@ export default function GlobalSearch({ stages, tasks, expenses, suppliers, docum
           onChange={e => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
           placeholder="חיפוש בכל הפרויקט..."
-          dir={isRtl ? 'rtl' : 'ltr'}
-          className={`w-full pe-10 ps-9 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm${isRtl ? ' text-right' : ''}`}
+          className="w-full pe-10 ps-9 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm"
         />
         {query && (
           <button

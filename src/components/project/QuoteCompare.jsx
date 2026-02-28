@@ -70,7 +70,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="w-5 h-5" />
           </Button>
-          <div className="text-right">
+          <div className="text-end">
             <h2 className="text-xl font-bold text-gray-800">השוואת מסמכים</h2>
             <p className="text-sm text-gray-500">{docCount} מסמכים מושווים</p>
           </div>
@@ -78,11 +78,11 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
 
         {/* Table */}
         <div className="flex-1 overflow-auto p-4 md:p-5">
-          <table className="w-full border-collapse text-right text-sm">
+          <table className="w-full border-collapse text-end text-sm">
             <thead>
               <tr>
                 {/* Field label column */}
-                <td className="p-3 font-semibold text-gray-500 text-xs border border-gray-200 bg-gray-50 sticky right-0 z-10 w-36">שדה</td>
+                <td className="p-3 font-semibold text-gray-500 text-xs border border-gray-200 bg-gray-50 sticky end-0 z-10 w-36">שדה</td>
                 {/* Document columns */}
                 {documents.map((doc) => (
                   <td key={doc.id} className={`p-3 border border-gray-200 bg-gradient-to-b from-blue-50 to-indigo-50 ${colMinWidth}`}>
@@ -115,7 +115,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                 const Icon = field.icon;
                 return (
                   <tr key={field.key} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}>
-                    <td className="p-3 border border-gray-200 bg-gray-50 sticky right-0 z-10">
+                    <td className="p-3 border border-gray-200 bg-gray-50 sticky end-0 z-10">
                       <div className="flex items-center gap-1.5 justify-end">
                         <span className="font-medium text-gray-600 text-xs">{field.label}</span>
                         <Icon className={`w-3.5 h-3.5 ${field.color} flex-shrink-0`} />
@@ -135,7 +135,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                             field.isAmount ? (
                               <div className={`font-semibold ${isLowest ? 'text-green-700' : 'text-gray-800'}`}>
                                 {Number(val).toLocaleString()} ₪
-                                {isLowest && <span className="mr-1 text-xs text-green-600">✓ הנמוך</span>}
+                                {isLowest && <span className="me-1 text-xs text-green-600">✓ הנמוך</span>}
                               </div>
                             ) : (
                               <span className="text-gray-800 whitespace-pre-wrap">{val}</span>
@@ -153,7 +153,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
               {/* Custom fields */}
               {customFields.map((field, idx) => (
                 <tr key={field.id} className={(BUILT_IN_FIELDS.length + idx) % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}>
-                  <td className="p-3 border border-gray-200 bg-amber-50 sticky right-0 z-10">
+                  <td className="p-3 border border-gray-200 bg-amber-50 sticky end-0 z-10">
                     <div className="flex items-center gap-1.5 justify-end">
                       <span className="font-medium text-amber-800 text-xs">{field.label}</span>
                       <button
@@ -171,7 +171,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                         value={customValues[`${field.id}_${doc.id}`] || ''}
                         onChange={(e) => setCustomValue(field.id, doc.id, e.target.value)}
                         placeholder="הזן ערך..."
-                        className="border-dashed border-amber-300 focus:border-amber-500 text-sm h-8 text-right"
+                        className="border-dashed border-amber-300 focus:border-amber-500 text-sm h-8 text-end"
                       />
                     </td>
                   ))}
@@ -197,14 +197,14 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                         onChange={(e) => setNewFieldLabel(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && addCustomField()}
                         placeholder="שם השדה..."
-                        className="max-w-[200px] h-8 text-right"
+                        className="max-w-[200px] h-8 text-end"
                         autoFocus
                       />
                     </div>
                   ) : (
                     <button
                       onClick={() => setAddingField(true)}
-                      className="flex items-center gap-1.5 text-amber-600 hover:text-amber-800 text-sm font-medium transition-colors mr-auto"
+                      className="flex items-center gap-1.5 text-amber-600 hover:text-amber-800 text-sm font-medium transition-colors me-auto"
                     >
                       <Plus className="w-4 h-4" />
                       הוסף קריטריון השוואה מותאם

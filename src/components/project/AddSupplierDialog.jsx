@@ -87,25 +87,25 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
 
         <div className="space-y-4 mt-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 text-right">
+            <label className="block text-sm font-medium text-gray-700 mb-2 text-end">
               שם הספק <span className="text-red-500">*</span>
             </label>
             <Input
               placeholder="שם הספק"
               value={supplierData.name}
               onChange={(e) => setSupplierData({ ...supplierData, name: e.target.value })}
-              className="text-right"
+              className="text-end"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 text-right">
+            <label className="block text-sm font-medium text-gray-700 mb-2 text-end">
               קטגוריה <span className="text-red-500">*</span>
             </label>
             <select
               value={supplierData.category}
               onChange={(e) => setSupplierData({ ...supplierData, category: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-end"
             >
               {categories.map(cat => (
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -115,40 +115,40 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 text-right">טלפון</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2 text-end">טלפון</label>
               <Input
                 placeholder="טלפון ליצירת קשר"
                 value={supplierData.contact_phone}
                 onChange={(e) => setSupplierData({ ...supplierData, contact_phone: e.target.value })}
-                className="text-right"
+                className="text-end"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 text-right">אימייל</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2 text-end">אימייל</label>
               <Input
                 type="email"
                 placeholder="example@email.com"
                 value={supplierData.email}
                 onChange={(e) => setSupplierData({ ...supplierData, email: e.target.value })}
-                className="text-right"
+                className="text-end"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 text-right">כתובת</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 text-end">כתובת</label>
             <Input
               placeholder="כתובת הספק"
               value={supplierData.address}
               onChange={(e) => setSupplierData({ ...supplierData, address: e.target.value })}
-              className="text-right"
+              className="text-end"
             />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 text-right">
+              <label className="block text-sm font-medium text-gray-700 mb-2 text-end">
                 דירוג (0-5)
               </label>
               <Input
@@ -159,16 +159,16 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
                 placeholder="0"
                 value={supplierData.rating}
                 onChange={(e) => setSupplierData({ ...supplierData, rating: parseFloat(e.target.value) || 0 })}
-                className="text-right"
+                className="text-end"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 text-right">טווח מחירים</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2 text-end">טווח מחירים</label>
               <select
                 value={supplierData.price_range}
                 onChange={(e) => setSupplierData({ ...supplierData, price_range: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-end"
               >
                 {priceRanges.map(range => (
                   <option key={range.value} value={range.value}>{range.label}</option>
@@ -178,13 +178,13 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 text-right">הערות</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2 text-end">הערות</label>
             <Textarea
               placeholder="הערות נוספות על הספק..."
               value={supplierData.notes}
               onChange={(e) => setSupplierData({ ...supplierData, notes: e.target.value })}
               rows={4}
-              className="text-right"
+              className="text-end"
             />
           </div>
         </div>
@@ -200,7 +200,7 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
           >
             {isSaving ? (
               <>
-                <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                <Loader2 className="w-4 h-4 me-2 animate-spin" />
                 שומר...
               </>
             ) : (

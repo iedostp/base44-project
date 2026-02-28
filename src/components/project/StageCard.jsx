@@ -196,7 +196,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 ms-auto"
               >
-                <Trash2 className="w-4 h-4 ml-2" />
+                <Trash2 className="w-4 h-4 ms-2" />
                 מחק שלב
               </Button>
             </div>

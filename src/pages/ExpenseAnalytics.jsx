@@ -137,7 +137,7 @@ export default function ExpenseAnalyticsPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 flex-row-reverse">
+        <div className="flex items-center justify-between mb-8">
           <div className="text-start">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100">ניתוח הוצאות</h1>
             <p className="text-gray-600 dark:text-slate-400">{project?.name}</p>
@@ -153,7 +153,7 @@ export default function ExpenseAnalyticsPage() {
         {/* Summary Cards */}
         <div className="grid md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-            <div className="flex items-start justify-between mb-4 flex-row-reverse">
+            <div className="flex items-start justify-between mb-4">
               <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
                 <DollarSign className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
@@ -165,7 +165,7 @@ export default function ExpenseAnalyticsPage() {
           </div>
 
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-            <div className="flex items-start justify-between mb-4 flex-row-reverse">
+            <div className="flex items-start justify-between mb-4">
               <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
                 <TrendingUp className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
@@ -177,7 +177,7 @@ export default function ExpenseAnalyticsPage() {
           </div>
 
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-            <div className="flex items-start justify-between mb-4 flex-row-reverse">
+            <div className="flex items-start justify-between mb-4">
               <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-lg">
                 <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
               </div>
@@ -189,7 +189,7 @@ export default function ExpenseAnalyticsPage() {
           </div>
 
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-            <div className="flex items-start justify-between mb-4 flex-row-reverse">
+            <div className="flex items-start justify-between mb-4">
               <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg">
                 <Package className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>

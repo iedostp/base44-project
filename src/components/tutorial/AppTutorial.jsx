@@ -233,7 +233,7 @@ export default function AppTutorial({ onDismiss, onTabChange }) {
           </div>
 
           {/* Never show again */}
-          <label className="flex items-center gap-2 cursor-pointer w-fit mr-auto">
+          <label className="flex items-center gap-2 cursor-pointer w-fit me-auto">
             <input
               type="checkbox"
               checked={neverShow}

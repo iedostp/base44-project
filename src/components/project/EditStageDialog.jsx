@@ -43,7 +43,7 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-bold text-gray-800 text-right">
+            <DialogTitle className="text-2xl font-bold text-gray-800 text-end">
               ערוך שלב: {stage?.title}
             </DialogTitle>
             <Button
@@ -60,7 +60,7 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
         <div className="space-y-6 mt-4">
           {/* Title */}
           <div>
-            <Label htmlFor="title" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+            <Label htmlFor="title" className="text-sm font-medium text-gray-700 mb-2 block text-end">
               שם השלב
             </Label>
             <Input
@@ -68,13 +68,13 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
               value={stageData.title}
               onChange={(e) => setStageData(prev => ({ ...prev, title: e.target.value }))}
               placeholder="למשל: ביסוס ויציקת רצפה"
-              className="text-right"
+              className="text-end"
             />
           </div>
 
           {/* Duration */}
           <div>
-            <Label htmlFor="duration" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+            <Label htmlFor="duration" className="text-sm font-medium text-gray-700 mb-2 block text-end">
               משך זמן משוער
             </Label>
             <Input
@@ -82,13 +82,13 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
               value={stageData.duration}
               onChange={(e) => setStageData(prev => ({ ...prev, duration: e.target.value }))}
               placeholder="למשל: 2-3 שבועות"
-              className="text-right"
+              className="text-end"
             />
           </div>
 
           {/* Budget Percentage */}
           <div>
-            <Label htmlFor="budget" className="text-sm font-medium text-gray-700 mb-2 block text-right">
+            <Label htmlFor="budget" className="text-sm font-medium text-gray-700 mb-2 block text-end">
               אחוז מהתקציב הכולל
             </Label>
             <div className="flex items-center gap-3">
@@ -98,13 +98,13 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
                 value={stageData.budget_percentage}
                 onChange={(e) => setStageData(prev => ({ ...prev, budget_percentage: e.target.value }))}
                 placeholder="למשל: 15%"
-                className="flex-1 text-right"
+                className="flex-1 text-end"
               />
               <span className="text-sm text-gray-500 whitespace-nowrap">
                 מהתקציב הכולל
               </span>
             </div>
-            <p className="text-xs text-gray-500 mt-1 text-right">
+            <p className="text-xs text-gray-500 mt-1 text-end">
               הזן אחוז עם סימן % או מספר בלבד
             </p>
           </div>
@@ -145,12 +145,12 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
             >
               {saving ? (
                 <>
-                  <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                  <Loader2 className="w-4 h-4 me-2 animate-spin" />
                   שומר...
                 </>
               ) : (
                 <>
-                  <Save className="w-4 h-4 ml-2" />
+                  <Save className="w-4 h-4 me-2" />
                   שמור שינויים
                 </>
               )}

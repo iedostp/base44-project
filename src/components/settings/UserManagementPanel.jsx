@@ -101,7 +101,7 @@ export default function UserManagementPanel({ user }) {
           className="text-xs text-indigo-600 dark:text-indigo-400 underline mb-2 block text-start"
           onClick={() => setShowRoleInfo(!showRoleInfo)}
         >
-          <Shield className="w-3.5 h-3.5 inline mr-1" />
+          <Shield className="w-3.5 h-3.5 inline me-1" />
           {showRoleInfo ? "הסתר הסבר תפקידים" : "הצג הסבר תפקידים"}
         </button>
         {showRoleInfo && (
@@ -111,13 +111,13 @@ export default function UserManagementPanel({ user }) {
               return (
                 <div key={role.value} className={`rounded-xl p-3 border ${role.bg}`}>
                    <div className="flex items-center gap-2 justify-between mb-0 flex-row">
-                     <div className="flex items-center gap-2 flex-row-reverse">
+                     <div className="flex items-center gap-2">
                        <Icon className={`w-4 h-4 ${role.color}`} />
                        <span className="font-semibold text-sm text-gray-800 dark:text-slate-100">{role.label}</span>
                        <span className="text-xs text-gray-500 dark:text-slate-400">— {role.description}</span>
                      </div>
                    </div>
-                   <div className="flex flex-wrap gap-x-2 gap-y-1 justify-end mt-2 flex-row-reverse">
+                   <div className="flex flex-wrap gap-x-2 gap-y-1 justify-end mt-2">
                      {role.permissions.map((p, i) => (
                        <span key={i} className="text-xs text-gray-600 dark:text-slate-400 flex items-center gap-1 flex-row whitespace-nowrap">
                          {p}<Check className="w-3 h-3 text-green-500" />
@@ -133,7 +133,7 @@ export default function UserManagementPanel({ user }) {
 
       {/* Invite new user */}
       <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 border border-indigo-200 dark:border-indigo-700 mb-5">
-        <p className="text-sm font-semibold text-gray-800 dark:text-slate-100 text-start mb-3 flex items-center gap-2 justify-end flex-row-reverse">
+        <p className="text-sm font-semibold text-gray-800 dark:text-slate-100 text-start mb-3 flex items-center gap-2 justify-end">
           הזמן משתמש חדש
           <UserPlus className="w-4 h-4 text-indigo-600" />
         </p>
@@ -145,7 +145,7 @@ export default function UserManagementPanel({ user }) {
             className="text-start"
             dir="ltr"
           />
-          <div className="flex gap-2 flex-row-reverse">
+          <div className="flex gap-2">
             {ROLES.map(role => (
               <button
                 key={role.value}
@@ -166,9 +166,9 @@ export default function UserManagementPanel({ user }) {
             className={`w-full ${inviteSuccess ? "bg-green-500 hover:bg-green-600" : "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"} text-white`}
           >
             {inviteSuccess ? (
-              <><Check className="w-4 h-4 ml-2" />ההזמנה נשלחה!</>
+              <><Check className="w-4 h-4 me-2" />ההזמנה נשלחה!</>
             ) : inviting ? "שולח..." : (
-              <><Mail className="w-4 h-4 ml-2" />שלח הזמנה</>
+              <><Mail className="w-4 h-4 me-2" />שלח הזמנה</>
             )}
           </Button>
         </div>
@@ -186,7 +186,7 @@ export default function UserManagementPanel({ user }) {
               <div className="flex-1 text-start min-w-0">
                 <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm truncate">
                   {u.full_name || u.email}
-                  {isCurrentUser && <span className="text-xs text-gray-400 mr-1">(אתה)</span>}
+                  {isCurrentUser && <span className="text-xs text-gray-400 me-1">(אתה)</span>}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-slate-400 truncate">{u.email}</p>
               </div>

@@ -85,7 +85,7 @@ export default function DirectMessagesPanel({ projectId, user }) {
               <button
                 key={u.email}
                 onClick={() => setSelectedUser(u)}
-                className={`w-full text-right p-2 rounded-lg transition-colors ${
+                className={`w-full text-end p-2 rounded-lg transition-colors ${
                   selectedUser?.email === u.email
                     ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
                     : "bg-gray-50 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-100"
@@ -122,7 +122,7 @@ export default function DirectMessagesPanel({ projectId, user }) {
                     <div
                       key={msg.id}
                       className={`text-xs ${
-                        msg.sender_email === user.email ? "text-right" : ""
+                        msg.sender_email === user.email ? "text-end" : ""
                       }`}
                     >
                       <p className="font-medium text-gray-700 dark:text-slate-300">

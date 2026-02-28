@@ -53,7 +53,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                 <FileText className="w-6 h-6 text-blue-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-lg text-gray-800 mb-1 text-right">{document.name}</h3>
+                <h3 className="font-bold text-lg text-gray-800 mb-1 text-end">{document.name}</h3>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className={`text-xs px-3 py-1 rounded-full font-medium border ${getCategoryColor(document.category)}`}>
                     {getCategoryText(document.category)}
@@ -97,7 +97,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
           {/* Extracted Data */}
           {document.extracted_data && Object.keys(document.extracted_data).length > 0 && (
             <div className="mb-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-4 border border-purple-200">
-              <h4 className="text-sm font-semibold text-purple-900 mb-3 flex items-center gap-2 text-right">
+              <h4 className="text-sm font-semibold text-purple-900 mb-3 flex items-center gap-2 text-end">
                 <span className="bg-purple-100 p-1 rounded">✨</span>
                 מידע שחולץ מהמסמך
               </h4>
@@ -132,7 +132,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                 )}
                 {document.extracted_data.description && (
                   <div className="text-sm mt-2 pt-2 border-t border-purple-200">
-                    <p className="text-gray-700 text-right">{document.extracted_data.description}</p>
+                    <p className="text-gray-700 text-end">{document.extracted_data.description}</p>
                   </div>
                 )}
               </div>
@@ -142,12 +142,12 @@ export default function DocumentCard({ document, stage, supplier, project, stage
           {/* Notes */}
           {document.notes && (
             <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="text-sm text-gray-700 text-right">{document.notes}</p>
+              <p className="text-sm text-gray-700 text-end">{document.notes}</p>
             </div>
           )}
 
           {/* Upload Date */}
-          <div className="text-xs text-gray-500 mb-4 text-right">
+          <div className="text-xs text-gray-500 mb-4 text-end">
             הועלה ב-{format(new Date(document.created_date), 'dd/MM/yyyy HH:mm', { locale: he })}
           </div>
 
@@ -160,7 +160,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                 onClick={() => window.open(document.file_url, '_blank')}
                 size="sm"
               >
-                <ExternalLink className="w-3 h-3 ml-2" />
+                <ExternalLink className="w-3 h-3 me-2" />
                 צפה במסמך
               </Button>
               <Button
@@ -174,7 +174,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                   link.click();
                 }}
               >
-                <Download className="w-3 h-3 ml-2" />
+                <Download className="w-3 h-3 me-2" />
                 הורד
               </Button>
             </div>
@@ -186,7 +186,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                 onClick={() => setShowAnalyzer(true)}
                 size="sm"
               >
-                <Sparkles className="w-3 h-3 ml-2" />
+                <Sparkles className="w-3 h-3 me-2" />
                 AI ניתוח
               </Button>
               {onToggleCompare && (
@@ -196,7 +196,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                   onClick={() => onToggleCompare(document)}
                   size="sm"
                 >
-                  <GitCompare className="w-3 h-3 ml-1" />
+                  <GitCompare className="w-3 h-3 me-1" />
                   {isSelected ? 'נבחר' : 'השווה'}
                 </Button>
               )}

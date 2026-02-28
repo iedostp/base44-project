@@ -7,11 +7,10 @@ import './components/i18n';
 // Apply saved theme immediately (before first render)
 try { initThemeFromStorage(); } catch(e) {}
 
-// Apply saved language
+// Apply saved language direction before first render (i18n.jsx handles subsequent changes)
 try {
   const language = localStorage.getItem('language') || 'he';
-  const isRTL = ['he', 'ar'].includes(language);
-  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
   document.documentElement.lang = language;
 } catch(e) {}
 
@@ -24,7 +23,7 @@ export default function Layout({ children, currentPageName }) {
   const [theme, setTheme] = useState('light');
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isRtl = ['he', 'ar'].includes(i18n.language);
 
   const touchStartY = useRef(0);
@@ -34,9 +33,7 @@ export default function Layout({ children, currentPageName }) {
   useEffect(() => {
     setMounted(true);
     setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-    const isRTL = ['he', 'ar'].includes(i18n.language);
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-  }, [i18n.language]);
+  }, []);
 
   const handleTouchStart = (e) => {
     touchStartY.current = e.touches[0].clientY;
@@ -96,7 +93,7 @@ export default function Layout({ children, currentPageName }) {
         {/* Pull-to-refresh indicator */}
         {(pullDistance > 0 || isRefreshing) && (
           <div
-            className="fixed top-0 left-0 right-0 z-[100] flex justify-center items-center transition-all duration-150"
+            className="fixed inset-x-0 top-0 z-[100] flex justify-center items-center transition-all duration-150"
             style={{ height: isRefreshing ? 56 : pullDistance, overflow: 'hidden' }}
           >
             <div
@@ -115,7 +112,7 @@ export default function Layout({ children, currentPageName }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                   </svg>
-                  <span>מרענן...</span>
+                  <span>{t('pullRefreshing')}</span>
                 </>
               ) : (
                 <>
@@ -126,7 +123,7 @@ export default function Layout({ children, currentPageName }) {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
-                  <span>{ready ? 'החזק לרענון...' : 'משוך לרענון'}</span>
+                  <span>{ready ? t('pullHold') : t('pullToRefresh')}</span>
                 </>
               )}
             </div>
@@ -135,7 +132,7 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Refreshing top bar */}
         {isRefreshing && (
-          <div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 z-50 animate-pulse" />
+          <div className="fixed inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 z-50 animate-pulse" />
         )}
 
         <div

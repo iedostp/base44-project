@@ -74,7 +74,7 @@ export default function SettingsTab({ user, project }) {
             className="w-full mt-6 select-none"
             onClick={() => base44.auth.logout()}
           >
-            <LogOut className="w-4 h-4 ml-2" />
+            <LogOut className="w-4 h-4 me-2" />
             {t('logout')}
           </Button>
           </div>
@@ -119,7 +119,7 @@ export default function SettingsTab({ user, project }) {
 
           <div className="bg-red-50 dark:bg-red-950 rounded-xl p-4 mb-4 border border-red-200 dark:border-red-900 text-start">
             <p className="text-sm text-red-800 dark:text-red-300 leading-relaxed">{t('deleteAccountWarning')}</p>
-            <ul className="mt-3 space-y-1 text-sm text-red-700 dark:text-red-400 ml-5 list-disc text-start">
+            <ul className="mt-3 space-y-1 text-sm text-red-700 dark:text-red-400 ms-5 list-disc text-start">
               <li>{t('deleteItem_projects')}</li>
               <li>{t('deleteItem_stages')}</li>
               <li>{t('deleteItem_suppliers')}</li>
@@ -133,7 +133,7 @@ export default function SettingsTab({ user, project }) {
             className="w-full select-none"
             onClick={() => setShowDeleteDialog(true)}
           >
-            <Trash2 className="w-4 h-4 ml-2" />
+            <Trash2 className="w-4 h-4 me-2" />
             {t('deleteMyAccount')}
           </Button>
         </div>
@@ -143,7 +143,7 @@ export default function SettingsTab({ user, project }) {
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
        <DialogContent className="dark:bg-slate-800 dark:border-slate-700">
          <DialogHeader>
-           <DialogTitle className="flex flex-row-reverse items-center gap-2 text-red-600 dark:text-red-400 text-start">
+           <DialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400 text-start">
            <AlertTriangle className="w-5 h-5" />
            {t('confirmDeleteAccount')}
            </DialogTitle>

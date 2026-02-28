@@ -150,7 +150,7 @@ export default function ImportStagesDialog({ isOpen, onClose, projectId, current
               onClick={downloadTemplate}
               className="border-blue-400 text-blue-700 hover:bg-blue-100 dark:text-blue-200 dark:border-blue-600 dark:hover:bg-blue-900/40"
             >
-              <Download className="w-4 h-4 ml-2" />
+              <Download className="w-4 h-4 me-2" />
               הורד תבנית CSV
             </Button>
           </div>
@@ -208,9 +208,9 @@ export default function ImportStagesDialog({ isOpen, onClose, projectId, current
               className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
             >
               {importing ? (
-                <><Loader2 className="w-4 h-4 ml-2 animate-spin" />מייבא...</>
+                <><Loader2 className="w-4 h-4 me-2 animate-spin" />מייבא...</>
               ) : (
-                <><Upload className="w-4 h-4 ml-2" />ייבא שלבים</>
+                <><Upload className="w-4 h-4 me-2" />ייבא שלבים</>
               )}
             </Button>
           </div>

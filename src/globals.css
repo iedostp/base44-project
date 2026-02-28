@@ -1,7 +1,4 @@
-css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* globals.css — app-level styles (Tailwind loaded by index.css) */
 
 html {
   scroll-behavior: smooth;

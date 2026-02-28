@@ -100,7 +100,7 @@ function QuickEventForm({ onClose, onCreated }) {
         <div className="flex gap-3 p-5 pt-0">
           <Button onClick={onClose} variant="outline" className="flex-1">ביטול</Button>
           <Button onClick={handleCreate} disabled={loading} className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Plus className="w-4 h-4 ml-1" />צור אירוע</>}
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Plus className="w-4 h-4 me-1" />צור אירוע</>}
           </Button>
         </div>
       </div>
@@ -290,7 +290,7 @@ export default function CalendarSyncPanel({ user, project }) {
                 disabled={saving}
                 className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white h-11 font-semibold"
               >
-                {saving ? <><Loader2 className="w-4 h-4 ml-2 animate-spin" />מחבר...</> : <><CalendarDays className="w-4 h-4 ml-2" />חבר ל-Google Calendar</>}
+                {saving ? <><Loader2 className="w-4 h-4 me-2 animate-spin" />מחבר...</> : <><CalendarDays className="w-4 h-4 me-2" />חבר ל-Google Calendar</>}
               </Button>
             </div>
           ) : (
@@ -315,8 +315,8 @@ export default function CalendarSyncPanel({ user, project }) {
                 className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white h-11 font-semibold"
               >
                 {syncing
-                  ? <><Loader2 className="w-5 h-5 ml-2 animate-spin" />מסנכרן...</>
-                  : <><RefreshCw className="w-5 h-5 ml-2" />סנכרן עכשיו</>
+                  ? <><Loader2 className="w-5 h-5 me-2 animate-spin" />מסנכרן...</>
+                  : <><RefreshCw className="w-5 h-5 me-2" />סנכרן עכשיו</>
                 }
               </Button>
 

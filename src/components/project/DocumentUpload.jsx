@@ -264,7 +264,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               </AnimatePresence>
 
               <button onClick={() => { setSelectedFile(null); setPreviewUrl(null); setAiPhase(null); setAiSuggestions(null); }}
-                className="absolute top-2 left-2 bg-white/80 dark:bg-slate-800/80 rounded-full p-1 hover:bg-white transition-colors">
+                className="absolute top-2 start-2 bg-white/80 dark:bg-slate-800/80 rounded-full p-1 hover:bg-white transition-colors">
                 <X className="w-4 h-4 text-gray-600" />
               </button>
             </div>
@@ -279,9 +279,9 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                   <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
                   <p className="text-sm font-semibold text-purple-800 dark:text-purple-300">AI זיהה וקישר אוטומטית</p>
                 </div>
-                <p className="text-xs text-purple-600 dark:text-purple-400 pr-6">{aiSuggestions.reason}</p>
+                <p className="text-xs text-purple-600 dark:text-purple-400 pe-6">{aiSuggestions.reason}</p>
                 {extractedData?.amount && (
-                  <p className="text-xs text-purple-700 dark:text-purple-400 pr-6 font-medium">
+                  <p className="text-xs text-purple-700 dark:text-purple-400 pe-6 font-medium">
                     💰 סכום שזוהה: ₪{extractedData.amount.toLocaleString('he-IL')}
                     {extractedData.reference_number && ` · מס׳ ${extractedData.reference_number}`}
                   </p>
@@ -310,7 +310,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
                   קטגוריה *
-                  {aiSuggestions && <span className="text-purple-500 text-xs mr-1">✨</span>}
+                  {aiSuggestions && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.category} onValueChange={v => setDocumentData(p => ({ ...p, category: v }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
@@ -323,7 +323,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
                   שלב
-                  {aiSuggestions?.stage_id && <span className="text-purple-500 text-xs mr-1">✨</span>}
+                  {aiSuggestions?.stage_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.stage_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, stage_id: v === '_none' ? '' : v }))}>
                   <SelectTrigger><SelectValue placeholder="בחר שלב" /></SelectTrigger>
@@ -339,7 +339,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
                   ספק
-                  {aiSuggestions?.supplier_id && <span className="text-purple-500 text-xs mr-1">✨</span>}
+                  {aiSuggestions?.supplier_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.supplier_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, supplier_id: v === '_none' ? '' : v }))}>
                   <SelectTrigger><SelectValue placeholder="בחר ספק" /></SelectTrigger>
@@ -367,10 +367,10 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
             >
               {uploading
-                ? <><Loader2 className="w-4 h-4 ml-2 animate-spin" />שומר...</>
+                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />שומר...</>
                 : aiPhase && aiPhase !== 'done'
-                ? <><Loader2 className="w-4 h-4 ml-2 animate-spin" />מנתח...</>
-                : <><CheckCircle2 className="w-4 h-4 ml-2" />שמור מסמך</>
+                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />מנתח...</>
+                : <><CheckCircle2 className="w-4 h-4 ms-2" />שמור מסמך</>
               }
             </Button>
           </div>

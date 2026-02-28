@@ -134,7 +134,7 @@ export default function SuppliersPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 flex-row-reverse">
+        <div className="flex items-center justify-between mb-8">
           <div className="text-start flex-1">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-1">ניהול ספקים</h1>
             <p className="text-gray-600 dark:text-slate-400">{project?.name}</p>
@@ -150,14 +150,14 @@ export default function SuppliersPage() {
 
         {/* Search & Filter */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 mb-6 border border-gray-100 dark:border-slate-700">
-          <div className="flex gap-4 flex-col md:flex-row md:flex-row-reverse">
+          <div className="flex gap-4 flex-col md:flex-row">
             <div className="flex-1 relative">
-              <Search className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
+              <Search className="absolute end-3 top-3 w-5 h-5 text-gray-400" />
               <Input
                 placeholder="חיפוש לפי שם או טלפון"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pr-10 text-start"
+                className="pe-10 text-start"
               />
             </div>
             <select
