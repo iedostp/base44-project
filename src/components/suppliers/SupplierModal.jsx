@@ -120,7 +120,7 @@ export default function SupplierModal({ isOpen, supplier, projectId, categories,
           {/* Rating */}
           <div>
             <label className="block text-sm font-medium mb-2">דירוג (1-5)</label>
-            <div className="flex gap-2 justify-end">
+            <div className="flex gap-2 justify-start">
               {[1, 2, 3, 4, 5].map((rating) => (
                 <button
                   key={rating}

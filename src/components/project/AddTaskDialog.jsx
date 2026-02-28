@@ -142,10 +142,7 @@ export default function AddTaskDialog({ isOpen, onClose, stageId, onTaskAdded })
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 mt-6">
-          <Button variant="outline" onClick={onClose} disabled={isSaving}>
-            ביטול
-          </Button>
+        <div className="flex justify-between gap-3 mt-6">
           <Button
             onClick={handleSave}
             disabled={isSaving}
@@ -159,6 +156,9 @@ export default function AddTaskDialog({ isOpen, onClose, stageId, onTaskAdded })
             ) : (
               "שמור משימה"
             )}
+          </Button>
+          <Button variant="outline" onClick={onClose} disabled={isSaving}>
+            ביטול
           </Button>
         </div>
       </DialogContent>

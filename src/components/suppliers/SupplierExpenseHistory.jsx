@@ -63,7 +63,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
             <div className="flex items-start justify-between gap-4">
               <div className="text-start flex-1">
                 <p className="font-medium text-gray-900 dark:text-slate-100">{expense.description}</p>
-                <div className="flex gap-3 mt-2 justify-end">
+                <div className="flex gap-3 mt-2 justify-start">
                   <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-slate-400">
                     <Calendar className="w-3 h-3" />
                     {new Date(expense.date).toLocaleDateString("he-IL")}

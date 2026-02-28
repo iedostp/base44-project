@@ -130,14 +130,7 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end gap-3 pt-4 border-t">
-            <Button
-              variant="outline"
-              onClick={onClose}
-              disabled={saving}
-            >
-              ביטול
-            </Button>
+          <div className="flex justify-between gap-3 pt-4 border-t">
             <Button
               onClick={handleSave}
               disabled={saving || !stageData.title}
@@ -154,6 +147,13 @@ export default function EditStageDialog({ stage, isOpen, onClose, onSaved }) {
                   שמור שינויים
                 </>
               )}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={onClose}
+              disabled={saving}
+            >
+              ביטול
             </Button>
           </div>
         </div>

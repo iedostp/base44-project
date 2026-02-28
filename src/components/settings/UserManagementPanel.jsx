@@ -117,7 +117,7 @@ export default function UserManagementPanel({ user }) {
                        <span className="text-xs text-gray-500 dark:text-slate-400">— {role.description}</span>
                      </div>
                    </div>
-                   <div className="flex flex-wrap gap-x-2 gap-y-1 justify-end mt-2">
+                   <div className="flex flex-wrap gap-x-2 gap-y-1 justify-start mt-2">
                      {role.permissions.map((p, i) => (
                        <span key={i} className="text-xs text-gray-600 dark:text-slate-400 flex items-center gap-1 flex-row whitespace-nowrap">
                          {p}<Check className="w-3 h-3 text-green-500" />
@@ -133,7 +133,7 @@ export default function UserManagementPanel({ user }) {
 
       {/* Invite new user */}
       <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 border border-indigo-200 dark:border-indigo-700 mb-5">
-        <p className="text-sm font-semibold text-gray-800 dark:text-slate-100 text-start mb-3 flex items-center gap-2 justify-end">
+        <p className="text-sm font-semibold text-gray-800 dark:text-slate-100 text-start mb-3 flex items-center gap-2 justify-start">
           הזמן משתמש חדש
           <UserPlus className="w-4 h-4 text-indigo-600" />
         </p>

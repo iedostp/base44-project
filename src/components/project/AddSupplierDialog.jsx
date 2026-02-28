@@ -189,10 +189,7 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 mt-6">
-          <Button variant="outline" onClick={onClose} disabled={isSaving}>
-            ביטול
-          </Button>
+        <div className="flex justify-between gap-3 mt-6">
           <Button
             onClick={handleSave}
             disabled={isSaving}
@@ -206,6 +203,9 @@ export default function AddSupplierDialog({ isOpen, onClose, projectId, onSuppli
             ) : (
               "שמור ספק"
             )}
+          </Button>
+          <Button variant="outline" onClick={onClose} disabled={isSaving}>
+            ביטול
           </Button>
         </div>
       </DialogContent>

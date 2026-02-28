@@ -149,7 +149,7 @@ export default function AppearanceSettings() {
             <div className="h-1.5 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
               <div className="h-full w-2/3 rounded-full" style={{ background: "var(--accent-primary)" }} />
             </div>
-            <div className="flex gap-1 justify-end">
+            <div className="flex gap-1 justify-start">
               <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--accent-light)", color: "var(--accent-text)" }}>
                 בהתקדמות
               </span>

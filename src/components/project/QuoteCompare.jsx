@@ -86,10 +86,10 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                 {/* Document columns */}
                 {documents.map((doc) => (
                   <td key={doc.id} className={`p-3 border border-gray-200 bg-gradient-to-b from-blue-50 to-indigo-50 ${colMinWidth}`}>
-                    <div className="flex items-start gap-2 justify-end">
+                    <div className="flex items-start gap-2 justify-start">
                       <div>
                         <p className="font-bold text-gray-800 leading-snug line-clamp-2">{doc.name}</p>
-                        <div className="flex items-center gap-1.5 mt-1 justify-end flex-wrap">
+                        <div className="flex items-center gap-1.5 mt-1 justify-start flex-wrap">
                           <span className="text-xs bg-white border border-gray-200 text-gray-600 px-2 py-0.5 rounded-full">
                             {CATEGORY_LABELS[doc.category] || doc.category}
                           </span>
@@ -116,7 +116,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                 return (
                   <tr key={field.key} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}>
                     <td className="p-3 border border-gray-200 bg-gray-50 sticky end-0 z-10">
-                      <div className="flex items-center gap-1.5 justify-end">
+                      <div className="flex items-center gap-1.5 justify-start">
                         <span className="font-medium text-gray-600 text-xs">{field.label}</span>
                         <Icon className={`w-3.5 h-3.5 ${field.color} flex-shrink-0`} />
                       </div>
@@ -154,7 +154,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
               {customFields.map((field, idx) => (
                 <tr key={field.id} className={(BUILT_IN_FIELDS.length + idx) % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}>
                   <td className="p-3 border border-gray-200 bg-amber-50 sticky end-0 z-10">
-                    <div className="flex items-center gap-1.5 justify-end">
+                    <div className="flex items-center gap-1.5 justify-start">
                       <span className="font-medium text-amber-800 text-xs">{field.label}</span>
                       <button
                         onClick={() => removeCustomField(field.id)}
@@ -182,16 +182,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
               <tr>
                 <td colSpan={docCount + 1} className="p-3 border border-gray-200 bg-gray-50">
                   {addingField ? (
-                    <div className="flex items-center gap-2 justify-end">
-                      <Button size="sm" variant="outline" onClick={() => setAddingField(false)}>ביטול</Button>
-                      <Button
-                        size="sm"
-                        className="bg-amber-500 hover:bg-amber-600 text-white"
-                        onClick={addCustomField}
-                        disabled={!newFieldLabel.trim()}
-                      >
-                        הוסף
-                      </Button>
+                    <div className="flex items-center gap-2 justify-start">
                       <Input
                         value={newFieldLabel}
                         onChange={(e) => setNewFieldLabel(e.target.value)}
@@ -200,6 +191,15 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                         className="max-w-[200px] h-8 text-end"
                         autoFocus
                       />
+                      <Button
+                        size="sm"
+                        className="bg-amber-500 hover:bg-amber-600 text-white"
+                        onClick={addCustomField}
+                        disabled={!newFieldLabel.trim()}
+                      >
+                        הוסף
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setAddingField(false)}>ביטול</Button>
                     </div>
                   ) : (
                     <button

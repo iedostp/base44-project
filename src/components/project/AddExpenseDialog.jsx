@@ -261,14 +261,7 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end gap-3 pt-4 border-t">
-            <Button
-              variant="outline"
-              onClick={handleClose}
-              disabled={saving}
-            >
-              ביטול
-            </Button>
+          <div className="flex justify-between gap-3 pt-4 border-t">
             <Button
               onClick={handleSave}
               disabled={saving || !expenseData.description || !expenseData.amount}
@@ -285,6 +278,13 @@ export default function AddExpenseDialog({ projectId, stage, suppliers, isOpen, 
                   הוסף הוצאה
                 </>
               )}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleClose}
+              disabled={saving}
+            >
+              ביטול
             </Button>
           </div>
         </div>

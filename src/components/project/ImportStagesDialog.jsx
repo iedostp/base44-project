@@ -198,10 +198,7 @@ export default function ImportStagesDialog({ isOpen, onClose, projectId, current
           )}
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-2 border-t border-gray-100 dark:border-slate-700">
-            <Button variant="outline" onClick={handleClose} disabled={importing}>
-              ביטול
-            </Button>
+          <div className="flex justify-between gap-3 pt-2 border-t border-gray-100 dark:border-slate-700">
             <Button
               onClick={handleImport}
               disabled={!parsedStages || importing}
@@ -212,6 +209,9 @@ export default function ImportStagesDialog({ isOpen, onClose, projectId, current
               ) : (
                 <><Upload className="w-4 h-4 me-2" />ייבא שלבים</>
               )}
+            </Button>
+            <Button variant="outline" onClick={handleClose} disabled={importing}>
+              ביטול
             </Button>
           </div>
         </div>
