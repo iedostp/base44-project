@@ -96,7 +96,7 @@ export default function DashboardSummary({ project, stages, tasks, expenses }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {cards.map((card, i) => (
           <div key={i} className={`bg-gradient-to-br ${card.color} rounded-2xl p-4 text-white shadow-lg`}>
-            <div className={`flex items-center justify-between mb-2 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className="flex items-center justify-between mb-2">
               <div className="bg-white/20 p-1.5 rounded-lg">{card.icon}</div>
               <span className="text-xs opacity-80">{card.label}</span>
             </div>
@@ -167,8 +167,8 @@ export default function DashboardSummary({ project, stages, tasks, expenses }) {
           />
         </div>
         <div className="flex justify-between mt-1">
-          <span className="text-xs text-gray-400">{doneTasks} {t('completed')}</span>
           <span className="text-xs text-gray-400">{totalTasks - doneTasks} {t('remaining')}</span>
+          <span className="text-xs text-gray-400">{doneTasks} {t('completed')}</span>
         </div>
       </div>
     </div>
