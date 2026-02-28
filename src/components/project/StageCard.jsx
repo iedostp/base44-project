@@ -135,7 +135,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
           </div>
 
           {/* Progress row */}
-          <div className="flex items-center justify-between gap-2 mb-1.5">
+          <div className={`flex items-center justify-between gap-2 mb-1.5 ${i18n.language === 'he' || i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
             <div className="text-xs text-gray-500 dark:text-slate-400">{t('progress')}</div>
             <div className="flex items-center gap-1">
               <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{progressPercent}%</span>
@@ -171,7 +171,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="border-blue-500 text-blue-700 hover:bg-blue-50"
               >
-                <Edit className="w-4 h-4 ml-2" />
+                <Edit className="w-4 h-4 me-2" />
                 {t('editStage')}
               </Button>
               <Button
@@ -179,7 +179,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
               >
-                <Plus className="w-4 h-4 ml-2" />
+                <Plus className="w-4 h-4 me-2" />
                 {t('addTask')}
               </Button>
               <Button
@@ -187,14 +187,14 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 size="sm"
                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
               >
-                <Plus className="w-4 h-4 ml-2" />
+                <Plus className="w-4 h-4 me-2" />
                 {t('addExpense')}
               </Button>
               <Button
                 onClick={(e) => { e.stopPropagation(); setConfirmDelete(true); }}
                 variant="outline"
                 size="sm"
-                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 mr-auto"
+                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 ms-auto"
               >
                 <Trash2 className="w-4 h-4 ml-2" />
                 מחק שלב
@@ -222,7 +222,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                     onClick={(e) => { e.stopPropagation(); handleDeleteStage(); }}
                     className="bg-red-600 hover:bg-red-700 text-white"
                   >
-                    <Trash2 className="w-4 h-4 ml-1" />
+                    <Trash2 className="w-4 h-4 me-1" />
                     כן, מחק
                   </Button>
                 </div>
@@ -233,7 +233,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
             {stageExpenses.length > 0 && (
               <div className="mb-6 bg-white dark:bg-slate-700 rounded-xl p-4 border border-gray-200 dark:border-slate-600">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-bold text-gray-800 dark:text-slate-100">{t('actualExpenses')}</h4>
+                  <h4 className="font-bold text-gray-800 dark:text-slate-100 text-right">{t('actualExpenses')}</h4>
                   <span className="text-lg font-bold text-green-600">
                     {currencySymbol}{totalExpenses.toLocaleString()}
                   </span>
@@ -277,7 +277,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
             {/* Subtopics */}
             {subtopics.length > 0 && (
               <div className="mb-6">
-                <h4 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-lg">{t('importantTopics')}</h4>
+                <h4 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-lg text-right">{t('importantTopics')}</h4>
                 <div className="grid md:grid-cols-2 gap-4">
                   {subtopics.map((subtopic) => (
                     <SubtopicCard key={subtopic.id} subtopic={subtopic} />
@@ -288,7 +288,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
             
             {/* Tasks */}
             <div>
-              <h4 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-lg">{t('tasksToComplete')}</h4>
+              <h4 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-lg text-right">{t('tasksToComplete')}</h4>
               <div className="space-y-3">
                 {tasks.map((task) => (
                   <TaskItem 

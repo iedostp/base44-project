@@ -84,7 +84,7 @@ export default function ProjectHeader({ project, onUpdate, overallProgress, budg
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 dark:text-slate-400 mb-1.5">{t('phone')}</label>
-                  <Input type="tel" placeholder={t('enterPhone')} value={localProject?.[phoneField] || ''} onChange={(e) => handleChange(phoneField, e.target.value)} className="border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all" dir="ltr" />
+                  <Input type="tel" placeholder={t('enterPhone')} value={localProject?.[phoneField] || ''} onChange={(e) => handleChange(phoneField, e.target.value)} className="border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all text-right" />
                 </div>
               </div>
             </div>

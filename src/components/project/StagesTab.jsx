@@ -68,7 +68,7 @@ export default function StagesTab({ stages, tasks, subtopics, expenses, supplier
           onClick={() => setShowImport(true)}
           className="border-green-500 text-green-700 hover:bg-green-50 dark:text-green-300 dark:border-green-700 dark:hover:bg-green-900/20"
         >
-          <Upload className="w-4 h-4 ml-2" />
+          <Upload className="w-4 h-4 me-2" />
           ייבוא שלבים מ-Excel
         </Button>
       </div>

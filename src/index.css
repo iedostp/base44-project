@@ -156,3 +156,8 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+:root[dir='rtl'] body {
+  text-align: right;
+  direction: rtl;
+}

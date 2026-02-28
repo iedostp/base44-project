@@ -25,6 +25,7 @@ export default function Layout({ children, currentPageName }) {
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { i18n } = useTranslation();
+  const isRtl = ['he', 'ar'].includes(i18n.language);
 
   const touchStartY = useRef(0);
   const holdTimer = useRef(null);
@@ -86,6 +87,7 @@ export default function Layout({ children, currentPageName }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <div
+        dir={isRtl ? 'rtl' : 'ltr'}
         className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}

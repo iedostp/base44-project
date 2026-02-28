@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Search, X, Layers, CheckSquare, DollarSign, Users, FileText } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import "../i18n";
 
 const CATEGORY_LABELS = {
   materials: "חומרים", labor: "עבודה", equipment: "ציוד",
@@ -11,6 +13,8 @@ export default function GlobalSearch({ stages, tasks, expenses, suppliers, docum
   const [open, setOpen] = useState(false);
   const inputRef = useRef();
   const containerRef = useRef();
+  const { i18n } = useTranslation();
+  const isRtl = ['he', 'ar'].includes(i18n.language);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -75,7 +79,7 @@ export default function GlobalSearch({ stages, tasks, expenses, suppliers, docum
   return (
     <div ref={containerRef} className="relative w-full max-w-lg">
       <div className="relative">
-        <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <Search className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
         <input
           ref={inputRef}
           type="text"
@@ -83,12 +87,13 @@ export default function GlobalSearch({ stages, tasks, expenses, suppliers, docum
           onChange={e => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
           placeholder="חיפוש בכל הפרויקט..."
-          className="w-full pr-10 pl-9 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm"
+          dir={isRtl ? 'rtl' : 'ltr'}
+          className={`w-full pe-10 ps-9 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm${isRtl ? ' text-right' : ''}`}
         />
         {query && (
           <button
             onClick={() => { setQuery(""); inputRef.current?.focus(); }}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
           >
             <X className="w-4 h-4" />
           </button>
