@@ -227,11 +227,11 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
       {/* Header & Analyze Button */}
       <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl p-4 md:p-6 text-white shadow-xl">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div className="flex flex-row-reverse items-center gap-3 flex-1 min-w-0">
             <div className="bg-white/20 p-2.5 rounded-xl shrink-0">
               <Sparkles className="w-6 h-6" />
             </div>
-            <div className="min-w-0 text-end">
+            <div className="min-w-0 text-right">
               <h3 className="text-lg font-bold leading-tight">יועץ AI חכם לתקציב</h3>
               <p className="text-purple-100 text-xs mt-0.5">ניתוח מתקדם של דפוסי הוצאה והמלצות אישיות</p>
             </div>
@@ -284,7 +284,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
           {/* Summary */}
           {analysis.summary && (
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-              <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <h4 className="text-xl font-bold text-gray-800 mb-4 flex flex-row-reverse items-center gap-2">
                 <BarChart3 className="w-6 h-6 text-blue-600" />
                 סיכום ניתוח
               </h4>
@@ -295,7 +295,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
           {/* Budget Overrun Risk */}
           {analysis.budget_overrun_risk && (
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-              <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <h4 className="text-xl font-bold text-gray-800 mb-4 flex flex-row-reverse items-center gap-2">
                 <AlertTriangle className="w-6 h-6 text-amber-600" />
                 סיכון לחריגה מהתקציב
               </h4>
@@ -318,7 +318,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
           {/* Critical Alerts */}
           {analysis.critical_alerts && analysis.critical_alerts.length > 0 && (
             <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-red-300">
-              <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <h4 className="text-xl font-bold text-gray-800 mb-4 flex flex-row-reverse items-center gap-2">
                 <XCircle className="w-6 h-6 text-red-600" />
                 התראות קריטיות
               </h4>
@@ -329,7 +329,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
                     alert.severity === 'warning' ? 'bg-amber-50 border-amber-300' :
                     'bg-blue-50 border-blue-300'
                   }`}>
-                    <div className="flex items-start gap-3">
+                    <div className="flex flex-row-reverse items-start gap-3">
                       {getSeverityIcon(alert.severity)}
                       <div className="flex-1">
                         <p className="font-semibold text-gray-800 mb-1">{alert.alert}</p>
@@ -345,14 +345,14 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
           {/* Cost Saving Recommendations */}
           {analysis.cost_saving_recommendations && analysis.cost_saving_recommendations.length > 0 && (
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-              <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <h4 className="text-xl font-bold text-gray-800 mb-4 flex flex-row-reverse items-center gap-2">
                 <TrendingDown className="w-6 h-6 text-green-600" />
                 המלצות לחיסכון בעלויות
               </h4>
               <div className="space-y-4">
                 {analysis.cost_saving_recommendations.map((rec, index) => (
                   <div key={index} className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
-                    <div className="flex items-start gap-3">
+                    <div className="flex flex-row-reverse items-start gap-3">
                       {getPriorityIcon(rec.priority)}
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
@@ -375,7 +375,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
           {/* Supplier Recommendations */}
           {analysis.supplier_recommendations && analysis.supplier_recommendations.length > 0 && (
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-              <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <h4 className="text-xl font-bold text-gray-800 mb-4 flex flex-row-reverse items-center gap-2">
                 <Lightbulb className="w-6 h-6 text-blue-600" />
                 המלצות לגבי ספקים
               </h4>
@@ -402,7 +402,7 @@ ${suppliers.filter(s => s.status === 'under_consideration').map(s => `- ${s.name
           {/* Remaining Stages Prediction */}
           {analysis.remaining_stages_prediction && analysis.remaining_stages_prediction.length > 0 && (
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-              <h4 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <h4 className="text-xl font-bold text-gray-800 mb-4 flex flex-row-reverse items-center gap-2">
                 <span className="text-2xl font-bold text-purple-600">₪</span>
                 תחזית עלויות לשלבים הנותרים
               </h4>

@@ -112,48 +112,48 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-xl">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex flex-row-reverse items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
             </div>
             <span className="text-xs opacity-90">תקציב כולל</span>
           </div>
-          <p className="text-2xl font-bold text-end">{currencySymbol}{totalBudget.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-right">{currencySymbol}{totalBudget.toLocaleString()}</p>
         </div>
 
         <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-4 text-white shadow-xl">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex flex-row-reverse items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
             </div>
             <span className="text-xs opacity-90">הוצאה משוערת</span>
           </div>
-          <p className="text-2xl font-bold text-end">{currencySymbol}{Math.round(spentBudget).toLocaleString()}</p>
-          <p className="text-xs opacity-90 mt-1 text-end">{spentPercentage}% מהתקציב</p>
+          <p className="text-2xl font-bold text-right">{currencySymbol}{Math.round(spentBudget).toLocaleString()}</p>
+          <p className="text-xs opacity-90 mt-1 text-right">{spentPercentage}% מהתקציב</p>
         </div>
 
         <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl p-4 text-white shadow-xl">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex flex-row-reverse items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
             </div>
             <span className="text-xs opacity-90">יתרה משוערת</span>
           </div>
-          <p className="text-2xl font-bold text-end">{currencySymbol}{Math.round(remainingBudget).toLocaleString()}</p>
-          <p className="text-xs opacity-90 mt-1 text-end">{100 - spentPercentage}% נותר</p>
+          <p className="text-2xl font-bold text-right">{currencySymbol}{Math.round(remainingBudget).toLocaleString()}</p>
+          <p className="text-xs opacity-90 mt-1 text-right">{100 - spentPercentage}% נותר</p>
         </div>
       </div>
 
       {/* Budget Breakdown */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-slate-700">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="font-bold text-xl text-gray-800 dark:text-slate-100 flex items-center gap-2">
+          <h3 className="font-bold text-xl text-gray-800 dark:text-slate-100 flex flex-row-reverse items-center gap-2">
             <span className="text-2xl font-bold text-blue-600">{currencySymbol}</span>
             פירוט תקציב לפי שלבים
           </h3>
           <button
             onClick={() => setShowAddExpense(true)}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
+            className="flex flex-row-reverse items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
           >
             <Plus className="w-4 h-4" />
             הוסף הוצאה
@@ -165,9 +165,9 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
             const isEditing = editingStageId === stage.id;
             return (
               <div key={stage.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors gap-3">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="flex flex-row-reverse items-center gap-3 flex-1 min-w-0">
                   <div className={`w-3 h-3 rounded-full shrink-0 ${stage.completed ? 'bg-emerald-500' : 'bg-gray-300'}`}></div>
-                  <span className="text-gray-700 font-medium text-end break-words leading-snug">{stage.title}</span>
+                  <span className="text-gray-700 font-medium text-right break-words leading-snug">{stage.title}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {isEditing ? (
