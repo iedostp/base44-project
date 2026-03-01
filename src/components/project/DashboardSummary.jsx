@@ -103,7 +103,7 @@ export default function DashboardSummary({ project, stages, tasks, expenses }) {
             <p className="text-2xl font-bold mb-1 text-right">{card.value}</p>
             <p className="text-xs opacity-80 text-right">{card.sub}</p>
             {card.bar !== null && (
-              <div className={`mt-2 w-full ${card.barColor} rounded-full h-1.5 overflow-hidden`}>
+              <div dir="ltr" className={`mt-2 w-full ${card.barColor} rounded-full h-1.5 overflow-hidden`}>
                 <div className={`${card.barFill} h-1.5 rounded-full transition-all duration-700`} style={{ width: `${card.bar}%` }} />
               </div>
             )}
