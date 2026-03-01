@@ -124,38 +124,38 @@ export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, proje
         </motion.div>
       )}
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+      <div dir="rtl" className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+        <div className="text-right">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-slate-100 mb-1">{t('supplierManagement')}</h2>
+          <p className="text-gray-500 dark:text-slate-400 text-sm">{t('supplierManagementDesc')}</p>
+        </div>
         <div className="flex flex-wrap gap-2">
-          <Button 
+          <Button
             className="flex-1 md:flex-none bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white shadow-md text-xs md:text-sm"
             onClick={() => mapPickerModal.open()}
           >
-            <Map className="w-4 h-4 ms-2" />
+            <Map className="w-4 h-4 me-2" />
             {t('pickLocationOnMap')}
           </Button>
-          <Button 
+          <Button
             className="flex-1 md:flex-none bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-md text-xs md:text-sm"
             onClick={() => nearbyModal.open()}
           >
-            <MapPin className="w-4 h-4 ms-2" />
+            <MapPin className="w-4 h-4 me-2" />
             {t('findNearbySuppliers')}
           </Button>
-          <Button 
+          <Button
             className="flex-1 md:flex-none bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md text-xs md:text-sm"
             onClick={() => addSupplierModal.open()}
           >
-            <Plus className="w-4 h-4 ms-2" />
+            <Plus className="w-4 h-4 me-2" />
             {t('addNewSupplier')}
           </Button>
-        </div>
-        <div className="text-end">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-slate-100 mb-1">{t('supplierManagement')}</h2>
-          <p className="text-gray-500 dark:text-slate-400 text-sm">{t('supplierManagementDesc')}</p>
         </div>
       </div>
 
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 mb-6 pb-6 border-b border-gray-200">
+      <div dir="rtl" className="flex flex-wrap gap-2 mb-6 pb-6 border-b border-gray-200">
         {categories.map(cat => (
           <button
             key={cat.value}
@@ -174,7 +174,7 @@ export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, proje
       {/* Compare Bar */}
       {selectedForCompare.length > 0 && (
         <div className="mb-6 p-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg text-white">
-          <div className="flex items-center justify-between">
+          <div dir="rtl" className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-lg">
                 <GitCompare className="w-5 h-5" />

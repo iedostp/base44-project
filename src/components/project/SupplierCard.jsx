@@ -62,7 +62,7 @@ export default function SupplierCard({ supplier, onStatusChange, isSelected, onT
   };
 
   return (
-    <div className={`border rounded-2xl p-5 transition-all duration-300 bg-white dark:bg-slate-800 relative select-none flex flex-col ${
+    <div dir="rtl" className={`border rounded-2xl p-5 transition-all duration-300 bg-white dark:bg-slate-800 relative select-none flex flex-col ${
       isSelected ? 'border-blue-500 dark:border-blue-400 shadow-xl ring-2 ring-blue-200 dark:ring-blue-700' : 'border-gray-200 dark:border-slate-700 hover:shadow-xl'
     }`}>
       {/* Compare Checkbox */}
@@ -84,10 +84,10 @@ export default function SupplierCard({ supplier, onStatusChange, isSelected, onT
       </div>
 
       {/* Supplier name - right aligned (text-start = inline-start = right in RTL) */}
-      <h3 className="font-bold text-xl text-gray-800 dark:text-slate-100 text-start mt-8 mb-3">{supplier.name}</h3>
+      <h3 className="font-bold text-xl text-gray-800 dark:text-slate-100 text-right mt-8 mb-3">{supplier.name}</h3>
 
       {/* Category, rating, price range, status - all on one row */}
-      <div className="flex items-center gap-2 mb-4 flex-wrap">
+      <div dir="rtl" className="flex items-center gap-2 mb-4 flex-wrap">
         <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
           {getCategoryText(supplier.category)}
         </span>
@@ -109,20 +109,20 @@ export default function SupplierCard({ supplier, onStatusChange, isSelected, onT
       
       <div className="space-y-2 mb-4">
         {supplier.address && (
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <MapPin className="w-4 h-4 text-gray-400" />
+          <div dir="rtl" className="flex items-center gap-2 text-sm text-gray-600">
+            <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
             <span>{supplier.address}</span>
           </div>
         )}
         {supplier.contact_phone && (
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Phone className="w-4 h-4 text-gray-400" />
+          <div dir="rtl" className="flex items-center gap-2 text-sm text-gray-600">
+            <Phone className="w-4 h-4 text-gray-400 shrink-0" />
             <span dir="ltr">{supplier.contact_phone}</span>
           </div>
         )}
         {supplier.email && (
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Mail className="w-4 h-4 text-gray-400" />
+          <div dir="rtl" className="flex items-center gap-2 text-sm text-gray-600">
+            <Mail className="w-4 h-4 text-gray-400 shrink-0" />
             <span>{supplier.email}</span>
           </div>
         )}
@@ -131,7 +131,7 @@ export default function SupplierCard({ supplier, onStatusChange, isSelected, onT
       <div className="flex-1">
         {supplier.notes && (
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 mb-4 border border-blue-100">
-            <p className="text-sm text-gray-700 leading-relaxed">{supplier.notes}</p>
+            <p className="text-sm text-gray-700 leading-relaxed text-right">{supplier.notes}</p>
           </div>
         )}
       </div>
