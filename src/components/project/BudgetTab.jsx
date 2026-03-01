@@ -166,7 +166,10 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
             return (
               <div key={stage.id} dir="rtl" className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors gap-3">
                 <div dir="ltr" className="flex items-center justify-end gap-3 flex-1 min-w-0">
-                  <span className="text-gray-700 font-medium text-right break-words leading-snug">{stage.title}</span>
+                  <div className="text-right min-w-0">
+                    <span className="text-gray-700 font-medium text-right break-words leading-snug block">{stage.title}</span>
+                    {!isEditing && <span className="text-xs text-gray-400">{stage.budget_percentage}</span>}
+                  </div>
                   <div className={`w-3 h-3 rounded-full shrink-0 ${stage.completed ? 'bg-emerald-500' : 'bg-gray-300'}`}></div>
                 </div>
                 <div dir="ltr" className="flex items-center gap-2 shrink-0">
@@ -191,10 +194,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
                       <button onClick={() => startEdit(stage)} className="p-1 rounded-lg hover:bg-gray-200 text-gray-400 hover:text-gray-600 transition-colors">
                         <Pencil className="w-4 h-4" />
                       </button>
-                      <div className="text-right">
-                        <div className="text-gray-900 font-bold">{currencySymbol}{stageAmount.toLocaleString()}</div>
-                        <div className="text-sm text-gray-500">{stage.budget_percentage}</div>
-                      </div>
+                      <div className="text-gray-900 font-bold">{currencySymbol}{stageAmount.toLocaleString()}</div>
                     </>
                   )}
                 </div>
