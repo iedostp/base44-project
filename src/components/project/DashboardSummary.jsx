@@ -96,14 +96,14 @@ export default function DashboardSummary({ project, stages, tasks, expenses }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {cards.map((card, i) => (
           <div key={i} className={`bg-gradient-to-br ${card.color} rounded-2xl p-4 text-white shadow-lg`}>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 flex-row-reverse">
               <div className="bg-white/20 p-1.5 rounded-lg">{card.icon}</div>
               <span className="text-xs opacity-80">{card.label}</span>
             </div>
-            <p className="text-2xl font-bold mb-1">{card.value}</p>
-            <p className="text-xs opacity-80">{card.sub}</p>
+            <p className="text-2xl font-bold mb-1 text-right">{card.value}</p>
+            <p className="text-xs opacity-80 text-right">{card.sub}</p>
             {card.bar !== null && (
-              <div className={`mt-2 w-full ${card.barColor} rounded-full h-1.5 overflow-hidden`}>
+              <div dir="rtl" className={`mt-2 w-full ${card.barColor} rounded-full h-1.5 overflow-hidden`}>
                 <div className={`${card.barFill} h-1.5 rounded-full transition-all duration-700`} style={{ width: `${card.bar}%` }} />
               </div>
             )}
