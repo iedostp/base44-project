@@ -520,12 +520,10 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                 <tr className="border-t-2 border-gray-300 dark:border-slate-500 bg-indigo-50 dark:bg-indigo-900/20 font-bold">
                   <td className="px-2 md:px-4 py-2 md:py-3 text-gray-800 dark:text-slate-100 text-right">סה"כ</td>
                   <td className="hidden md:table-cell px-4 py-3 text-gray-800 dark:text-slate-100 text-right text-xs md:text-sm">{formatNIS(totalBudget)}</td>
-                  <td className="px-2 md:px-4 py-2 md:py-3 text-right text-xs md:text-sm">
-                    <span className={displaySpent > totalBudget ? "text-red-600 dark:text-red-400" : "text-gray-800 dark:text-slate-100"}>
-                      {formatNIS(Math.round(displaySpent))}{isEstimated ? " *" : ""}
-                    </span>
+                  <td className={`px-2 md:px-4 py-2 md:py-3 text-right text-xs md:text-sm ${displaySpent > totalBudget ? "text-red-600 dark:text-red-400" : "text-gray-800 dark:text-slate-100"}`}>
+                    {formatNIS(Math.round(displaySpent))}{isEstimated ? " *" : ""}
                   </td>
-                  <td className={`hidden lg:table-cell px-4 py-3 text-right text-xs md:text-sm ${displaySpent - totalBudget > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
+                  <td className={`hidden lg:table-cell px-4 py-3 text-right text-xs md:text-sm font-semibold ${displaySpent - totalBudget < 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
                     {displaySpent - totalBudget > 0 ? "+" : ""}{formatNIS(Math.round(displaySpent - totalBudget))}
                   </td>
                   <td className="px-2 md:px-4 py-2 md:py-3 text-center text-xs md:text-sm text-gray-700 dark:text-slate-300">{Math.round(budgetUsagePercent)}%</td>
