@@ -157,7 +157,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
             <div className="flex gap-2">
               <Button
                 className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
-                onClick={() => window.open(document.file_url, '_blank')}
+                onClick={() => window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(document.file_url)}`, '_blank')}
                 size="sm"
               >
                 <ExternalLink className="w-3 h-3 me-2" />
