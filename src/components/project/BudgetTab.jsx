@@ -110,7 +110,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       />
 
       {/* Summary Cards */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div dir="rtl" className="grid md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-xl">
           <div className="flex flex-row-reverse items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
