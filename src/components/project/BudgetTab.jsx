@@ -215,7 +215,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
             {spentPercentage > 10 && `${spentPercentage}%`}
           </div>
         </div>
-        <div dir="ltr" className="flex justify-between mt-3 text-sm text-gray-600">
+        <div className="flex justify-between mt-3 text-sm text-gray-600">
           <span>הוצאה משוערת</span>
           <span>יתרה</span>
         </div>
