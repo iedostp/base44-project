@@ -460,8 +460,8 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                       </div>
                     </td>
                     <td className="hidden md:table-cell px-4 py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.planned))}</td>
-                    <td className="px-2 md:px-4 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.actual))}</td>
-                    <td className={`hidden lg:table-cell px-4 py-3 text-right font-semibold text-xs md:text-sm ${s.diff > 0 ? "text-red-600 dark:text-red-400" : s.diff < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
+                    <td className={`px-2 md:px-4 py-2 md:py-3 text-right text-xs md:text-sm font-medium ${s.actual > s.planned ? "text-red-600 dark:text-red-400" : s.actual === s.planned && s.planned > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-700 dark:text-slate-300"}`}>{formatNIS(Math.round(s.actual))}</td>
+                    <td className={`hidden lg:table-cell px-4 py-3 text-right font-semibold text-xs md:text-sm ${s.diff < 0 ? "text-red-600 dark:text-red-400" : s.diff > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
                       {s.diff > 0 ? "+" : ""}{formatNIS(Math.round(s.diff))}
                     </td>
                     <td className="px-2 md:px-4 py-2 md:py-3 text-center">
