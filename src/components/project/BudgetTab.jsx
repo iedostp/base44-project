@@ -112,32 +112,32 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       {/* Summary Cards */}
       <div dir="rtl" className="grid md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-xl">
-          <div className="flex flex-row-reverse items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs opacity-90">תקציב כולל</span>
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
             </div>
-            <span className="text-xs opacity-90">תקציב כולל</span>
           </div>
           <p className="text-2xl font-bold text-right">{currencySymbol}{totalBudget.toLocaleString()}</p>
         </div>
 
         <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-4 text-white shadow-xl">
-          <div className="flex flex-row-reverse items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs opacity-90">הוצאה משוערת</span>
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
             </div>
-            <span className="text-xs opacity-90">הוצאה משוערת</span>
           </div>
           <p className="text-2xl font-bold text-right">{currencySymbol}{Math.round(spentBudget).toLocaleString()}</p>
           <p className="text-xs opacity-90 mt-1 text-right">{spentPercentage}% מהתקציב</p>
         </div>
 
         <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl p-4 text-white shadow-xl">
-          <div className="flex flex-row-reverse items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs opacity-90">יתרה משוערת</span>
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
               <span className="text-base font-bold">{currencySymbol}</span>
             </div>
-            <span className="text-xs opacity-90">יתרה משוערת</span>
           </div>
           <p className="text-2xl font-bold text-right">{currencySymbol}{Math.round(remainingBudget).toLocaleString()}</p>
           <p className="text-xs opacity-90 mt-1 text-right">{100 - spentPercentage}% נותר</p>
