@@ -49,7 +49,7 @@ export default function TaskItem({ task, onToggle, onDelete, projectId, user }) 
           {/* Clickable area: checkbox + text + badges only */}
           <div
             dir="ltr"
-            className="flex flex-row items-start gap-2 cursor-pointer select-none"
+            className="flex flex-row-reverse items-start gap-2 cursor-pointer select-none"
             onClick={handleClick}
           >
             {optimisticDone ? (
