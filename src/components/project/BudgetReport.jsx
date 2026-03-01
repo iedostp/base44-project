@@ -410,7 +410,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
           </div>
         </div>
         {showTable && (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" dir="rtl">
             <table className="w-full text-xs md:text-sm">
               <thead className="bg-gray-50 dark:bg-slate-700">
                 <tr>
@@ -435,14 +435,14 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
               <tbody>
                 {filteredAndSorted.map((s, i) => (
                   <tr key={s.id} className={`border-t border-gray-100 dark:border-slate-700 ${i % 2 === 0 ? "" : "bg-gray-50/50 dark:bg-slate-700/20"}`}>
-                    <td className="px-2 md:px-4 py-2 md:py-3 font-medium text-gray-800 dark:text-slate-200">{s.title}</td>
+                    <td className="px-2 md:px-4 py-2 md:py-3 font-medium text-gray-800 dark:text-slate-200 text-right">{s.title}</td>
                     <td className="hidden md:table-cell px-4 py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.planned))}</td>
                     <td className="px-2 md:px-4 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.actual))}</td>
                     <td className={`hidden lg:table-cell px-4 py-3 text-right font-semibold text-xs md:text-sm ${s.diff > 0 ? "text-red-600 dark:text-red-400" : s.diff < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
                       {s.diff > 0 ? "+" : ""}{formatNIS(Math.round(s.diff))}
                     </td>
                     <td className="px-2 md:px-4 py-2 md:py-3 text-center">
-                      <div className="flex items-center gap-1 justify-center">
+                      <div dir="ltr" className="flex items-center gap-1 justify-center">
                         <div className="w-12 md:w-16 h-2 bg-gray-200 dark:bg-slate-600 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all ${s.percentage > 100 ? "bg-red-500" : "bg-indigo-500"}`}
@@ -473,7 +473,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                 ))}
                 {/* Totals Row */}
                 <tr className="border-t-2 border-gray-300 dark:border-slate-500 bg-indigo-50 dark:bg-indigo-900/20 font-bold">
-                  <td className="px-2 md:px-4 py-2 md:py-3 text-gray-800 dark:text-slate-100">סה"כ</td>
+                  <td className="px-2 md:px-4 py-2 md:py-3 text-gray-800 dark:text-slate-100 text-right">סה"כ</td>
                   <td className="hidden md:table-cell px-4 py-3 text-gray-800 dark:text-slate-100 text-right text-xs md:text-sm">{formatNIS(totalBudget)}</td>
                   <td className="px-2 md:px-4 py-2 md:py-3 text-right text-xs md:text-sm">
                     <span className={displaySpent > totalBudget ? "text-red-600 dark:text-red-400" : "text-gray-800 dark:text-slate-100"}>
