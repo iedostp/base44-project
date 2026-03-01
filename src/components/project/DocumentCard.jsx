@@ -171,7 +171,11 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                   const link = window.document.createElement('a');
                   link.href = document.file_url;
                   link.download = document.name;
+                  link.target = '_blank';
+                  link.rel = 'noopener noreferrer';
+                  window.document.body.appendChild(link);
                   link.click();
+                  window.document.body.removeChild(link);
                 }}
               >
                 <Download className="w-3 h-3 me-2" />
