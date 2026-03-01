@@ -161,7 +161,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
             className="p-6 bg-gradient-to-b from-gray-50 dark:from-slate-700 to-white dark:to-slate-800 border-t border-gray-100 dark:border-slate-700"
           >
             {/* Action Buttons */}
-            <div className="flex items-center justify-between mb-6">
+            <div dir="rtl" className="flex items-center justify-between mb-6">
               <div className="flex gap-2 flex-wrap">
                 <Button
                   onClick={(e) => {

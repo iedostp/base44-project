@@ -42,12 +42,13 @@ export default function TaskItem({ task, onToggle, onDelete, projectId, user }) 
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-sm transition-all duration-200 p-2.5">
+    <div dir="rtl" className="bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-sm transition-all duration-200 p-2.5">
       <div className="flex flex-row items-start gap-2">
         {/* Text column — first child → RIGHT in RTL */}
         <div className="flex-1 min-w-0">
           {/* Clickable area: checkbox + text + badges only */}
           <div
+            dir="ltr"
             className="flex flex-row items-start gap-2 cursor-pointer select-none"
             onClick={handleClick}
           >
@@ -60,7 +61,7 @@ export default function TaskItem({ task, onToggle, onDelete, projectId, user }) 
               <span className={`text-sm text-right block ${optimisticDone ? 'line-through text-gray-400 dark:text-slate-500' : 'text-gray-700 dark:text-slate-200 font-medium'} transition-all`}>
                 {task.text}
               </span>
-              <div className="flex flex-wrap gap-1 mt-1 justify-start">
+              <div className="flex flex-wrap gap-1 mt-1 justify-end">
                 {task.duration && (
                   <span className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-0.5 bg-gray-50 dark:bg-slate-700 px-1.5 py-0.5 rounded-full">
                     <Clock className="w-2.5 h-2.5" />
