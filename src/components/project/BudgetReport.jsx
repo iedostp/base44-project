@@ -526,7 +526,19 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                   <td className={`hidden lg:table-cell px-4 py-3 text-right text-xs md:text-sm font-semibold ${displaySpent - totalBudget < 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
                     {displaySpent - totalBudget > 0 ? "+" : ""}{formatNIS(Math.round(displaySpent - totalBudget))}
                   </td>
-                  <td className="px-2 md:px-4 py-2 md:py-3 text-center text-xs md:text-sm text-gray-700 dark:text-slate-300">{Math.round(budgetUsagePercent)}%</td>
+                  <td className="px-2 md:px-4 py-2 md:py-3 text-center">
+                    <div dir="ltr" className="flex items-center gap-1 justify-center">
+                      <div className="w-12 md:w-16 h-2 bg-gray-200 dark:bg-slate-600 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all ${budgetUsagePercent > 100 ? "bg-red-500" : "bg-indigo-500"}`}
+                          style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }}
+                        />
+                      </div>
+                      <span className={`text-xs font-bold ${budgetUsagePercent > 100 ? "text-red-600 dark:text-red-400" : "text-gray-700 dark:text-slate-300"}`}>
+                        {Math.round(budgetUsagePercent)}%
+                      </span>
+                    </div>
+                  </td>
                   <td className="hidden md:table-cell" />
                 </tr>
                 {isEstimated && (
