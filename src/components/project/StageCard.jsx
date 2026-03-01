@@ -135,7 +135,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
           </div>
 
           {/* Progress row */}
-          <div className="flex flex-row items-center justify-between gap-2 mb-1.5">
+          <div dir="rtl" className="flex flex-row items-center justify-between gap-2 mb-1.5">
             <div className="text-xs text-gray-500 dark:text-slate-400">{t('progress')}</div>
             <div className="flex items-center gap-1">
               <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{progressPercent}%</span>
@@ -144,7 +144,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
           </div>
 
           {/* Progress bar */}
-          <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+          <div dir="rtl" className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
             <div 
               className="bg-gradient-to-r from-blue-500 to-indigo-600 h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
