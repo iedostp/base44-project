@@ -23,7 +23,7 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onTo
   })[cat] || 'bg-gray-100 text-gray-800';
 
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-blue-400 bg-blue-50' : 'border-gray-100 bg-white hover:bg-gray-50'}`}>
+    <div dir="rtl" className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-blue-400 bg-blue-50' : 'border-gray-100 bg-white hover:bg-gray-50'}`}>
       <input type="checkbox" className="rounded" checked={isSelected} onChange={() => onToggleCompare && onToggleCompare(document)} />
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-gray-800 text-sm truncate">{document.name}</p>
@@ -125,8 +125,8 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
     <div className="space-y-4 w-full overflow-x-hidden">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-5 border border-gray-100 dark:border-slate-700">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-3">
-          <div>
+        <div dir="rtl" className="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-3">
+          <div className="text-right">
             <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">{t('documentManagement')}</h2>
             <p className="text-gray-500 dark:text-slate-400 text-sm">{t('documentManagementDesc')}</p>
           </div>
@@ -140,18 +140,18 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
               </button>
             </div>
             <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md" onClick={() => uploadModal.open()} size="sm">
-              <Plus className="w-4 h-4 ms-1" />
+              <Plus className="w-4 h-4 me-1" />
               {t('uploadDocument')}
             </Button>
           </div>
         </div>
 
-        <div className="relative mb-3">
-          <Search className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input placeholder={t('searchDocuments')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pe-9" />
+        <div dir="rtl" className="relative mb-3">
+          <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input placeholder={t('searchDocuments')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pr-9 text-right" />
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div dir="rtl" className="flex flex-wrap gap-2 mb-3">
           {categories.map(cat => (
             <button key={cat.value} onClick={() => setSelectedCategory(cat.value)}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedCategory === cat.value ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200'}`}>
@@ -160,7 +160,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           ))}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div dir="rtl" className="flex flex-wrap items-center gap-2">
           {stages.length > 0 && (
             <select value={selectedStage} onChange={(e) => setSelectedStage(e.target.value)}
               className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300">
@@ -193,7 +193,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
       {/* Folders */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
+        <div dir="rtl" className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-700 dark:text-slate-200 text-sm flex items-center gap-2">
             <Folder className="w-4 h-4 text-amber-500" />{t('folders')}
           </h3>
@@ -208,7 +208,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
             <Button size="sm" variant="ghost" onClick={() => { setShowNewFolder(false); setNewFolderName(''); }} className="h-8">{t('cancel')}</Button>
           </div>
         )}
-        <div className="flex flex-wrap gap-2">
+        <div dir="rtl" className="flex flex-wrap gap-2">
           <button onClick={() => setSelectedFolder('all')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedFolder === 'all' ? 'bg-amber-500 text-white' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100'}`}>
             <FolderOpen className="w-3.5 h-3.5" />{t('allDocuments')} ({documents.length})
@@ -227,7 +227,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
       {/* Compare bar */}
       {selectedForCompare.length > 0 && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-3 flex items-center justify-between gap-3">
+        <div dir="rtl" className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-3 flex items-center justify-between gap-3">
           <span className="text-sm text-blue-800 dark:text-blue-300 font-medium">{selectedForCompare.length} {t('documentsSelectedForCompare')}</span>
           <div className="flex gap-2">
             <Button size="sm" variant="outline" onClick={() => setSelectedForCompare([])}>{t('clear')}</Button>

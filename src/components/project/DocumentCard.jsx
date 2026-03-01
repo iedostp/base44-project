@@ -47,14 +47,14 @@ export default function DocumentCard({ document, stage, supplier, project, stage
       <div className={`bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border overflow-hidden ${isSelected ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200'}`}>
         <div className="p-5">
           {/* Header */}
-          <div className="flex items-start justify-between mb-4">
+          <div dir="rtl" className="flex items-start justify-between mb-4">
             <div className="flex items-start gap-3 flex-1">
-              <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-3 rounded-lg">
+              <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-3 rounded-lg shrink-0">
                 <FileText className="w-6 h-6 text-blue-600" />
               </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-lg text-gray-800 mb-1 text-end">{document.name}</h3>
-                <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-lg text-gray-800 mb-1 text-right">{document.name}</h3>
+                <div dir="rtl" className="flex items-center gap-2 flex-wrap">
                   <span className={`text-xs px-3 py-1 rounded-full font-medium border ${getCategoryColor(document.category)}`}>
                     {getCategoryText(document.category)}
                   </span>
@@ -80,13 +80,13 @@ export default function DocumentCard({ document, stage, supplier, project, stage
           {(stage || supplier) && (
             <div className="mb-4 space-y-2">
               {stage && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 px-3 py-2 rounded-lg">
+                <div dir="rtl" className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 px-3 py-2 rounded-lg">
                   <span className="font-medium">שלב:</span>
                   <span>{stage.title}</span>
                 </div>
               )}
               {supplier && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 bg-purple-50 px-3 py-2 rounded-lg">
+                <div dir="rtl" className="flex items-center gap-2 text-sm text-gray-600 bg-purple-50 px-3 py-2 rounded-lg">
                   <span className="font-medium">ספק:</span>
                   <span>{supplier.name}</span>
                 </div>
@@ -97,42 +97,42 @@ export default function DocumentCard({ document, stage, supplier, project, stage
           {/* Extracted Data */}
           {document.extracted_data && Object.keys(document.extracted_data).length > 0 && (
             <div className="mb-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-4 border border-purple-200">
-              <h4 className="text-sm font-semibold text-purple-900 mb-3 flex items-center gap-2 text-end">
+              <h4 dir="rtl" className="text-sm font-semibold text-purple-900 mb-3 flex items-center gap-2 text-right">
                 <span className="bg-purple-100 p-1 rounded">✨</span>
                 מידע שחולץ מהמסמך
               </h4>
               <div className="space-y-2">
                 {document.extracted_data.document_date && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="w-4 h-4 text-purple-600" />
+                  <div dir="rtl" className="flex items-center gap-2 text-sm">
+                    <Calendar className="w-4 h-4 text-purple-600 shrink-0" />
                     <span className="text-gray-600">תאריך:</span>
                     <span className="font-medium text-gray-800">{document.extracted_data.document_date}</span>
                   </div>
                 )}
                 {document.extracted_data.amount && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <DollarSign className="w-4 h-4 text-purple-600" />
+                  <div dir="rtl" className="flex items-center gap-2 text-sm">
+                    <DollarSign className="w-4 h-4 text-purple-600 shrink-0" />
                     <span className="text-gray-600">סכום:</span>
                     <span className="font-medium text-gray-800">{document.extracted_data.amount.toLocaleString()} ₪</span>
                   </div>
                 )}
                 {document.extracted_data.parties && document.extracted_data.parties.length > 0 && (
-                  <div className="flex items-start gap-2 text-sm">
-                    <Users className="w-4 h-4 text-purple-600 mt-0.5" />
+                  <div dir="rtl" className="flex items-start gap-2 text-sm">
+                    <Users className="w-4 h-4 text-purple-600 mt-0.5 shrink-0" />
                     <span className="text-gray-600">צדדים:</span>
                     <span className="font-medium text-gray-800">{document.extracted_data.parties.join(', ')}</span>
                   </div>
                 )}
                 {document.extracted_data.reference_number && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Hash className="w-4 h-4 text-purple-600" />
+                  <div dir="rtl" className="flex items-center gap-2 text-sm">
+                    <Hash className="w-4 h-4 text-purple-600 shrink-0" />
                     <span className="text-gray-600">מספר אסמכתא:</span>
                     <span className="font-medium text-gray-800">{document.extracted_data.reference_number}</span>
                   </div>
                 )}
                 {document.extracted_data.description && (
                   <div className="text-sm mt-2 pt-2 border-t border-purple-200">
-                    <p className="text-gray-700 text-end">{document.extracted_data.description}</p>
+                    <p className="text-gray-700 text-right">{document.extracted_data.description}</p>
                   </div>
                 )}
               </div>
@@ -142,12 +142,12 @@ export default function DocumentCard({ document, stage, supplier, project, stage
           {/* Notes */}
           {document.notes && (
             <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="text-sm text-gray-700 text-end">{document.notes}</p>
+              <p className="text-sm text-gray-700 text-right">{document.notes}</p>
             </div>
           )}
 
           {/* Upload Date */}
-          <div className="text-xs text-gray-500 mb-4 text-end">
+          <div className="text-xs text-gray-500 mb-4 text-right">
             הועלה ב-{format(new Date(document.created_date), 'dd/MM/yyyy HH:mm', { locale: he })}
           </div>
 
