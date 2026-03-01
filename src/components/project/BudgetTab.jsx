@@ -207,7 +207,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       {/* Progress Visualization */}
       <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
         <h3 className="font-bold text-xl text-gray-800 mb-6 text-center">התפלגות תקציב</h3>
-        <div className="w-full bg-gray-200 rounded-full h-8 overflow-hidden shadow-inner">
+        <div dir="rtl" className="w-full bg-gray-200 rounded-full h-8 overflow-hidden shadow-inner">
           <div 
             className="bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 h-8 flex items-center justify-center text-white font-bold text-sm transition-all duration-700"
             style={{ width: `${spentPercentage}%` }}
