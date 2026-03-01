@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend, LineChart, Line, ReferenceLine
 } from "recharts";
-import { AlertTriangle, TrendingUp, TrendingDown, CheckCircle, Download, ChevronDown, ChevronUp, FileDown, Filter } from "lucide-react";
+import { AlertTriangle, TrendingUp, TrendingDown, CheckCircle, Download, ChevronDown, ChevronUp, ChevronLeft, FileDown, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, parseISO, startOfMonth } from "date-fns";
@@ -58,6 +58,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
   const [sortColumn, setSortColumn] = useState("title");
   const [sortDir, setSortDir] = useState("asc");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [expandedStages, setExpandedStages] = useState(() => new Set(initialStages.map(s => s.id)));
   const [stages, setStages] = useState(initialStages);
   const totalBudget = project?.total_budget || 0;
 
@@ -159,6 +160,15 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
       setSortColumn(column);
       setSortDir("asc");
     }
+  };
+
+  const toggleStage = (id) => {
+    setExpandedStages(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
   const exportToCSV = () => {
@@ -434,8 +444,21 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
               </thead>
               <tbody>
                 {filteredAndSorted.map((s, i) => (
-                  <tr key={s.id} className={`border-t border-gray-100 dark:border-slate-700 ${i % 2 === 0 ? "" : "bg-gray-50/50 dark:bg-slate-700/20"}`}>
-                    <td className="px-2 md:px-4 py-2 md:py-3 font-medium text-gray-800 dark:text-slate-200 text-right">{s.title}</td>
+                  <React.Fragment key={s.id}>
+                  <tr className={`border-t border-gray-100 dark:border-slate-700 ${i % 2 === 0 ? "" : "bg-gray-50/50 dark:bg-slate-700/20"}`}>
+                    <td className="px-2 md:px-4 py-2 md:py-3 font-medium text-gray-800 dark:text-slate-200">
+                      <div dir="rtl" className="flex items-center gap-1.5">
+                        <span>{s.title}</span>
+                        <button
+                          onClick={() => toggleStage(s.id)}
+                          className="shrink-0 p-0.5 hover:bg-gray-200 dark:hover:bg-slate-600 rounded transition-colors"
+                        >
+                          {expandedStages.has(s.id)
+                            ? <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+                            : <ChevronLeft className="w-3.5 h-3.5 text-gray-400" />}
+                        </button>
+                      </div>
+                    </td>
                     <td className="hidden md:table-cell px-4 py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.planned))}</td>
                     <td className="px-2 md:px-4 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-right text-xs md:text-sm">{formatNIS(Math.round(s.actual))}</td>
                     <td className={`hidden lg:table-cell px-4 py-3 text-right font-semibold text-xs md:text-sm ${s.diff > 0 ? "text-red-600 dark:text-red-400" : s.diff < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400"}`}>
@@ -470,6 +493,28 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                       )}
                     </td>
                   </tr>
+                  {expandedStages.has(s.id) && expenses
+                    .filter(e => e.stage_id === s.id)
+                    .map(e => (
+                      <tr key={e.id} className="border-t border-gray-50 dark:border-slate-700/50 bg-blue-50/30 dark:bg-blue-900/10">
+                        <td className="py-1.5 pl-2 md:pl-4 pr-6 md:pr-10 text-gray-600 dark:text-slate-300 text-right text-xs">
+                          <span className="text-gray-300 dark:text-slate-600 ml-1">↳</span>
+                          {e.description || '—'}
+                        </td>
+                        <td className="hidden md:table-cell px-4 py-1.5 text-gray-300 dark:text-slate-600 text-right text-xs">—</td>
+                        <td className="px-2 md:px-4 py-1.5 text-gray-700 dark:text-slate-300 text-right text-xs font-medium">
+                          {formatNIS(e.amount || 0)}
+                        </td>
+                        <td className="hidden lg:table-cell px-4 py-1.5 text-gray-300 dark:text-slate-600 text-xs text-right">—</td>
+                        <td className="px-2 md:px-4 py-1.5 text-center text-xs text-gray-500 dark:text-slate-400">
+                          {CATEGORY_LABELS[e.category] || e.category || '—'}
+                        </td>
+                        <td className="hidden md:table-cell px-4 py-1.5 text-center text-xs text-gray-400 dark:text-slate-500">
+                          {e.date ? new Date(e.date).toLocaleDateString('he-IL') : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
                 ))}
                 {/* Totals Row */}
                 <tr className="border-t-2 border-gray-300 dark:border-slate-500 bg-indigo-50 dark:bg-indigo-900/20 font-bold">
