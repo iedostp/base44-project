@@ -309,7 +309,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
       )}
 
       {/* ─── KPI Cards ───────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div dir="rtl" className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
           <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">תקציב כולל</p>
           <p className="text-xl font-bold text-gray-800 dark:text-slate-100">{formatNIS(totalBudget)}</p>
