@@ -28,3 +28,8 @@ dist-ssr
 *.sw?
 
 .env
+# Claude Code
+.claude/handover.md
+.claude/settings.local.json
+.claude/error-patterns.log
+.claude/handover.md
