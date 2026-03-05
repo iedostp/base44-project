@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Search, FolderOpen, GitCompare, List, LayoutGrid, FolderPlus, Folder, Calendar, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import DocumentUpload from "./DocumentUpload";
 import QuoteCompare from "./QuoteCompare";
 import { format } from "date-fns";
 
-function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onToggleCompare }) {
+function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onSelect, onDragStart, onDragEnd }) {
   const getCategoryText = (cat) => ({
     contract:'חוזה', permit:'היתר', invoice:'חשבונית', plan:'תוכנית',
     specification:'מפרט', certificate:'אישור', correspondence:'התכתבות', other:'אחר'
@@ -23,8 +23,9 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onTo
   })[cat] || 'bg-gray-100 text-gray-800';
 
   return (
-    <div dir="rtl" className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-blue-400 bg-blue-50' : 'border-gray-100 bg-white hover:bg-gray-50'}`}>
-      <input type="checkbox" className="rounded" checked={isSelected} onChange={() => onToggleCompare && onToggleCompare(document)} />
+    <div dir="rtl" draggable onDragStart={onDragStart} onDragEnd={onDragEnd}
+      className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-grab active:cursor-grabbing ${isSelected ? 'border-blue-400 bg-blue-50' : 'border-gray-100 bg-white hover:bg-gray-50'}`}>
+      <input type="checkbox" className="rounded" checked={isSelected} onChange={e => onSelect && onSelect(e, document)} onClick={e => e.stopPropagation()} />
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-gray-800 text-sm truncate">{document.name}</p>
         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -35,7 +36,23 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onTo
         </div>
       </div>
       <div className="flex items-center gap-1 shrink-0">
-        <Button size="sm" variant="ghost" className="text-blue-600 hover:bg-blue-50 h-7 px-2 text-xs" onClick={() => window.open(document.file_url, '_blank')}>צפה</Button>
+        <Button size="sm" variant="ghost" className="text-blue-600 hover:bg-blue-50 h-7 px-2 text-xs"
+          onClick={() => window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(document.file_url)}`, '_blank')}>
+          צפה
+        </Button>
+        <Button size="sm" variant="ghost" className="text-gray-600 hover:bg-gray-50 h-7 px-2 text-xs"
+          onClick={() => {
+            const a = window.document.createElement('a');
+            a.href = document.file_url;
+            a.download = document.name;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            window.document.body.appendChild(a);
+            a.click();
+            window.document.body.removeChild(a);
+          }}>
+          הורד
+        </Button>
         <Button size="sm" variant="ghost" className="text-red-500 hover:bg-red-50 h-7 w-7 p-0" onClick={() => onDelete(document)}><Trash2 className="w-3.5 h-3.5" /></Button>
       </div>
     </div>
@@ -50,7 +67,8 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
   const [selectedStage, setSelectedStage] = useState('all');
   const [showCompare, setShowCompare] = useState(false);
   const [selectedForCompare, setSelectedForCompare] = useState([]);
-  const [viewMode, setViewMode] = useState('grid');
+  const [viewMode, setViewMode] = useState('list');
+  const [sortBy, setSortBy] = useState('date-desc');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [showDateFilter, setShowDateFilter] = useState(false);
@@ -60,11 +78,29 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
   const [selectedFolder, setSelectedFolder] = useState('all');
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
+  const [draggedDocIds, setDraggedDocIds] = useState([]);
+  const [dragOverFolderId, setDragOverFolderId] = useState(null);
+  const [lastSelectedIndex, setLastSelectedIndex] = useState(null);
+  const ghostRef = useRef(null);
 
   const saveFolders = (newFolders) => {
     setFolders(newFolders);
     localStorage.setItem(`doc_folders_${projectId}`, JSON.stringify(newFolders));
   };
+
+  useEffect(() => {
+    if (folders.length === 0) {
+      saveFolders([
+        { id: 'f-cert',  name: 'אישורים',   docIds: [] },
+        { id: 'f-plan',  name: 'תוכניות',   docIds: [] },
+        { id: 'f-corr',  name: 'התכתבויות', docIds: [] },
+        { id: 'f-inv',   name: 'חשבוניות',  docIds: [] },
+        { id: 'f-cont',  name: 'חוזים',     docIds: [] },
+        { id: 'f-perm',  name: 'היתרים',    docIds: [] },
+        { id: 'f-other', name: 'אחר',       docIds: [] },
+      ]);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addFolder = () => {
     if (!newFolderName.trim()) return;
@@ -90,9 +126,41 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
     saveFolders(folders.map(f => ({ ...f, docIds: f.docIds.filter(id => id !== docId) })));
   };
 
+  const assignDocsToFolder = (docIds, folderId) => {
+    saveFolders(folders.map(f =>
+      f.id === folderId
+        ? { ...f, docIds: [...new Set([...f.docIds, ...docIds])] }
+        : { ...f, docIds: f.docIds.filter(id => !docIds.includes(id)) }
+    ));
+  };
+
+  const removeDocsFromFolders = (docIds) => {
+    saveFolders(folders.map(f => ({ ...f, docIds: f.docIds.filter(id => !docIds.includes(id)) })));
+  };
+
+  const handleDocDragStart = (e, doc) => {
+    const isInSelection = selectedForCompare.some(d => d.id === doc.id);
+    const ids = isInSelection ? selectedForCompare.map(d => d.id) : [doc.id];
+    if (!isInSelection) setSelectedForCompare([]);
+    setDraggedDocIds(ids);
+    if (ghostRef.current) {
+      ghostRef.current.textContent = ids.length > 1 ? `מעביר ${ids.length} מסמכים` : 'מעביר מסמך';
+      e.dataTransfer.setDragImage(ghostRef.current, 60, 20);
+    }
+  };
+
+  const handleFolderDrop = (folderId) => {
+    if (!draggedDocIds.length) return;
+    if (folderId === 'all') removeDocsFromFolders(draggedDocIds);
+    else assignDocsToFolder(draggedDocIds, folderId);
+    setSelectedForCompare([]);
+    setDraggedDocIds([]);
+    setDragOverFolderId(null);
+  };
+
   const toggleCompare = (doc) => {
     setSelectedForCompare(prev =>
-      prev.find(d => d.id === doc.id) ? prev.filter(d => d.id !== doc.id) : prev.length < 5 ? [...prev, doc] : prev
+      prev.find(d => d.id === doc.id) ? prev.filter(d => d.id !== doc.id) : [...prev, doc]
     );
   };
 
@@ -116,7 +184,45 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
     const dateToMatch = !dateTo || new Date(doc.created_date) <= new Date(dateTo + 'T23:59:59');
     const folderMatch = selectedFolder === 'all' || (folders.find(f => f.id === selectedFolder)?.docIds || []).includes(doc.id);
     return categoryMatch && stageMatch && searchMatch && dateFromMatch && dateToMatch && folderMatch;
-  }).sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+  }).sort((a, b) => {
+    switch (sortBy) {
+      case 'date-asc':  return new Date(a.created_date) - new Date(b.created_date);
+      case 'name-asc':  return a.name.localeCompare(b.name, 'he');
+      case 'name-desc': return b.name.localeCompare(a.name, 'he');
+      case 'size-desc': return (b.file_size || 0) - (a.file_size || 0);
+      case 'size-asc':  return (a.file_size || 0) - (b.file_size || 0);
+      default:          return new Date(b.created_date) - new Date(a.created_date);
+    }
+  });
+
+  const allVisibleSelected = filteredDocuments.length > 0 &&
+    filteredDocuments.every(d => selectedForCompare.some(s => s.id === d.id));
+
+  const handleSelectAll = () => {
+    if (allVisibleSelected) setSelectedForCompare([]);
+    else setSelectedForCompare(filteredDocuments);
+    setLastSelectedIndex(null);
+  };
+
+  const handleDeleteSelected = () => {
+    if (!confirm(`למחוק ${selectedForCompare.length} מסמכים?`)) return;
+    selectedForCompare.forEach(doc => onDocumentDeleted(doc));
+    setSelectedForCompare([]);
+    setLastSelectedIndex(null);
+  };
+
+  const handleDocSelect = (e, doc, index) => {
+    if (e.shiftKey && lastSelectedIndex !== null) {
+      const start = Math.min(lastSelectedIndex, index);
+      const end = Math.max(lastSelectedIndex, index);
+      const rangeIds = new Set(filteredDocuments.slice(start, end + 1).map(d => d.id));
+      const merged = [...new Set([...selectedForCompare.map(d => d.id), ...rangeIds])];
+      setSelectedForCompare(filteredDocuments.filter(d => merged.has(d.id)));
+    } else {
+      toggleCompare(doc);
+      setLastSelectedIndex(index);
+    }
+  };
 
   const hasDateFilter = dateFrom || dateTo;
   const hasActiveFilter = searchQuery || selectedCategory !== 'all' || selectedStage !== 'all' || hasDateFilter || selectedFolder !== 'all';
@@ -162,12 +268,21 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
         <div dir="rtl" className="flex flex-wrap items-center gap-2">
           {stages.length > 0 && (
-            <select value={selectedStage} onChange={(e) => setSelectedStage(e.target.value)}
+            <select value={selectedStage} onChange={(e) => setSelectedStage(e.target.value)} dir="rtl"
               className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300">
               <option value="all">{t('allStages')}</option>
               {stages.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
             </select>
           )}
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)} dir="rtl"
+            className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300">
+            <option value="date-desc">תאריך - חדש לישן</option>
+            <option value="date-asc">תאריך - ישן לחדש</option>
+            <option value="name-asc">שם - א׳ עד ת׳</option>
+            <option value="name-desc">שם - ת׳ עד א׳</option>
+            <option value="size-desc">גודל - גדול לקטן</option>
+            <option value="size-asc">גודל - קטן לגדול</option>
+          </select>
           <button onClick={() => setShowDateFilter(v => !v)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${hasDateFilter ? 'border-blue-400 bg-blue-50 text-blue-700' : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300'}`}>
             <Calendar className="w-3.5 h-3.5" />
@@ -210,13 +325,19 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
         )}
         <div dir="rtl" className="flex flex-wrap gap-2">
           <button onClick={() => setSelectedFolder('all')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedFolder === 'all' ? 'bg-amber-500 text-white' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100'}`}>
+            onDragOver={e => { e.preventDefault(); setDragOverFolderId('all'); }}
+            onDragLeave={() => setDragOverFolderId(null)}
+            onDrop={e => { e.preventDefault(); handleFolderDrop('all'); }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedFolder === 'all' ? 'bg-amber-500 text-white' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100'} ${dragOverFolderId === 'all' ? 'ring-2 ring-amber-400 scale-105' : ''}`}>
             <FolderOpen className="w-3.5 h-3.5" />{t('allDocuments')} ({documents.length})
           </button>
           {folders.map(folder => (
             <div key={folder.id} className="relative group">
               <button onClick={() => setSelectedFolder(folder.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedFolder === folder.id ? 'bg-amber-500 text-white' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100'}`}>
+                onDragOver={e => { e.preventDefault(); setDragOverFolderId(folder.id); }}
+                onDragLeave={() => setDragOverFolderId(null)}
+                onDrop={e => { e.preventDefault(); handleFolderDrop(folder.id); }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedFolder === folder.id ? 'bg-amber-500 text-white' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100'} ${dragOverFolderId === folder.id ? 'ring-2 ring-amber-400 scale-105' : ''}`}>
                 <Folder className="w-3.5 h-3.5" />{folder.name} ({folder.docIds.length})
               </button>
               <button onClick={() => deleteFolder(folder.id)} className="absolute -top-1.5 -start-1.5 hidden group-hover:flex w-4 h-4 bg-red-500 text-white rounded-full items-center justify-center text-xs leading-none">×</button>
@@ -225,15 +346,31 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
         </div>
       </div>
 
-      {/* Compare bar */}
+      {/* Selection toolbar */}
       {selectedForCompare.length > 0 && (
-        <div dir="rtl" className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-3 flex items-center justify-between gap-3">
-          <span className="text-sm text-blue-800 dark:text-blue-300 font-medium">{selectedForCompare.length} {t('documentsSelectedForCompare')}</span>
-          <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => setSelectedForCompare([])}>{t('clear')}</Button>
-            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => setShowCompare(true)} disabled={selectedForCompare.length < 2}>
-              <GitCompare className="w-3.5 h-3.5 ms-1" />{t('compare')}
-            </Button>
+        <div dir="rtl" className="sticky top-2 z-20 bg-blue-600 text-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl flex-wrap">
+          <span className="font-semibold text-sm shrink-0">{selectedForCompare.length} מסמכים נבחרו</span>
+          <div className="flex gap-2 me-auto flex-wrap">
+            <select dir="rtl" defaultValue=""
+              onChange={e => { if (!e.target.value) return; assignDocsToFolder(selectedForCompare.map(d => d.id), e.target.value); setSelectedForCompare([]); setLastSelectedIndex(null); e.target.value = ''; }}
+              className="text-xs px-2 py-1.5 rounded-lg bg-white/20 text-white border border-white/30 cursor-pointer">
+              <option value="">העבר לתיקייה ▾</option>
+              {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+            </select>
+            {selectedForCompare.length >= 2 && (
+              <button onClick={() => setShowCompare(true)}
+                className="text-xs px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 font-medium flex items-center gap-1">
+                <GitCompare className="w-3 h-3" /> השווה
+              </button>
+            )}
+            <button onClick={handleDeleteSelected}
+              className="text-xs px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 font-medium">
+              מחק
+            </button>
+            <button onClick={() => { setSelectedForCompare([]); setLastSelectedIndex(null); }}
+              className="text-xs px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30">
+              בטל בחירה
+            </button>
           </div>
         </div>
       )}
@@ -246,7 +383,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
               const stage = stages.find(s => s.id === doc.stage_id);
               const supplier = suppliers.find(s => s.id === doc.supplier_id);
               return (
-                <div key={doc.id} className="break-inside-avoid mb-4">
+                <div key={doc.id} className="break-inside-avoid mb-4 cursor-grab active:cursor-grabbing" draggable onDragStart={e => handleDocDragStart(e, doc)} onDragEnd={() => { setDraggedDocIds([]); setDragOverFolderId(null); }}>
                   <DocumentCard document={doc} stage={stage} supplier={supplier} project={project} stages={stages} onDelete={onDocumentDeleted} isSelected={!!selectedForCompare.find(d => d.id === doc.id)} onToggleCompare={toggleCompare} />
                   {folders.length > 0 && (
                     <select value={folders.find(f => f.docIds.includes(doc.id))?.id || ''} onChange={e => e.target.value === '' ? removeDocFromFolders(doc.id) : assignDocToFolder(doc.id, e.target.value)}
@@ -261,14 +398,22 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           </div>
         ) : (
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm overflow-hidden">
-            <div className="p-3 bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-600 flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-700 dark:text-slate-200">{filteredDocuments.length} {t('documents')}</span>
+            <div className="p-3 bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-600">
+              <div dir="rtl" className="flex items-center gap-2">
+                <input type="checkbox" className="rounded" checked={allVisibleSelected}
+                  ref={el => { if (el) el.indeterminate = selectedForCompare.length > 0 && !allVisibleSelected; }}
+                  onChange={handleSelectAll} />
+                <span className="text-sm font-semibold text-gray-700 dark:text-slate-200">{filteredDocuments.length} {t('documents')}</span>
+                {selectedForCompare.length > 0 && (
+                  <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">({selectedForCompare.length} נבחרו)</span>
+                )}
+              </div>
             </div>
             <div className="p-3 space-y-2">
-              {filteredDocuments.map(doc => {
+              {filteredDocuments.map((doc, index) => {
                 const stage = stages.find(s => s.id === doc.stage_id);
                 const supplier = suppliers.find(s => s.id === doc.supplier_id);
-                return <DocumentListRow key={doc.id} document={doc} stage={stage} supplier={supplier} project={project} stages={stages} onDelete={onDocumentDeleted} isSelected={!!selectedForCompare.find(d => d.id === doc.id)} onToggleCompare={toggleCompare} />;
+                return <DocumentListRow key={doc.id} document={doc} stage={stage} supplier={supplier} project={project} stages={stages} onDelete={onDocumentDeleted} isSelected={!!selectedForCompare.find(d => d.id === doc.id)} onSelect={(e, d) => handleDocSelect(e, d, index)} onDragStart={e => handleDocDragStart(e, doc)} onDragEnd={() => { setDraggedDocIds([]); setDragOverFolderId(null); }} />;
               })}
             </div>
           </div>
@@ -288,6 +433,10 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
       <DocumentUpload isOpen={uploadModal.isOpen} onClose={uploadModal.close} projectId={projectId} stages={stages} suppliers={suppliers} onUploadComplete={onDocumentAdded} />
       {showCompare && <QuoteCompare documents={selectedForCompare} suppliers={suppliers} onClose={() => setShowCompare(false)} />}
+
+      {/* Drag ghost element */}
+      <div ref={ghostRef} style={{ position: 'fixed', top: '-100px', left: 0 }}
+        className="bg-blue-600 text-white px-4 py-2 rounded-xl shadow-xl text-sm font-bold pointer-events-none" />
     </div>
   );
 }

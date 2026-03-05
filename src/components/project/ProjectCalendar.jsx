@@ -178,7 +178,7 @@ function ListView({ stagesWithDates, project, currentDate, setCurrentDate }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      <div dir="rtl" className="flex items-center justify-between mb-4">
         <Button variant="outline" size="sm" onClick={() => setCurrentDate(addDays(currentDate, -7))}>
           <ChevronRight className="w-4 h-4" />
         </Button>
@@ -191,17 +191,17 @@ function ListView({ stagesWithDates, project, currentDate, setCurrentDate }) {
       </div>
       <div className="space-y-2">
         {weekEvents.length === 0 ? (
-          <div className="text-center py-8 text-gray-400 text-sm">אין אירועים בשבוע זה</div>
+          <div dir="rtl" className="text-center py-8 text-gray-400 text-sm">אין אירועים בשבוע זה</div>
         ) : weekEvents.map((ev, i) => {
           const isPast = ev.date < today;
           return (
-            <div key={i} className={`flex items-center gap-3 p-3 rounded-xl border ${
+            <div dir="rtl" key={i} className={`flex items-center gap-3 p-3 rounded-xl border ${
               isPast ? 'bg-gray-50 dark:bg-slate-800/50 border-gray-100 dark:border-slate-700 opacity-60'
                      : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 shadow-sm'
             }`}>
               <div className={`w-3 h-3 rounded-full flex-shrink-0 ${ev.color.bg}`} />
               <div className="flex-1 min-w-0">
-                <p className={`text-sm font-medium truncate ${isPast ? 'text-gray-500 dark:text-slate-400' : 'text-gray-800 dark:text-slate-100'}`}>
+                <p className={`text-sm font-medium truncate text-right ${isPast ? 'text-gray-500 dark:text-slate-400' : 'text-gray-800 dark:text-slate-100'}`}>
                   {ev.label}
                 </p>
               </div>
@@ -219,7 +219,7 @@ function ListView({ stagesWithDates, project, currentDate, setCurrentDate }) {
 
 export default function ProjectCalendar({ project, stages }) {
   const isLandscape = useOrientation();
-  const [manualView, setManualView] = useState(null); // null = auto
+  const [manualView, setManualView] = useState('list'); // default to list view
   const [currentDate, setCurrentDate] = useState(
     project?.start_date ? parseISO(project.start_date) : new Date()
   );
@@ -306,14 +306,15 @@ export default function ProjectCalendar({ project, stages }) {
   // Portrait mobile or desktop → normal card
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-5">
-      <div className="flex items-center justify-between mb-5">
+      <div dir="rtl" className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-500" />
           לוח שנה
         </h2>
-        <div className="flex items-center gap-2">
+        {/* Mobile-only toggle */}
+        <div className="md:hidden flex items-center gap-2">
           {isMobile && !isLandscape && (
-            <span className="text-[10px] text-gray-400 hidden xs:block">סובב למסך מלא</span>
+            <span className="text-[10px] text-gray-400">סובב למסך מלא</span>
           )}
           <div className="flex items-center bg-gray-100 dark:bg-slate-700 rounded-xl p-1 gap-1">
             <button
@@ -336,22 +337,49 @@ export default function ProjectCalendar({ project, stages }) {
         </div>
       </div>
 
-      {view === 'calendar' ? (
-        <CalendarView
-          stagesWithDates={stagesWithDates}
-          project={project}
-          currentDate={currentDate}
-          setCurrentDate={setCurrentDate}
-          compact={false}
-        />
-      ) : (
-        <ListView
-          stagesWithDates={stagesWithDates}
-          project={project}
-          currentDate={currentDate}
-          setCurrentDate={setCurrentDate}
-        />
-      )}
+      {/* Mobile: single toggled view */}
+      <div className="md:hidden">
+        {view === 'calendar' ? (
+          <CalendarView
+            stagesWithDates={stagesWithDates}
+            project={project}
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+            compact={false}
+          />
+        ) : (
+          <ListView
+            stagesWithDates={stagesWithDates}
+            project={project}
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+          />
+        )}
+      </div>
+
+      {/* Desktop: two-panel side by side */}
+      <div dir="rtl" className="hidden md:flex gap-5">
+        {/* Right sidebar: ListView (first child = rightmost in RTL) */}
+        <div className="w-72 flex-shrink-0 border-l border-gray-100 dark:border-slate-700 pl-5">
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-slate-400 mb-3 text-right">אירועים השבוע</h3>
+          <ListView
+            stagesWithDates={stagesWithDates}
+            project={project}
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+          />
+        </div>
+        {/* Left main area: CalendarView */}
+        <div className="flex-1 min-w-0">
+          <CalendarView
+            stagesWithDates={stagesWithDates}
+            project={project}
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+            compact={false}
+          />
+        </div>
+      </div>
     </div>
   );
 }

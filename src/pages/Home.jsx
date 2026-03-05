@@ -105,7 +105,7 @@ export default function Home() {
   const project = projects[0];
 
   // Fetch stages
-  const { data: stages = [] } = useQuery({
+  const { data: stages = [], isLoading: stagesLoading } = useQuery({
     queryKey: ['stages', project?.id],
     queryFn: () => base44.entities.Stage.filter({ project_id: project.id }, 'order'),
     enabled: !!project?.id,
@@ -253,10 +253,10 @@ export default function Home() {
   });
 
   React.useEffect(() => {
-    if (project?.id && stages.length === 0 && !initMutation.isPending && !initMutation.isSuccess) {
+    if (project?.id && !stagesLoading && stages.length === 0 && !initMutation.isPending && !initMutation.isSuccess) {
       initMutation.mutate(project.id);
     }
-  }, [project?.id, stages.length]);
+  }, [project?.id, stages.length, stagesLoading]);
 
   const handleDataUpdate = () => {
     queryClient.invalidateQueries({ queryKey: ['stages'] });
@@ -273,7 +273,7 @@ export default function Home() {
     }
   };
 
-  if (userLoading || (projectsLoading && !!user)) {
+  if (userLoading || projectsLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="text-center">

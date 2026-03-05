@@ -313,8 +313,8 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                   {aiSuggestions && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.category} onValueChange={v => setDocumentData(p => ({ ...p, category: v }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger dir="rtl"><SelectValue /></SelectTrigger>
+                  <SelectContent dir="rtl">
                     {CATEGORIES.map(c => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -326,8 +326,8 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                   {aiSuggestions?.stage_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.stage_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, stage_id: v === '_none' ? '' : v }))}>
-                  <SelectTrigger><SelectValue placeholder="בחר שלב" /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger dir="rtl"><SelectValue placeholder="בחר שלב" /></SelectTrigger>
+                  <SelectContent dir="rtl">
                     <SelectItem value="_none">ללא שלב</SelectItem>
                     {stages.map(s => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
                   </SelectContent>
@@ -342,8 +342,8 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                   {aiSuggestions?.supplier_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.supplier_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, supplier_id: v === '_none' ? '' : v }))}>
-                  <SelectTrigger><SelectValue placeholder="בחר ספק" /></SelectTrigger>
-                  <SelectContent>
+                  <SelectTrigger dir="rtl"><SelectValue placeholder="בחר ספק" /></SelectTrigger>
+                  <SelectContent dir="rtl">
                     <SelectItem value="_none">ללא ספק</SelectItem>
                     {suppliers.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                   </SelectContent>
