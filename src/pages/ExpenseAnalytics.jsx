@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from "recharts";
 import { TrendingUp, Package, DollarSign, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function ExpenseAnalyticsPage() {
+  const { t } = useTranslation();
   const [selectedProject, setSelectedProject] = useState(null);
 
   const { data: projects = [] } = useQuery({
@@ -42,11 +44,11 @@ export default function ExpenseAnalyticsPage() {
 
   if (!selectedProject) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir="rtl">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-2">ניתוח הוצאות</h1>
-            <p className="text-gray-600 dark:text-slate-400">בחר פרויקט לצפייה בניתוח הוצאות מפורט</p>
+          <div className="mb-8 text-right">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-2">{t('expenseAnalyticsTitle')}</h1>
+            <p className="text-gray-600 dark:text-slate-400">{t('expenseSelectProject')}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -74,7 +76,7 @@ export default function ExpenseAnalyticsPage() {
   // By Category
   const byCategory = {};
   expenses.forEach((e) => {
-    const cat = getCategoryLabel(e.category);
+    const cat = t(`expenseCategory_${e.category}`, { defaultValue: e.category });
     byCategory[cat] = (byCategory[cat] || 0) + e.amount;
   });
   const categoryData = Object.entries(byCategory).map(([name, value]) => ({
@@ -134,19 +136,19 @@ export default function ExpenseAnalyticsPage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir="rtl">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div className="text-start">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100">ניתוח הוצאות</h1>
+          <div className="text-right">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100">{t('expenseAnalyticsTitle')}</h1>
             <p className="text-gray-600 dark:text-slate-400">{project?.name}</p>
           </div>
           <Button
             onClick={() => setSelectedProject(null)}
             variant="outline"
           >
-            חזור לפרויקטים
+            {t('expenseBackToProjects')}
           </Button>
         </div>
 
@@ -158,7 +160,7 @@ export default function ExpenseAnalyticsPage() {
                 <DollarSign className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
-            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">סה"כ הוצאות</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">{t('totalExpenses')}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-slate-100 text-start">
               {totalExpenses.toLocaleString()} ₪
             </p>
@@ -170,7 +172,7 @@ export default function ExpenseAnalyticsPage() {
                 <TrendingUp className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">שולם</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">{t('paidExpenses')}</p>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400 text-start">
               {paidExpenses.toLocaleString()} ₪
             </p>
@@ -182,7 +184,7 @@ export default function ExpenseAnalyticsPage() {
                 <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
               </div>
             </div>
-            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">טרם שולם</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">{t('unpaid')}</p>
             <p className="text-2xl font-bold text-red-600 dark:text-red-400 text-start">
               {unpaidExpenses.toLocaleString()} ₪
             </p>
@@ -194,7 +196,7 @@ export default function ExpenseAnalyticsPage() {
                 <Package className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
-            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">תקציב בשימוש</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">{t('budgetInUse')}</p>
             <p className="text-2xl font-bold text-purple-600 dark:text-purple-400 text-start">
               {budgetUsage}%
             </p>
@@ -205,7 +207,7 @@ export default function ExpenseAnalyticsPage() {
         <div className="grid lg:grid-cols-2 gap-6 mb-6">
           {/* By Category */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-            <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-start">הוצאות לפי קטגוריה</h3>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-right">{t('expenseByCategoryTitle')}</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -230,7 +232,7 @@ export default function ExpenseAnalyticsPage() {
           {/* By Supplier */}
           {supplierData.length > 0 && (
             <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-start">הוצאות לפי ספק</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-right">{t('expenseBySupplierTitle')}</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={supplierData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -247,7 +249,7 @@ export default function ExpenseAnalyticsPage() {
         {/* Timeline */}
         {timeline.length > 0 && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700 mb-6">
-            <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-start">התפתחות הוצאות לאורך זמן</h3>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-right">{t('expenseTimelineTitle')}</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={timeline}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -263,7 +265,7 @@ export default function ExpenseAnalyticsPage() {
         {/* By Stage */}
         {stageData.length > 0 && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-            <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-start">הוצאות לפי שלב</h3>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-slate-100 mb-4 text-right">{t('expenseByStageTitle')}</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={stageData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -271,7 +273,7 @@ export default function ExpenseAnalyticsPage() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="value" fill="#10b981" name="הוצאה (₪)" />
+                <Bar dataKey="value" fill="#10b981" name={t('expenseBarLabel')} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -281,14 +283,3 @@ export default function ExpenseAnalyticsPage() {
   );
 }
 
-function getCategoryLabel(category) {
-  const categories = {
-    materials: "חומרי בניין",
-    labor: "כוח אדם",
-    equipment: "ציוד",
-    permits: "היתרים",
-    professional_services: "שירותים",
-    other: "אחר",
-  };
-  return categories[category] || category;
-}

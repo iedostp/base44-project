@@ -10,10 +10,8 @@ import QuoteCompare from "./QuoteCompare";
 import { format } from "date-fns";
 
 function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onSelect, onDragStart, onDragEnd }) {
-  const getCategoryText = (cat) => ({
-    contract:'חוזה', permit:'היתר', invoice:'חשבונית', plan:'תוכנית',
-    specification:'מפרט', certificate:'אישור', correspondence:'התכתבות', other:'אחר'
-  })[cat] || 'אחר';
+  const { t } = useTranslation();
+  const getCategoryText = (cat) => t(`docCat_${cat}_single`, t(`docCat_${cat}`, cat));
 
   const getCategoryColor = (cat) => ({
     contract:'bg-purple-100 text-purple-800', permit:'bg-green-100 text-green-800',
@@ -30,15 +28,15 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onSe
         <p className="font-semibold text-gray-800 text-sm truncate">{document.name}</p>
         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getCategoryColor(document.category)}`}>{getCategoryText(document.category)}</span>
-          {stage && <span className="text-xs text-gray-500">שלב: {stage.title}</span>}
-          {supplier && <span className="text-xs text-gray-500">ספק: {supplier.name}</span>}
+          {stage && <span className="text-xs text-gray-500">{t('docsStageLabel')} {stage.title}</span>}
+          {supplier && <span className="text-xs text-gray-500">{t('docsSupplierLabel')} {supplier.name}</span>}
           <span className="text-xs text-gray-400">{format(new Date(document.created_date), 'dd/MM/yyyy')}</span>
         </div>
       </div>
       <div className="flex items-center gap-1 shrink-0">
         <Button size="sm" variant="ghost" className="text-blue-600 hover:bg-blue-50 h-7 px-2 text-xs"
           onClick={() => window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(document.file_url)}`, '_blank')}>
-          צפה
+          {t('view')}
         </Button>
         <Button size="sm" variant="ghost" className="text-gray-600 hover:bg-gray-50 h-7 px-2 text-xs"
           onClick={() => {
@@ -51,7 +49,7 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onSe
             a.click();
             window.document.body.removeChild(a);
           }}>
-          הורד
+          {t('download', 'הורד')}
         </Button>
         <Button size="sm" variant="ghost" className="text-red-500 hover:bg-red-50 h-7 w-7 p-0" onClick={() => onDelete(document)}><Trash2 className="w-3.5 h-3.5" /></Button>
       </div>
@@ -100,7 +98,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
         { id: 'f-other', name: 'אחר',       docIds: [] },
       ]);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const addFolder = () => {
     if (!newFolderName.trim()) return;
@@ -144,7 +142,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
     if (!isInSelection) setSelectedForCompare([]);
     setDraggedDocIds(ids);
     if (ghostRef.current) {
-      ghostRef.current.textContent = ids.length > 1 ? `מעביר ${ids.length} מסמכים` : 'מעביר מסמך';
+      ghostRef.current.textContent = ids.length > 1 ? `${t('docsMoveGhost')} ${ids.length}` : t('docsMoveGhost');
       e.dataTransfer.setDragImage(ghostRef.current, 60, 20);
     }
   };
@@ -205,7 +203,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
   };
 
   const handleDeleteSelected = () => {
-    if (!confirm(`למחוק ${selectedForCompare.length} מסמכים?`)) return;
+    if (!confirm(`${t('docsDeleteSelected')} ${selectedForCompare.length} ${t('documents')}?`)) return;
     selectedForCompare.forEach(doc => onDocumentDeleted(doc));
     setSelectedForCompare([]);
     setLastSelectedIndex(null);
@@ -276,12 +274,12 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           )}
           <select value={sortBy} onChange={e => setSortBy(e.target.value)} dir="rtl"
             className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300">
-            <option value="date-desc">תאריך - חדש לישן</option>
-            <option value="date-asc">תאריך - ישן לחדש</option>
-            <option value="name-asc">שם - א׳ עד ת׳</option>
-            <option value="name-desc">שם - ת׳ עד א׳</option>
-            <option value="size-desc">גודל - גדול לקטן</option>
-            <option value="size-asc">גודל - קטן לגדול</option>
+            <option value="date-desc">{t('sortDateDesc')}</option>
+            <option value="date-asc">{t('sortDateAsc')}</option>
+            <option value="name-asc">{t('sortNameAsc')}</option>
+            <option value="name-desc">{t('sortNameDesc')}</option>
+            <option value="size-desc">{t('sortSizeDesc')}</option>
+            <option value="size-asc">{t('sortSizeAsc')}</option>
           </select>
           <button onClick={() => setShowDateFilter(v => !v)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${hasDateFilter ? 'border-blue-400 bg-blue-50 text-blue-700' : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300'}`}>
@@ -349,27 +347,27 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
       {/* Selection toolbar */}
       {selectedForCompare.length > 0 && (
         <div dir="rtl" className="sticky top-2 z-20 bg-blue-600 text-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl flex-wrap">
-          <span className="font-semibold text-sm shrink-0">{selectedForCompare.length} מסמכים נבחרו</span>
+          <span className="font-semibold text-sm shrink-0">{selectedForCompare.length} {t('docsSelectedCount')}</span>
           <div className="flex gap-2 me-auto flex-wrap">
             <select dir="rtl" defaultValue=""
               onChange={e => { if (!e.target.value) return; assignDocsToFolder(selectedForCompare.map(d => d.id), e.target.value); setSelectedForCompare([]); setLastSelectedIndex(null); e.target.value = ''; }}
               className="text-xs px-2 py-1.5 rounded-lg bg-white/20 text-white border border-white/30 cursor-pointer">
-              <option value="">העבר לתיקייה ▾</option>
+              <option value="">{t('docsMoveTo')}</option>
               {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
             </select>
             {selectedForCompare.length >= 2 && (
               <button onClick={() => setShowCompare(true)}
                 className="text-xs px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 font-medium flex items-center gap-1">
-                <GitCompare className="w-3 h-3" /> השווה
+                <GitCompare className="w-3 h-3" /> {t('docsCompare')}
               </button>
             )}
             <button onClick={handleDeleteSelected}
               className="text-xs px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 font-medium">
-              מחק
+              {t('docsDeleteSelected')}
             </button>
             <button onClick={() => { setSelectedForCompare([]); setLastSelectedIndex(null); }}
               className="text-xs px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30">
-              בטל בחירה
+              {t('docsCancelSelection')}
             </button>
           </div>
         </div>
@@ -388,7 +386,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
                   {folders.length > 0 && (
                     <select value={folders.find(f => f.docIds.includes(doc.id))?.id || ''} onChange={e => e.target.value === '' ? removeDocFromFolders(doc.id) : assignDocToFolder(doc.id, e.target.value)}
                       className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300 mt-1">
-                      <option value="">ללא תיקייה</option>
+                      <option value="">{t('docsNoFolder')}</option>
                       {folders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
                     </select>
                   )}
@@ -405,7 +403,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
                   onChange={handleSelectAll} />
                 <span className="text-sm font-semibold text-gray-700 dark:text-slate-200">{filteredDocuments.length} {t('documents')}</span>
                 {selectedForCompare.length > 0 && (
-                  <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">({selectedForCompare.length} נבחרו)</span>
+                  <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">({selectedForCompare.length} {t('docsSelectedCount')})</span>
                 )}
               </div>
             </div>

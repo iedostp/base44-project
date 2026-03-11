@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Loader2, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
 
 export default function InitializeTasks() {
+  const { t } = useTranslation();
   const [isInitializing, setIsInitializing] = useState(false);
   const [result, setResult] = useState(null);
 
   // Fetch user and project
-  const { data: user } = useQuery({
+  const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me(),
     retry: false,
   });
 
-  const { data: projects = [] } = useQuery({
+  const { data: projects = [], isLoading: projectsLoading } = useQuery({
     queryKey: ['projects', user?.email],
     queryFn: () => base44.entities.Project.filter({ created_by: user?.email }),
     enabled: !!user?.email,
@@ -25,7 +27,7 @@ export default function InitializeTasks() {
 
   const project = projects[0];
 
-  const { data: stages = [] } = useQuery({
+  const { data: stages = [], isLoading: stagesLoading } = useQuery({
     queryKey: ['stages', project?.id],
     queryFn: () => base44.entities.Stage.filter({ project_id: project.id }, 'order'),
     enabled: !!project?.id,
@@ -74,11 +76,11 @@ export default function InitializeTasks() {
 
   const handleInitialize = async () => {
     if (!project?.id || stages.length === 0) {
-      alert("לא נמצא פרויקט או שלבים. אנא צור פרויקט תחילה.");
+      alert(t('initNoProject'));
       return;
     }
 
-    if (!confirm("האם אתה בטוח שברצונך להוסיף את כל המשימות? פעולה זו תוסיף משימות לכל השלבים.")) {
+    if (!confirm(t('initConfirmMsg'))) {
       return;
     }
 
@@ -132,13 +134,21 @@ export default function InitializeTasks() {
     }
   };
 
+  if (userLoading || projectsLoading || stagesLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+        <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+      </div>
+    );
+  }
+
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-right">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">נדרשת התחברות</h2>
-          <p className="text-gray-600 text-center">אנא התחבר כדי להשתמש בעמוד זה</p>
+          <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">{t('initLoginRequired')}</h2>
+          <p className="text-gray-600 text-center">{t('initLoginDesc')}</p>
         </div>
       </div>
     );
@@ -146,13 +156,13 @@ export default function InitializeTasks() {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-right">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">לא נמצא פרויקט</h2>
-          <p className="text-gray-600 text-center mb-6">צור פרויקט תחילה בעמוד הראשי</p>
+          <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">{t('initNoProjectTitle')}</h2>
+          <p className="text-gray-600 text-center mb-6">{t('initNoProjectDesc')}</p>
           <Link to={createPageUrl("Home")}>
-            <Button className="w-full">חזור לעמוד הראשי</Button>
+            <Button className="w-full">{t('initBackToHome')}</Button>
           </Link>
         </div>
       </div>
@@ -160,22 +170,22 @@ export default function InitializeTasks() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8" dir="rtl">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">אתחול משימות לפרויקט</h1>
+        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 text-right">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('initPageTitle')}</h1>
           <p className="text-gray-600 mb-6">
-            דף זה יאפשר לך להוסיף באופן אוטומטי את כל המשימות התקניות לשלבים השונים בפרויקט שלך.
+            {t('initPageDesc')}
           </p>
 
           <div className="bg-blue-50 border-s-4 border-blue-500 p-4 mb-6 rounded-lg">
-            <h3 className="font-bold text-blue-900 mb-2">מידע חשוב</h3>
+            <h3 className="font-bold text-blue-900 mb-2">{t('initInfoTitle')}</h3>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>• הפעולה תוסיף {tasksTemplate.length} משימות לשלבים השונים</li>
-              <li>• המשימות מתבססות על תקן בנייה עצמית מקובל</li>
-              <li>• ניתן למחוק או לערוך משימות לאחר ההוספה</li>
-              <li>• הפרויקט שלך: {project.name}</li>
-              <li>• מספר שלבים זמינים: {stages.length}</li>
+              <li>• {t('initWillAdd')} {tasksTemplate.length} {t('initTasksToStages')}</li>
+              <li>• {t('initBasedOn')}</li>
+              <li>• {t('initCanEdit')}</li>
+              <li>• {t('initYourProject')} {project.name}</li>
+              <li>• {t('initAvailableStages')} {stages.length}</li>
             </ul>
           </div>
 
@@ -187,13 +197,13 @@ export default function InitializeTasks() {
             >
               {isInitializing ? (
                 <>
-                  <Loader2 className="w-5 h-5 ml-2 animate-spin" />
-                  מוסיף משימות...
+                  <Loader2 className="w-5 h-5 me-2 animate-spin" />
+                  {t('initAddingTasks')}
                 </>
               ) : (
                 <>
-                  התחל אתחול משימות
-                  <ArrowRight className="w-5 h-5 mr-2" />
+                  {t('initStartBtn')}
+                  <ArrowRight className="w-5 h-5 me-2" />
                 </>
               )}
             </Button>
@@ -208,16 +218,16 @@ export default function InitializeTasks() {
                   <div className="flex items-center gap-3 mb-4">
                     <CheckCircle2 className="w-8 h-8 text-green-600" />
                     <div>
-                      <h3 className="text-xl font-bold text-green-900">האתחול הושלם בהצלחה!</h3>
+                      <h3 className="text-xl font-bold text-green-900">{t('initSuccess')}</h3>
                       <p className="text-green-700">
-                        נוספו {result.addedCount} מתוך {result.totalCount} משימות
+                        {t('initAdded')} {result.addedCount} {t('initOf')} {result.totalCount} {t('initTasksWord')}
                       </p>
                     </div>
                   </div>
 
                   {result.errors && result.errors.length > 0 && (
                     <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                      <h4 className="font-semibold text-amber-900 mb-2">שגיאות שהתרחשו:</h4>
+                      <h4 className="font-semibold text-amber-900 mb-2">{t('initErrorsTitle')}</h4>
                       <ul className="text-sm text-amber-800 space-y-1">
                         {result.errors.map((error, idx) => (
                           <li key={idx}>• {error}</li>
@@ -228,8 +238,8 @@ export default function InitializeTasks() {
 
                   <Link to={createPageUrl("Home")}>
                     <Button className="w-full mt-6 bg-gradient-to-r from-blue-500 to-indigo-600">
-                      חזור לעמוד הראשי
-                      <ArrowRight className="w-5 h-5 mr-2" />
+                      {t('initBackToHome')}
+                      <ArrowRight className="w-5 h-5 me-2" />
                     </Button>
                   </Link>
                 </>
@@ -238,7 +248,7 @@ export default function InitializeTasks() {
                   <div className="flex items-center gap-3 mb-4">
                     <AlertCircle className="w-8 h-8 text-red-600" />
                     <div>
-                      <h3 className="text-xl font-bold text-red-900">אירעה שגיאה</h3>
+                      <h3 className="text-xl font-bold text-red-900">{t('initErrorTitle')}</h3>
                       <p className="text-red-700">{result.error}</p>
                     </div>
                   </div>
@@ -250,7 +260,7 @@ export default function InitializeTasks() {
                     variant="outline"
                     className="w-full mt-4"
                   >
-                    נסה שוב
+                    {t('initTryAgain')}
                   </Button>
                 </>
               )}
@@ -260,7 +270,7 @@ export default function InitializeTasks() {
           <div className="mt-8 border-t pt-6">
             <Link to={createPageUrl("Home")}>
               <Button variant="outline" className="w-full">
-                ← חזור לעמוד הראשי
+                ← {t('initBackToHome')}
               </Button>
             </Link>
           </div>

@@ -13,14 +13,7 @@ import { getCurrencySymbol } from "../utils/currencyFormatter";
 import { useTranslation } from "react-i18next";
 import "../i18n";
 
-const CATEGORY_LABELS = {
-  materials: "חומרים",
-  labor: "עבודה",
-  equipment: "ציוד",
-  permits: "היתרים",
-  professional_services: "שירותים מקצועיים",
-  other: "אחר",
-};
+// Category labels are resolved via t() at render time using budgetCat* keys
 
 const CATEGORY_COLORS = {
   materials: "#6366f1",
@@ -48,7 +41,16 @@ const makeCustomTooltip = (formatNIS) => ({ active, payload, label }) => {
 };
 
 export default function BudgetReport({ project, stages: initialStages, expenses }) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+
+  const CATEGORY_LABELS = {
+    materials: t('budgetCatMaterials'),
+    labor: t('budgetCatLabor'),
+    equipment: t('budgetCatEquipment'),
+    permits: t('budgetCatPermits'),
+    professional_services: t('budgetCatProfServices'),
+    other: t('budgetCatOther'),
+  };
   const formatNIS = (v) => {
     const sym = getCurrencySymbol(i18n.language);
     return `${sym}${Number(v).toLocaleString(i18n.language === 'he' ? 'he-IL' : 'en-US')}`;
@@ -172,17 +174,17 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
   };
 
   const exportToCSV = () => {
-    const headers = ["שלב", "מתוכנן", "בפועל", "סטייה", "% ניצול", "סטטוס"];
+    const headers = [t('budgetColStage'), t('budgetColPlanned'), t('budgetColActual'), t('budgetColDeviation'), t('budgetColUsage'), t('budgetColStatus')];
     const rows = filteredAndSorted.map((s) => [
       s.title,
       Math.round(s.planned),
       Math.round(s.actual),
       Math.round(s.diff),
       s.percentage,
-      getStatus(s) === "completed" ? "הושלם" : getStatus(s) === "overrun" ? "חריגה" : "בתהליך",
+      getStatus(s) === "completed" ? t('budgetStatusCompleted') : getStatus(s) === "overrun" ? t('budgetStatusOverrun') : t('budgetStatusInProgress'),
     ]);
     rows.push([
-      "סה\"כ",
+      t('budgetColTotal'),
       totalBudget,
       Math.round(totalActual),
       Math.round(totalActual - totalBudget),
@@ -253,17 +255,17 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
 
   // Project-level summary bar data
   const projectSummaryData = [
-    { name: "תקציב כולל", value: totalBudget, color: "#a5b4fc" },
-    { name: isEstimated ? "הוצ׳ משוערת" : "הוצ׳ בפועל", value: Math.round(displaySpent), color: displaySpent > totalBudget ? "#ef4444" : "#10b981" },
-    { name: "יתרה", value: Math.max(0, Math.round(totalBudget - displaySpent)), color: "#6366f1" },
+    { name: t('budgetTotalBudget'), value: totalBudget, color: "#a5b4fc" },
+    { name: isEstimated ? t('budgetEstimatedExpense') : t('budgetActualExpense'), value: Math.round(displaySpent), color: displaySpent > totalBudget ? "#ef4444" : "#10b981" },
+    { name: t('budgetRemainderLabel'), value: Math.max(0, Math.round(totalBudget - displaySpent)), color: "#6366f1" },
   ];
 
   if (!totalBudget) {
     return (
       <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-6 text-center">
         <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-        <p className="text-amber-800 dark:text-amber-300 font-semibold">לא הוגדר תקציב לפרויקט</p>
-        <p className="text-amber-600 dark:text-amber-400 text-sm mt-1">הגדר תקציב בהגדרות הפרויקט כדי להציג דוח תקציב</p>
+        <p className="text-amber-800 dark:text-amber-300 font-semibold">{t('budgetNoBudget')}</p>
+        <p className="text-amber-600 dark:text-amber-400 text-sm mt-1">{t('budgetNoBudgetDesc')}</p>
       </div>
     );
   }
@@ -276,8 +278,8 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
           <TrendingUp className="w-6 h-6 text-white" />
         </div>
         <div className="text-right">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">דוח תקציב אוטומטי</h2>
-          <p className="text-sm text-gray-500 dark:text-slate-400">השוואה בין תכנון לביצוע</p>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">{t('budgetReportTitle')}</h2>
+          <p className="text-sm text-gray-500 dark:text-slate-400">{t('budgetReportSubtitle')}</p>
         </div>
       </div>
 
@@ -286,7 +288,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         <div className="bg-red-50 dark:bg-red-900/20 border-s-4 border-red-500 rounded-xl p-4 flex flex-row-reverse items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold text-red-800 dark:text-red-300">⚠️ חריגת תקציב קריטית!</p>
+            <p className="font-semibold text-red-800 dark:text-red-300">{t('budgetCriticalOverrun')}</p>
             <p className="text-sm text-red-700 dark:text-red-400 mt-0.5">
               נוצלו {Math.round(budgetUsagePercent)}% מהתקציב הכולל. נותרו{" "}
               {formatNIS(totalBudget - displaySpent)} בלבד.
@@ -298,7 +300,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         <div className="bg-amber-50 dark:bg-amber-900/20 border-s-4 border-amber-500 rounded-xl p-4 flex flex-row-reverse items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold text-amber-800 dark:text-amber-300">התראת תקציב</p>
+            <p className="font-semibold text-amber-800 dark:text-amber-300">{t('budgetWarning')}</p>
             <p className="text-sm text-amber-700 dark:text-amber-400 mt-0.5">
               נוצלו {Math.round(budgetUsagePercent)}% מהתקציב הכולל. מומלץ לבדוק את ההוצאות.
             </p>
@@ -307,7 +309,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
       )}
       {overrunStages.length > 0 && (
         <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-xl p-4">
-          <p className="font-semibold text-orange-800 dark:text-orange-300 mb-2">שלבים עם חריגת תקציב:</p>
+          <p className="font-semibold text-orange-800 dark:text-orange-300 mb-2">{t('budgetOverrunStages')}</p>
           <div className="flex flex-wrap gap-2">
             {overrunStages.map((s) => (
               <span key={s.id} className="text-xs bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-3 py-1 rounded-full font-medium">
@@ -321,22 +323,22 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
       {/* ─── KPI Cards ───────────────────────────────────────────────── */}
       <div dir="rtl" className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
-          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">תקציב כולל</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{t('budgetTotalBudget')}</p>
           <p className="text-xl font-bold text-gray-800 dark:text-slate-100">{formatNIS(totalBudget)}</p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
-          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{isEstimated ? "הוצאה משוערת" : "הוצאה בפועל"}</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{isEstimated ? t('budgetEstimatedExpense') : t('budgetActualExpense')}</p>
           <p className="text-xl font-bold text-red-600 dark:text-red-400">{formatNIS(displaySpent)}</p>
           <p className="text-xs text-gray-400 mt-0.5">{Math.round(budgetUsagePercent)}% מהתקציב{isEstimated ? " (הערכה)" : ""}</p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
-          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">יתרה</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{t('budgetRemainderLabel')}</p>
           <p className={`text-xl font-bold ${totalBudget - displaySpent >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
             {formatNIS(totalBudget - displaySpent)}
           </p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
-          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">סטייה ממוצע שלבים</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{t('budgetAvgDeviation')}</p>
           <p className={`text-xl font-bold text-right ${variance > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>
             {variance > 0 ? "+" : ""}{formatNIS(variance)}
           </p>
@@ -352,7 +354,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         {/* Category Pie */}
         {categoryData.length > 0 && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-md">
-            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-right">התפלגות הוצאות לפי קטגוריה</h3>
+            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-right">{t('budgetCategoryBreakdown')}</h3>
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
@@ -377,7 +379,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
         {/* Monthly Line Chart */}
         {monthlyData.length > 1 && (
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-md">
-            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-right">מגמת הוצאות חודשית</h3>
+            <h3 className="font-bold text-gray-800 dark:text-slate-100 mb-4 text-right">{t('budgetMonthlyTrend')}</h3>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={monthlyData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -394,17 +396,17 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
       {/* ─── Detailed Table ──────────────────────────────────────────── */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-md overflow-hidden">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-5 border-b border-gray-100 dark:border-slate-700 gap-3">
-          <span className="font-bold text-gray-800 dark:text-slate-100">טבלת פירוט לפי שלב</span>
+          <span className="font-bold text-gray-800 dark:text-slate-100">{t('budgetTableTitle')}</span>
           <div className="flex flex-wrap items-center gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">כל הסטטוסים</SelectItem>
-                <SelectItem value="completed">הושלם</SelectItem>
-                <SelectItem value="overrun">חריגה</SelectItem>
-                <SelectItem value="in_progress">בתהליך</SelectItem>
+                <SelectItem value="all">{t('budgetAllStatuses')}</SelectItem>
+                <SelectItem value="completed">{t('budgetStatusCompleted')}</SelectItem>
+                <SelectItem value="overrun">{t('budgetStatusOverrun')}</SelectItem>
+                <SelectItem value="in_progress">{t('budgetStatusInProgress')}</SelectItem>
               </SelectContent>
             </Select>
             <Button onClick={exportToCSV} size="sm" variant="outline" className="gap-2">
@@ -425,21 +427,21 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
               <thead className="bg-gray-50 dark:bg-slate-700">
                 <tr>
                   <th className="text-right px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("title")}>
-                    שלב {sortColumn === "title" && (sortDir === "asc" ? "↑" : "↓")}
+                    {t('budgetColStage')} {sortColumn === "title" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
                   <th className="hidden md:table-cell text-right px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("planned")}>
-                    מתוכנן {sortColumn === "planned" && (sortDir === "asc" ? "↑" : "↓")}
+                    {t('budgetColPlanned')} {sortColumn === "planned" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
                   <th className="text-right px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("actual")}>
-                    בפועל {sortColumn === "actual" && (sortDir === "asc" ? "↑" : "↓")}
+                    {t('budgetColActual')} {sortColumn === "actual" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
                   <th className="hidden lg:table-cell text-right px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("diff")}>
-                    סטייה {sortColumn === "diff" && (sortDir === "asc" ? "↑" : "↓")}
+                    {t('budgetColDeviation')} {sortColumn === "diff" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
                   <th className="text-center px-2 md:px-4 py-2 md:py-3 text-gray-600 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600" onClick={() => handleSort("percentage")}>
-                    % ניצול {sortColumn === "percentage" && (sortDir === "asc" ? "↑" : "↓")}
+                    {t('budgetColUsage')} {sortColumn === "percentage" && (sortDir === "asc" ? "↑" : "↓")}
                   </th>
-                  <th className="hidden md:table-cell text-center px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold">סטטוס</th>
+                  <th className="hidden md:table-cell text-center px-4 py-3 text-gray-600 dark:text-slate-300 font-semibold">{t('budgetColStatus')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -480,15 +482,15 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                     <td className="hidden md:table-cell px-4 py-3 text-center">
                       {getStatus(s) === "completed" ? (
                         <span className="inline-flex items-center gap-1 text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-full">
-                          <CheckCircle className="w-3 h-3" /> הושלם
+                          <CheckCircle className="w-3 h-3" /> {t('budgetStatusCompleted')}
                         </span>
                       ) : getStatus(s) === "overrun" ? (
                         <span className="inline-flex items-center gap-1 text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-2 py-0.5 rounded-full">
-                          <AlertTriangle className="w-3 h-3" /> חריגה
+                          <AlertTriangle className="w-3 h-3" /> {t('budgetStatusOverrun')}
                         </span>
                       ) : (
                         <span className="text-xs bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-slate-400 px-2 py-0.5 rounded-full">
-                          בתהליך
+                          {t('budgetStatusInProgress')}
                         </span>
                       )}
                     </td>
@@ -497,8 +499,8 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                     .filter(e => e.stage_id === s.id)
                     .map(e => (
                       <tr key={e.id} className="border-t border-gray-50 dark:border-slate-700/50 bg-blue-50/30 dark:bg-blue-900/10">
-                        <td className="py-1.5 pl-2 md:pl-4 pr-6 md:pr-10 text-gray-600 dark:text-slate-300 text-right text-xs">
-                          <span className="text-gray-300 dark:text-slate-600 ml-1">↳</span>
+                        <td className="py-1.5 pr-2 md:pr-4 pl-6 md:pl-10 text-gray-600 dark:text-slate-300 text-right text-xs">
+                          <span className="text-gray-300 dark:text-slate-600 mr-1">↳</span>
                           {e.description || '—'}
                         </td>
                         <td className="hidden md:table-cell px-4 py-1.5 text-gray-300 dark:text-slate-600 text-right text-xs">—</td>
@@ -518,7 +520,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                 ))}
                 {/* Totals Row */}
                 <tr className="border-t-2 border-gray-300 dark:border-slate-500 bg-indigo-50 dark:bg-indigo-900/20 font-bold">
-                  <td className="px-2 md:px-4 py-2 md:py-3 text-gray-800 dark:text-slate-100 text-right">סה"כ</td>
+                  <td className="px-2 md:px-4 py-2 md:py-3 text-gray-800 dark:text-slate-100 text-right">{t('budgetColTotal')}</td>
                   <td className="hidden md:table-cell px-4 py-3 text-gray-800 dark:text-slate-100 text-right text-xs md:text-sm">{formatNIS(totalBudget)}</td>
                   <td className={`px-2 md:px-4 py-2 md:py-3 text-right text-xs md:text-sm ${displaySpent > totalBudget ? "text-red-600 dark:text-red-400" : "text-gray-800 dark:text-slate-100"}`}>
                     {formatNIS(Math.round(displaySpent))}{isEstimated ? " *" : ""}
@@ -542,7 +544,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                   <td className="hidden md:table-cell" />
                 </tr>
                 {isEstimated && (
-                  <tr><td colSpan={6} className="px-4 py-2 text-xs text-gray-400 italic text-right">* הערכה לפי שלבים שהושלמו (אין הוצאות ידניות)</td></tr>
+                  <tr><td colSpan={6} className="px-4 py-2 text-xs text-gray-400 italic text-right">{t('budgetEstimationNote')}</td></tr>
                 )}
               </tbody>
             </table>

@@ -8,21 +8,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Upload, Loader2, FileText, Camera, Sparkles, Link2, CheckCircle2, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-const CATEGORIES = [
-  { value: 'contract', label: 'חוזה' },
-  { value: 'permit', label: 'היתר' },
-  { value: 'invoice', label: 'חשבונית' },
-  { value: 'plan', label: 'תוכנית' },
-  { value: 'specification', label: 'מפרט' },
-  { value: 'certificate', label: 'אישור' },
-  { value: 'correspondence', label: 'התכתבות' },
-  { value: 'other', label: 'אחר' }
-];
+const CATEGORY_KEYS = ['contract', 'permit', 'invoice', 'plan', 'specification', 'certificate', 'correspondence', 'other'];
 
 const AI_EXTRACT_CATEGORIES = ['contract', 'permit', 'invoice', 'certificate', 'specification'];
 
 export default function DocumentUpload({ isOpen, onClose, projectId, stages, suppliers, onUploadComplete }) {
+  const { t } = useTranslation();
+
+  const CATEGORIES = CATEGORY_KEYS.map(value => ({
+    value,
+    label: t(`docCat_${value}_single`, t(`docCat_${value}`))
+  }));
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -163,7 +162,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
       onUploadComplete();
       handleClose();
     } catch (e) {
-      alert('שגיאה בשמירת המסמך: ' + e.message);
+      alert(t('docUploadError') + ': ' + e.message);
     } finally {
       setUploading(false);
     }
@@ -188,7 +187,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2">
             <Upload className="w-5 h-5 text-blue-600" />
-            הוספת מסמך
+            {t('docUploadTitle')}
           </DialogTitle>
         </DialogHeader>
 
@@ -203,8 +202,8 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                 className="flex flex-col items-center justify-center gap-2 p-5 border-2 border-dashed border-gray-200 dark:border-slate-600 rounded-2xl hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all cursor-pointer"
               >
                 <Upload className="w-8 h-8 text-blue-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-slate-300">בחר קובץ</span>
-                <span className="text-xs text-gray-400">PDF, JPG, PNG</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-slate-300">{t('docUploadChooseFile')}</span>
+                <span className="text-xs text-gray-400">{t('docUploadFileTypes')}</span>
               </label>
 
               {/* Camera scan */}
@@ -213,8 +212,8 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                 className="flex flex-col items-center justify-center gap-2 p-5 border-2 border-dashed border-indigo-200 dark:border-indigo-700 rounded-2xl hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all cursor-pointer"
               >
                 <Camera className="w-8 h-8 text-indigo-500" />
-                <span className="text-sm font-medium text-gray-700 dark:text-slate-300">סרוק מסמך</span>
-                <span className="text-xs text-gray-400">צלם ישירות</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-slate-300">{t('docUploadScanDoc')}</span>
+                <span className="text-xs text-gray-400">{t('docUploadCameraHint')}</span>
               </label>
 
               <input
@@ -257,7 +256,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                     className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center gap-2">
                     <Loader2 className="w-7 h-7 text-white animate-spin" />
                     <p className="text-white text-sm font-medium">
-                      {aiPhase === 'ocr' ? '📷 מזהה טקסט (OCR)...' : '🔗 מקשר לשלבים וספקים...'}
+                      {aiPhase === 'ocr' ? `📷 ${t('docUploadOcrPhase')}` : `🔗 ${t('docUploadLinkingPhase')}`}
                     </p>
                   </motion.div>
                 )}
@@ -277,7 +276,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                 className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-700 rounded-xl p-3 space-y-1">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
-                  <p className="text-sm font-semibold text-purple-800 dark:text-purple-300">AI זיהה וקישר אוטומטית</p>
+                  <p className="text-sm font-semibold text-purple-800 dark:text-purple-300">{t('docUploadAiDetected')}</p>
                 </div>
                 <p className="text-xs text-purple-600 dark:text-purple-400 pe-6">{aiSuggestions.reason}</p>
                 {extractedData?.amount && (
@@ -293,7 +292,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
           {/* OCR text */}
           {ocrText && (
             <div className="bg-gray-50 dark:bg-slate-700/40 rounded-xl p-3 border border-gray-200 dark:border-slate-600">
-              <p className="text-xs font-medium text-gray-500 dark:text-slate-400 mb-1">📄 טקסט שזוהה</p>
+              <p className="text-xs font-medium text-gray-500 dark:text-slate-400 mb-1">📄 {t('docUploadOcrText')}</p>
               <p className="text-xs text-gray-600 dark:text-slate-300 leading-relaxed line-clamp-3">{ocrText}</p>
             </div>
           )}
@@ -301,15 +300,15 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
           {/* Form fields */}
           <div className="space-y-4">
             <div>
-              <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">שם המסמך *</Label>
+              <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">{t('docUploadDocName')}</Label>
               <Input value={documentData.name} onChange={e => setDocumentData(p => ({ ...p, name: e.target.value }))}
-                placeholder="למשל: חוזה עם קבלן ראשי" />
+                placeholder={t('docUploadDocNamePlaceholder')} />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
-                  קטגוריה *
+                  {t('docUploadCategory')}
                   {aiSuggestions && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.category} onValueChange={v => setDocumentData(p => ({ ...p, category: v }))}>
@@ -322,13 +321,13 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
 
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
-                  שלב
+                  {t('docUploadStage')}
                   {aiSuggestions?.stage_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.stage_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, stage_id: v === '_none' ? '' : v }))}>
-                  <SelectTrigger dir="rtl"><SelectValue placeholder="בחר שלב" /></SelectTrigger>
+                  <SelectTrigger dir="rtl"><SelectValue placeholder={t('docUploadSelectStage')} /></SelectTrigger>
                   <SelectContent dir="rtl">
-                    <SelectItem value="_none">ללא שלב</SelectItem>
+                    <SelectItem value="_none">{t('docUploadNoStage')}</SelectItem>
                     {stages.map(s => <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -338,13 +337,13 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
             {suppliers.length > 0 && (
               <div>
                 <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">
-                  ספק
+                  {t('docUploadSupplier')}
                   {aiSuggestions?.supplier_id && <span className="text-purple-500 text-xs me-1">✨</span>}
                 </Label>
                 <Select value={documentData.supplier_id || '_none'} onValueChange={v => setDocumentData(p => ({ ...p, supplier_id: v === '_none' ? '' : v }))}>
-                  <SelectTrigger dir="rtl"><SelectValue placeholder="בחר ספק" /></SelectTrigger>
+                  <SelectTrigger dir="rtl"><SelectValue placeholder={t('docUploadSelectSupplier')} /></SelectTrigger>
                   <SelectContent dir="rtl">
-                    <SelectItem value="_none">ללא ספק</SelectItem>
+                    <SelectItem value="_none">{t('docUploadNoSupplier')}</SelectItem>
                     {suppliers.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -352,25 +351,25 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
             )}
 
             <div>
-              <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">הערות</Label>
+              <Label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5 block">{t('docUploadNotes')}</Label>
               <Textarea value={documentData.notes} onChange={e => setDocumentData(p => ({ ...p, notes: e.target.value }))}
-                placeholder="הערות נוספות..." rows={2} />
+                placeholder={t('docUploadNotesPlaceholder')} rows={2} />
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex gap-3 pt-2 border-t dark:border-slate-700">
-            <Button variant="outline" onClick={handleClose} disabled={uploading} className="flex-1">ביטול</Button>
+            <Button variant="outline" onClick={handleClose} disabled={uploading} className="flex-1">{t('cancel')}</Button>
             <Button
               onClick={handleUpload}
               disabled={!selectedFile || !documentData.name || uploading || (aiPhase && aiPhase !== 'done')}
               className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
             >
               {uploading
-                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />שומר...</>
+                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />{t('docUploadSaving')}</>
                 : aiPhase && aiPhase !== 'done'
-                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />מנתח...</>
-                : <><CheckCircle2 className="w-4 h-4 ms-2" />שמור מסמך</>
+                ? <><Loader2 className="w-4 h-4 ms-2 animate-spin" />{t('docUploadAnalyzing')}</>
+                : <><CheckCircle2 className="w-4 h-4 ms-2" />{t('docUploadSave')}</>
               }
             </Button>
           </div>
