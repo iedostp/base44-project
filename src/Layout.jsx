@@ -17,6 +17,9 @@ function AppNav({ isRtl }) {
   const { t } = useTranslation();
   const location = useLocation();
 
+  // Home.jsx renders its own 8-tab mobile bottom nav — hide ours there to avoid overlap
+  const isHomePage = location.pathname === '/';
+
   const linkClass = (to, exact) => {
     const active = exact ? location.pathname === to : location.pathname.startsWith(to);
     return active
@@ -26,18 +29,20 @@ function AppNav({ isRtl }) {
 
   return (
     <>
-      {/* ── Mobile bottom nav ─────────────────────────────────────────────── */}
-      <nav
-        dir={isRtl ? 'rtl' : 'ltr'}
-        className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 flex justify-around items-center h-16 px-2 safe-area-bottom"
-      >
-        {NAV_ITEMS.map(({ to, Icon, labelKey, exact }) => (
-          <NavLink key={to} to={to} className={linkClass(to, exact)}>
-            <Icon className="w-5 h-5" />
-            <span className="text-[10px] font-medium">{t(labelKey, labelKey.replace('nav', ''))}</span>
-          </NavLink>
-        ))}
-      </nav>
+      {/* ── Mobile bottom nav (hidden on Home which has its own 8-tab nav) ── */}
+      {!isHomePage && (
+        <nav
+          dir={isRtl ? 'rtl' : 'ltr'}
+          className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 flex justify-around items-center h-16 px-2 safe-area-bottom"
+        >
+          {NAV_ITEMS.map(({ to, Icon, labelKey, exact }) => (
+            <NavLink key={to} to={to} className={linkClass(to, exact)}>
+              <Icon className="w-5 h-5" />
+              <span className="text-[10px] font-medium">{t(labelKey, labelKey.replace('nav', ''))}</span>
+            </NavLink>
+          ))}
+        </nav>
+      )}
 
       {/* ── Desktop top nav ───────────────────────────────────────────────── */}
       <header
