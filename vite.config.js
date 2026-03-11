@@ -46,7 +46,17 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Remove stale caches from previous SW versions — prevents 404 loops on mobile
+        cleanupOutdatedCaches: true,
+        // New SW takes over immediately without waiting for old tabs to close
+        skipWaiting: true,
+        // New SW claims all existing clients immediately
+        clientsClaim: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Limit precache size to avoid initial install failures
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
