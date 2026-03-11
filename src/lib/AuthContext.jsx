@@ -52,6 +52,12 @@ export const AuthProvider = ({ children }) => {
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
           const reason = appError.data.extra_data.reason;
           if (reason === 'auth_required') {
+            // If we already have a token that's being rejected, don't redirect
+            // to login again — that creates an infinite redirect loop. Clear the
+            // stale token and let the user log in fresh.
+            if (appParams.token) {
+              localStorage.removeItem('base44_access_token');
+            }
             setAuthError({
               type: 'auth_required',
               message: 'Authentication required'
