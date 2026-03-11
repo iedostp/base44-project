@@ -2,17 +2,85 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { initThemeFromStorage } from './components/useAppTheme';
 import { useTranslation } from 'react-i18next';
+import { NavLink, useLocation } from 'react-router-dom';
+import { Home as HomeIcon, PieChart, Settings, Hammer, Users, BarChart2 } from 'lucide-react';
 import './components/i18n';
 
+const NAV_ITEMS = [
+  { to: '/',                 Icon: HomeIcon,  labelKey: 'navHome',      exact: true },
+  { to: '/Suppliers',        Icon: Users,     labelKey: 'navSuppliers'             },
+  { to: '/ExpenseAnalytics', Icon: BarChart2, labelKey: 'navAnalytics'             },
+  { to: '/UserSettings',     Icon: Settings,  labelKey: 'navSettings'              },
+];
+
+function AppNav({ isRtl }) {
+  const { t } = useTranslation();
+  const location = useLocation();
+
+  const linkClass = (to, exact) => {
+    const active = exact ? location.pathname === to : location.pathname.startsWith(to);
+    return active
+      ? 'flex flex-col items-center gap-0.5 text-blue-600 dark:text-blue-400'
+      : 'flex flex-col items-center gap-0.5 text-gray-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors';
+  };
+
+  return (
+    <>
+      {/* ── Mobile bottom nav ─────────────────────────────────────────────── */}
+      <nav
+        dir={isRtl ? 'rtl' : 'ltr'}
+        className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 flex justify-around items-center h-16 px-2 safe-area-bottom"
+      >
+        {NAV_ITEMS.map(({ to, Icon, labelKey, exact }) => (
+          <NavLink key={to} to={to} className={linkClass(to, exact)}>
+            <Icon className="w-5 h-5" />
+            <span className="text-[10px] font-medium">{t(labelKey, labelKey.replace('nav', ''))}</span>
+          </NavLink>
+        ))}
+      </nav>
+
+      {/* ── Desktop top nav ───────────────────────────────────────────────── */}
+      <header
+        dir={isRtl ? 'rtl' : 'ltr'}
+        className="hidden md:flex sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 h-14 items-center px-6 gap-6 shadow-sm"
+      >
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg me-4 select-none">
+          <Hammer className="w-5 h-5" />
+          <span>בונים בית</span>
+        </div>
+        <div className="flex items-center gap-1">
+          {NAV_ITEMS.map(({ to, Icon, labelKey, exact }) => {
+            const active = exact ? location.pathname === to : location.pathname.startsWith(to);
+            return (
+              <NavLink
+                key={to}
+                to={to}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  active
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {t(labelKey, labelKey.replace('nav', ''))}
+              </NavLink>
+            );
+          })}
+        </div>
+      </header>
+    </>
+  );
+}
+
 // Apply saved theme immediately (before first render)
-try { initThemeFromStorage(); } catch(e) {}
+try { initThemeFromStorage(); } catch(_e) { /* ignore */ }
 
 // Apply saved language direction before first render (i18n.jsx handles subsequent changes)
 try {
   const language = localStorage.getItem('language') || 'he';
   document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
   document.documentElement.lang = language;
-} catch(e) {}
+} catch(_e) { /* ignore */ }
 
 const PULL_THRESHOLD = 80;      // px to trigger refresh
 const PULL_MAX = 120;           // max visual pull distance
@@ -90,6 +158,7 @@ export default function Layout({ children, currentPageName }) {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
+        <AppNav isRtl={isRtl} />
         {/* Pull-to-refresh indicator */}
         {(pullDistance > 0 || isRefreshing) && (
           <div
@@ -136,6 +205,7 @@ export default function Layout({ children, currentPageName }) {
         )}
 
         <div
+          className="pb-16 md:pb-0"
           style={{
             transform: pullDistance > 0 ? `translateY(${pullDistance * 0.4}px)` : 'none',
             transition: pullDistance === 0 ? 'transform 0.3s ease' : 'none',

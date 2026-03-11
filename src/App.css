@@ -1,0 +1,4 @@
+/* Hide scrollbar on Gantt chart scroll container (Chrome/Safari) */
+.gantt-scroll-container::-webkit-scrollbar {
+  display: none;
+}

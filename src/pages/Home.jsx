@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Loader2, Building2, Users, FileText, Calendar, Settings, Layers, Home as HomeIcon, PieChart } from "lucide-react";
+import { Loader2, Building2, Users, FileText, Calendar, Settings, Layers, Home as HomeIcon, PieChart, Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../components/i18n";
 
@@ -14,10 +14,11 @@ import StagesTab from "../components/project/StagesTab";
 import SuppliersTab from "../components/project/SuppliersTab";
 import BudgetTab from "../components/project/BudgetTab";
 import GanttChart from "../components/project/GanttChart";
-import ProjectCalendar from "../components/project/ProjectCalendar";
 import DocumentsTab from "../components/project/DocumentsTab";
 import SettingsTab from "../components/SettingsTab";
+import PhotoUpload from "../components/project/PhotoUpload";
 import NotificationBell from "../components/notifications/NotificationBell";
+import { sendProjectUpdate, sendMilestoneReminder } from "../lib/notifyService";
 import AppTutorial, { useTutorial } from "../components/tutorial/AppTutorial";
 
 export default function Home() {
@@ -53,7 +54,7 @@ export default function Home() {
   const activeModal = getParam('modal', null);
 
   // Tab order for slide direction calculation
-  const TAB_ORDER = ['home', 'stages', 'budget', 'suppliers', 'documents', 'timeline', 'settings'];
+  const TAB_ORDER = ['home', 'stages', 'budget', 'suppliers', 'documents', 'timeline', 'photos', 'settings'];
   const [prevTab, setPrevTab] = React.useState(activeTab);
   const [slideDir, setSlideDir] = React.useState(0); // -1 left, 1 right
 
@@ -103,6 +104,13 @@ export default function Home() {
   });
 
   const project = projects[0];
+
+  // Track initial project status for change detection
+  useEffect(() => {
+    if (project?.status && prevStatusRef.current === null) {
+      prevStatusRef.current = project.status;
+    }
+  }, [project?.status]);
 
   // Fetch stages
   const { data: stages = [], isLoading: stagesLoading } = useQuery({
@@ -158,6 +166,8 @@ export default function Home() {
     enabled: !!project?.id,
   });
 
+  const prevStatusRef = useRef(null);
+
   // Update project mutation
   const updateProjectMutation = useMutation({
     mutationFn: (updatedProject) => {
@@ -167,16 +177,66 @@ export default function Home() {
         return base44.entities.Project.create(updatedProject);
       }
     },
-    onSuccess: () => {
+    onSuccess: (_, updatedProject) => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
+
+      // Fire WhatsApp notification when status changes
+      const newStatus = updatedProject?.status;
+      if (
+        newStatus &&
+        newStatus !== prevStatusRef.current &&
+        user?.whatsapp_notifications &&
+        user?.whatsapp_phone
+      ) {
+        sendProjectUpdate(
+          user.whatsapp_phone,
+          project?.name || updatedProject?.name || "",
+          `סטטוס עודכן: ${newStatus}`
+        ).catch(console.error);
+      }
+      prevStatusRef.current = newStatus ?? prevStatusRef.current;
     },
   });
 
   // Update task mutation
   const updateTaskMutation = useMutation({
     mutationFn: ({ taskId, updates }) => base44.entities.Task.update(taskId, updates),
-    onSuccess: () => {
+    onSuccess: (_, { taskId, updates }) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['stages'] });
+
+      if (!user?.whatsapp_notifications || !user?.whatsapp_phone) return;
+
+      // Notify when task is marked done
+      if (updates.done === true) {
+        const task = allTasks.find(t => t.id === taskId);
+        if (task) {
+          sendProjectUpdate(
+            user.whatsapp_phone,
+            project?.name || "",
+            `✅ משימה '${task.text}' בפרויקט '${project?.name || ""}' עודכנה ל-הושלם`
+          ).catch(console.error);
+        }
+      }
+
+      // Notify when task is marked delayed (un-done a task that is overdue)
+      if (updates.done === false) {
+        const task = allTasks.find(t => t.id === taskId);
+        if (task?.due_date && new Date(task.due_date) < new Date()) {
+          sendProjectUpdate(
+            user.whatsapp_phone,
+            project?.name || "",
+            `⚠️ משימה '${task.text}' בפרויקט '${project?.name || ""}' עודכנה ל-באיחור`
+          ).catch(console.error);
+        }
+      }
+    },
+  });
+
+  // Update stage mutation (used by GanttChart drag)
+  const updateStageMutation = useMutation({
+    mutationFn: ({ stageId, updates }) => base44.entities.Stage.update(stageId, updates),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['stages'] });
     },
   });
@@ -229,6 +289,15 @@ export default function Home() {
         return oldStages.map(s => s.id === stage.id ? { ...s, completed: allDone } : s);
       });
       base44.entities.Stage.update(task.stage_id, { completed: allDone });
+
+      // Notify milestone reached
+      if (allDone && user?.whatsapp_notifications && user?.whatsapp_phone) {
+        sendProjectUpdate(
+          user.whatsapp_phone,
+          project?.name || "",
+          `🏆 אבן דרך '${stage.title}' הושגה בפרויקט '${project?.name || ""}'!`
+        ).catch(console.error);
+      }
     }
 
     // Update in background
@@ -237,6 +306,35 @@ export default function Home() {
       updates: { done: newDoneStatus }
     });
   };
+
+  // Notify tasks due tomorrow — once per session when tasks load
+  const deadlineNotifiedRef = useRef(false);
+  useEffect(() => {
+    if (
+      deadlineNotifiedRef.current ||
+      !allTasks.length ||
+      !user?.whatsapp_notifications ||
+      !user?.whatsapp_phone ||
+      !project?.name
+    ) return;
+    deadlineNotifiedRef.current = true;
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().slice(0, 10);
+
+    const dueTomorrow = allTasks.filter(
+      t => !t.done && t.due_date && t.due_date.slice(0, 10) === tomorrowStr
+    );
+
+    dueTomorrow.forEach(task => {
+      sendProjectUpdate(
+        user.whatsapp_phone,
+        project.name,
+        `⏰ תזכורת: משימה '${task.text}' בפרויקט '${project.name}' מסתיימת מחר`
+      ).catch(console.error);
+    });
+  }, [allTasks, user, project]);
 
   const handleProjectUpdate = (updatedProject) => {
     updateProjectMutation.mutate(updatedProject);
@@ -312,13 +410,14 @@ export default function Home() {
         {project?.id ? (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             {/* Desktop TabsList */}
-            <TabsList className="hidden md:grid w-full grid-cols-7 mb-6 bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-md border border-gray-100 dark:border-slate-700 h-auto gap-0.5" dir={isRTL ? 'rtl' : 'ltr'}>
+            <TabsList className="hidden md:grid w-full grid-cols-8 mb-6 bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-md border border-gray-100 dark:border-slate-700 h-auto gap-0.5" dir={isRTL ? 'rtl' : 'ltr'}>
               <TabsTrigger value="home" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_home')}</TabsTrigger>
               <TabsTrigger value="stages" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_stages')}</TabsTrigger>
               <TabsTrigger value="budget" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_budget')}</TabsTrigger>
               <TabsTrigger value="suppliers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_suppliers')}</TabsTrigger>
               <TabsTrigger value="documents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_documents')}</TabsTrigger>
               <TabsTrigger value="timeline" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_timeline')}</TabsTrigger>
+              <TabsTrigger value="photos" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_photos')}</TabsTrigger>
               <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_settings')}</TabsTrigger>
             </TabsList>
 
@@ -400,15 +499,18 @@ export default function Home() {
               </TabsContent>
 
               <TabsContent value="timeline" className="mt-0">
-                <div className="space-y-6">
-                  <ProjectCalendar project={project} stages={stages} />
-                  <GanttChart 
-                    project={project}
-                    stages={stages}
-                    tasks={allTasks}
-                    suppliers={suppliers}
-                  />
-                </div>
+                <GanttChart
+                  project={project}
+                  stages={stages}
+                  tasks={allTasks}
+                  suppliers={suppliers}
+                  onStageUpdate={(stageId, updates) => updateStageMutation.mutate({ stageId, updates })}
+                  onProjectUpdate={handleProjectUpdate}
+                />
+              </TabsContent>
+
+              <TabsContent value="photos" className="mt-0">
+                <PhotoUpload projectId={project?.id} uploadedBy={user?.email} />
               </TabsContent>
 
               <TabsContent value="settings" className="mt-0">
@@ -441,7 +543,7 @@ export default function Home() {
       {/* Mobile Bottom Navigation */}
       {project?.id && (
         <div className="md:hidden fixed bottom-0 inset-x-0 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 shadow-lg z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-          <div className="grid grid-cols-7 h-16 w-full" role="tablist" aria-label={t('appName')}>
+          <div className="grid grid-cols-8 h-16 w-full" role="tablist" aria-label={t('appName')}>
             {[
               { key: 'home', Icon: HomeIcon, label: t('tab_home') },
               { key: 'stages', Icon: Layers, label: t('tab_stages') },
@@ -449,6 +551,7 @@ export default function Home() {
               { key: 'suppliers', Icon: Users, label: t('tab_suppliers') },
               { key: 'documents', Icon: FileText, label: t('tab_documents') },
               { key: 'timeline', Icon: Calendar, label: t('tab_timeline') },
+              { key: 'photos', Icon: Camera, label: t('tab_photos') },
               { key: 'settings', Icon: Settings, label: t('tab_settings') },
             ].map(({ key, Icon, label }) => (
               <button key={key} onClick={() => setActiveTab(key)}

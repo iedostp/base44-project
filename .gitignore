@@ -33,3 +33,4 @@ dist-ssr
 .claude/settings.local.json
 .claude/error-patterns.log
 .claude/handover.md
+.vercel

@@ -1,42 +1,57 @@
----
-Project: "תיב מינוב" — Hebrew-first RTL construction management PWA on Base44
+# 🏗️ בונים בית — Project Context
 
-## Working Directory
-Always `cd ~/base44-migration` at the start of each session.
+> הצוותות והפקודות הגלובליים: ~/.claude/
+> קובץ זה = הקשר ספציפי לפרויקט בלבד.
 
-## Commands
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Start dev server |
-| `npm run build` | Production build |
-| `npm run typecheck` | TS check |
-| `npm run lint` | Lint |
-| `npm run preview` | Preview build |
+## מבנה ארגוני
+```
+מנכ"ל (אתה)
+    └── 🎯 Orchestrator  (~/.claude/agents/orchestrator.md)
+            ├── 💻 Team Dev     (.claude/agents/team-dev.md) ← override
+            ├── 🧪 Team QA      (.claude/agents/team-qa.md) ← override
+            ├── 🎨 Team UI      (~/.claude/agents/team-ui.md)
+            ├── 📱 Team Mobile  (~/.claude/agents/team-mobile.md)
+            ├── ⚙️  Team Infra   (~/.claude/agents/team-infra.md)
+            ├── 📚 Team Docs    (~/.claude/agents/team-docs.md)
+            └── 🛟 Team Support (~/.claude/agents/team-support.md)
+```
 
-## 🔴 After EVERY code change
-Run `npm run typecheck` — fix ALL errors before continuing.
-Never leave TypeScript errors unfixed.
+## Slash Commands
+/mission [תיאור] — משימה חדשה
+/standup          — סטנדאפ יומי
+/review [קובץ]   — סקירת קוד מקיפה
+/sync [נושא]     — ישיבת sync ידנית
 
-## Key Files
-- Backend SDK: `src/api/base44Client.js`
-- Entities: `src/api/entities.js`
-- Integrations: `src/api/integrations.js`
-- Routes: `src/pages.config.js` (auto-generated — do not edit manually)
-- Theme: `src/components/useAppTheme.jsx`
+## פרויקט
+שם: בונים בית | PWA ניהול בנייה | פלטפורמה: Base44
+מיקום: ~/base44-migration/
 
-## Critical Rules
-1. **RTL**: Apply via `document.documentElement.dir`, not per-component
-2. **Tab nav**: URL query params `?tab=...` + `pushState` (Android PWA back-button)
-3. **i18n**: All text via i18next — zero hardcoded Hebrew strings
-4. **Data**: TanStack Query everywhere — no raw `fetch()` calls
-5. **Backend**: Base44 SDK only — no direct API calls
+## Stack
+React 18 + Vite + TypeScript | shadcn/ui + Tailwind
+TanStack Query | Base44 SDK | i18next
 
-## When you need more context
-- Full architecture: @docs/architecture.md
-- Task progress: @docs/progress.md
+## Context Files — קרא לפני כל משימה
+1. CLAUDE.md (קובץ זה)
+2. .claude/agents/team-dev.md
+3. .claude/agents/team-qa.md
+4. src/i18n/ — מפתחות קיימים
+5. src/components/ — קומפוננטים קיימים
 
-## Useful slash commands
-- `/check` — typecheck + lint
-- `/new-feature <name>` — structured feature workflow
-- `/review` — review recent changes
-- `/status` — project status summary
+## כללים קריטיים
+1. RTL — document.documentElement.dir = 'rtl'
+2. i18n — כל עברית דרך t('key')
+3. Backend — Base44 SDK בלבד
+4. TypeScript — אסור any
+5. Packages — אסור ללא אישור מנכ"ל
+6. base44Client.ts — אסור לשנות ללא הוראה
+7. **Language** — Always respond in English. Do not use Hebrew in responses.
+
+🛑 עומד לשבור כלל? עצור ודווח למנכ"ל קודם.
+
+## In-Progress
+| קומפוננט | סטטוס |
+|---------|--------|
+| DocumentUpload | 🔄 |
+| DocumentsTab | 🔄 |
+| GanttChart | 🔄 |
+| ProjectCalendar | 🔄 |

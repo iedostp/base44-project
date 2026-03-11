@@ -2,8 +2,13 @@
   "hooks": {
     "SessionStart": [
       {
-        "type": "command",
-        "command": "bash ~/base44-migration/.claude/hooks/session-start.sh"
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/base44-migration/.claude/hooks/session-start.sh"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -12,19 +17,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd ~/base44-migration && npm run typecheck 2>&1 | grep 'error TS\|Found [0-9]' | tail -10"
+            "command": "cd ~/base44-migration && npm run typecheck 2>&1 | grep 'error TS' | tail -10"
           }
         ]
       }
     ],
     "Stop": [
       {
-        "type": "command",
-        "command": "bash ~/base44-migration/.claude/hooks/analyze-session.sh"
-      },
-      {
-        "type": "command",
-        "command": "powershell.exe -c "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('Claude Code finished')" 2>/dev/null || true"
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/base44-migration/.claude/hooks/analyze-session.sh"
+          }
+        ]
       }
     ],
     "PreCompact": [
@@ -33,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd ~/base44-migration && echo \"## Handover $(date '+%Y-%m-%d %H:%M')\" >> .claude/handover.md && git diff --stat HEAD >> .claude/handover.md && echo 'Handover saved'"
+            "command": "cd ~/base44-migration && echo \"## Handover $(date '+%Y-%m-%d %H:%M')\" >> .claude/handover.md && git diff --stat HEAD >> .claude/handover.md"
           }
         ]
       }

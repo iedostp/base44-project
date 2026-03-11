@@ -7,7 +7,7 @@ import LanguageSwitcher from "@/components/settings/LanguageSwitcher";
 import AppearanceSettings from "@/components/settings/AppearanceSettings";
 import {
   User, Bell, Sun, Moon, Mail, Smartphone, Save, LogOut,
-  ChevronRight, Check, Shield, Clock, AlertTriangle, Trash2, Loader2, Globe
+  ChevronRight, Check, Shield, Clock, AlertTriangle, Trash2, Loader2, Globe, MessageCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,25 +48,10 @@ function Section({ icon, color, title, subtitle, children }) {
   );
 }
 
-const NOTIF_TYPES = [
-  {
-    key: "task_overdue",
-    label: "משימות שעברו זמנן",
-    desc: "כשמשימה עוברת את מועד הסיום המשוער",
-    icon: <AlertTriangle className="w-4 h-4 text-red-500" />,
-  },
-  {
-    key: "task_upcoming",
-    label: "משימות קרובות למועד",
-    desc: "תזכורת מוקדמת לפני מועד הסיום",
-    icon: <Clock className="w-4 h-4 text-blue-500" />,
-  },
-  {
-    key: "budget_alert",
-    label: "התראות תקציב",
-    desc: "כשניצלת 75% או יותר מהתקציב",
-    icon: <Shield className="w-4 h-4 text-orange-500" />,
-  },
+const NOTIF_KEYS = [
+  { key: "task_overdue",   icon: <AlertTriangle className="w-4 h-4 text-red-500" /> },
+  { key: "task_upcoming",  icon: <Clock className="w-4 h-4 text-blue-500" /> },
+  { key: "budget_alert",   icon: <Shield className="w-4 h-4 text-orange-500" /> },
 ];
 
 export default function UserSettings() {
@@ -77,7 +62,9 @@ export default function UserSettings() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
   const [notifSaved, setNotifSaved] = useState(false);
+  const [whatsappSaved, setWhatsappSaved] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [whatsapp, setWhatsapp] = useState({ phone: "", enabled: false });
 
   useEffect(() => {
     setMounted(true);
@@ -106,6 +93,10 @@ export default function UserSettings() {
       setProfile({
         phone: user.phone || "",
         job_title: user.job_title || "",
+      });
+      setWhatsapp({
+        phone: user.whatsapp_phone || "",
+        enabled: user.whatsapp_notifications ?? false,
       });
     }
   }, [user]);
@@ -147,6 +138,19 @@ export default function UserSettings() {
     },
   });
 
+  const saveWhatsappMutation = useMutation({
+    mutationFn: () =>
+      base44.auth.updateMe({
+        whatsapp_phone: whatsapp.phone,
+        whatsapp_notifications: whatsapp.enabled,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      setWhatsappSaved(true);
+      setTimeout(() => setWhatsappSaved(false), 2500);
+    },
+  });
+
   const saveNotifMutation = useMutation({
     mutationFn: async () => {
       const data = { ...notif, user_email: user.email };
@@ -165,7 +169,7 @@ export default function UserSettings() {
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
     try {
-      alert("חשבונך נמחק בהצלחה. כל הנתונים שלך הוסרו מהמערכת.");
+      alert(t('accountDeletedSuccess'));
       base44.auth.logout();
     } finally {
       setIsDeleting(false);
@@ -186,26 +190,26 @@ export default function UserSettings() {
 
         {/* Page Title */}
         <div className="text-start">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-slate-100">הגדרות משתמש</h1>
-          <p className="text-gray-500 dark:text-slate-400 text-sm mt-1">ניהול פרופיל, התראות ועיצוב</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-slate-100">{t('settingsTitle')}</h1>
+          <p className="text-gray-500 dark:text-slate-400 text-sm mt-1">{t('settingsSubtitle')}</p>
         </div>
 
         {/* ── Profile ─────────────────────────────────────────────────────── */}
         <Section
           icon={<User className="w-5 h-5 text-blue-600 dark:text-blue-300" />}
           color="bg-blue-100 dark:bg-blue-900/50"
-          title="פרטי פרופיל"
-          subtitle="פרטים אישיים וצרכי קשר"
+          title={t('profileSectionTitle')}
+          subtitle={t('profileSectionSubtitle')}
         >
           <div className="space-y-4">
             {/* Read-only fields */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-3 border border-gray-100 dark:border-slate-600 text-start">
-                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">שם מלא</p>
-                <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm">{user.full_name || "לא זמין"}</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{t('fullName')}</p>
+                <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm">{user.full_name || t('notAvailable')}</p>
               </div>
               <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-3 border border-gray-100 dark:border-slate-600 text-start">
-                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">כתובת אימייל</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{t('emailAddress')}</p>
                 <p className="font-semibold text-gray-800 dark:text-slate-100 text-sm truncate">{user.email}</p>
               </div>
             </div>
@@ -213,7 +217,7 @@ export default function UserSettings() {
             {/* Editable fields */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="text-start">
-                <label htmlFor="phone-input" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">טלפון</label>
+                <label htmlFor="phone-input" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">{t('phone')}</label>
                 <input
                   id="phone-input"
                   name="phone"
@@ -226,14 +230,14 @@ export default function UserSettings() {
                 />
               </div>
               <div className="text-start">
-                <label htmlFor="job-input" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">תפקיד</label>
+                <label htmlFor="job-input" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">{t('role')}</label>
                 <input
                   id="job-input"
                   name="job_title"
                   type="text"
                   value={profile.job_title}
                   onChange={e => setProfile(p => ({ ...p, job_title: e.target.value }))}
-                  placeholder="לדוגמה: בעל בית / קבלן"
+                  placeholder={t('jobPlaceholder')}
                   className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
                  
                 />
@@ -247,16 +251,16 @@ export default function UserSettings() {
                 className={`flex-1 transition-all ${profileSaved ? "bg-green-500 hover:bg-green-600" : "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"} text-white`}
               >
                 {profileSaved ? (
-                  <><Check className="w-4 h-4 me-1.5" /> נשמר</>
+                  <><Check className="w-4 h-4 me-1.5" /> {t('savedProfile')}</>
                 ) : saveProfileMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <><Save className="w-4 h-4 me-1.5" /> שמור פרופיל</>
+                  <><Save className="w-4 h-4 me-1.5" /> {t('saveProfileBtn')}</>
                 )}
               </Button>
               <Button variant="outline" onClick={() => base44.auth.logout()} className="select-none">
                 <LogOut className="w-4 h-4 me-1.5" />
-                התנתק
+                {t('logoutShort')}
               </Button>
             </div>
           </div>
@@ -266,29 +270,29 @@ export default function UserSettings() {
         <Section
           icon={<Bell className="w-5 h-5 text-indigo-600 dark:text-indigo-300" />}
           color="bg-indigo-100 dark:bg-indigo-900/50"
-          title="הגדרות התראות"
-          subtitle="בחר כיצד ומתי לקבל התראות"
+          title={t('notifSectionTitle')}
+          subtitle={t('notifSectionSubtitle')}
         >
           {/* Channel headers */}
           <div className="flex items-center justify-end gap-6 mb-3 text-xs text-gray-500 dark:text-slate-400">
             <div className="flex items-center gap-1">
-              <span>דוא״ל</span>
+              <span>{t('emailChannel')}</span>
               <Mail className="w-3.5 h-3.5" />
             </div>
             <div className="flex items-center gap-1">
-              <span>באפליקציה</span>
+              <span>{t('appChannel')}</span>
               <Smartphone className="w-3.5 h-3.5" />
             </div>
           </div>
 
           <div className="space-y-3">
-            {NOTIF_TYPES.map(({ key, label, desc, icon }) => (
+            {NOTIF_KEYS.map(({ key, icon }) => (
               <div key={key} className="flex items-center gap-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
                 <div className="flex items-center gap-1.5 flex-1 min-w-0 text-start">
                   {icon}
                   <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-slate-100">{label}</p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{desc}</p>
+                    <p className="text-sm font-medium text-gray-800 dark:text-slate-100">{t(`notif_${key}_label`)}</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{t(`notif_${key}_desc`)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 flex-shrink-0">
@@ -309,8 +313,8 @@ export default function UserSettings() {
               <div className="flex items-center gap-1.5 flex-1 text-start">
                 <Clock className="w-4 h-4 text-gray-400" />
                 <label htmlFor="days-ahead-select" className="cursor-pointer flex-1">
-                  <p className="text-sm font-medium text-gray-800 dark:text-slate-100">תזכורת מוקדמת</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">כמה ימים לפני המועד</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-slate-100">{t('earlyReminder')}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">{t('daysBeforeDeadline')}</p>
                 </label>
               </div>
               <select
@@ -321,7 +325,7 @@ export default function UserSettings() {
                 className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 dark:text-slate-100 text-sm focus:ring-2 focus:ring-blue-500"
               >
                 {[1, 3, 5, 7, 14, 30].map(d => (
-                  <option key={d} value={d}>{d} ימים</option>
+                  <option key={d} value={d}>{d} {t('daysUnit')}</option>
                 ))}
               </select>
             </div>
@@ -333,13 +337,71 @@ export default function UserSettings() {
             className={`w-full mt-4 transition-all ${notifSaved ? "bg-green-500 hover:bg-green-600" : "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"} text-white`}
           >
             {notifSaved ? (
-              <><Check className="w-4 h-4 me-1.5" /> נשמר בהצלחה</>
+              <><Check className="w-4 h-4 me-1.5" /> {t('savedNotif')}</>
             ) : saveNotifMutation.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <><Save className="w-4 h-4 me-1.5" /> שמור הגדרות התראות</>
+              <><Save className="w-4 h-4 me-1.5" /> {t('saveNotifBtn')}</>
             )}
           </Button>
+        </Section>
+
+        {/* ── WhatsApp Notifications ───────────────────────────────────────── */}
+        <Section
+          icon={<MessageCircle className="w-5 h-5 text-green-600 dark:text-green-300" />}
+          color="bg-green-100 dark:bg-green-900/50"
+          title={t('whatsappSectionTitle', 'WhatsApp Notifications')}
+          subtitle={t('whatsappSectionSubtitle', 'Receive project updates via WhatsApp')}
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-between bg-gray-50 dark:bg-slate-700/50 rounded-xl px-4 py-3 border border-gray-100 dark:border-slate-600">
+              <div className="text-start">
+                <p className="text-sm font-medium text-gray-800 dark:text-slate-100">
+                  {t('enableWhatsapp', 'Enable WhatsApp notifications')}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+                  {t('enableWhatsappDesc', 'Get project status updates on WhatsApp')}
+                </p>
+              </div>
+              <Toggle
+                checked={whatsapp.enabled}
+                onChange={v => setWhatsapp(w => ({ ...w, enabled: v }))}
+              />
+            </div>
+
+            {whatsapp.enabled && (
+              <div className="text-start">
+                <label htmlFor="whatsapp-phone" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">
+                  {t('whatsappPhone', 'WhatsApp phone number')}
+                </label>
+                <input
+                  id="whatsapp-phone"
+                  type="tel"
+                  value={whatsapp.phone}
+                  onChange={e => setWhatsapp(w => ({ ...w, phone: e.target.value }))}
+                  placeholder="+972501234567"
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent text-start"
+                />
+                <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                  {t('whatsappPhoneHint', 'Include country code, e.g. +972501234567')}
+                </p>
+              </div>
+            )}
+
+            <Button
+              onClick={() => saveWhatsappMutation.mutate()}
+              disabled={saveWhatsappMutation.isPending || (whatsapp.enabled && !whatsapp.phone)}
+              className={`w-full transition-all ${whatsappSaved ? "bg-green-500 hover:bg-green-600" : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"} text-white`}
+            >
+              {whatsappSaved ? (
+                <><Check className="w-4 h-4 me-1.5" /> {t('savedWhatsapp', 'Saved!')}</>
+              ) : saveWhatsappMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <><Save className="w-4 h-4 me-1.5" /> {t('saveWhatsappBtn', 'Save WhatsApp settings')}</>
+              )}
+            </Button>
+          </div>
         </Section>
 
         {/* ── Theme & Appearance ───────────────────────────────────────────────────────── */}
@@ -349,8 +411,8 @@ export default function UserSettings() {
         <Section
           icon={<Globe className="w-5 h-5 text-blue-600 dark:text-blue-300" />}
           color="bg-blue-100 dark:bg-blue-900/50"
-          title="בחירת שפה"
-          subtitle="בחר את השפה המועדפת שלך"
+          title={t('langSectionTitle')}
+          subtitle={t('langSectionSubtitle')}
         >
           {mounted && <LanguageSwitcher />}
         </Section>
@@ -362,13 +424,13 @@ export default function UserSettings() {
               <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
             </div>
             <div className="text-start">
-              <h2 className="font-bold text-red-800 dark:text-red-300">אזור מסוכן</h2>
-              <p className="text-xs text-red-500 dark:text-red-400 mt-0.5">פעולות בלתי הפיכות</p>
+              <h2 className="font-bold text-red-800 dark:text-red-300">{t('dangerZone')}</h2>
+              <p className="text-xs text-red-500 dark:text-red-400 mt-0.5">{t('irreversibleActions')}</p>
             </div>
           </div>
           <div className="p-5">
             <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 text-start leading-relaxed">
-              מחיקת חשבון תסיר לצמיתות את כל הנתונים שלך, כולל פרויקטים, שלבים, משימות, ספקים, מסמכים והוצאות.
+              {t('deleteAccountDescShort')}
             </p>
             <Button
               variant="destructive"
@@ -376,7 +438,7 @@ export default function UserSettings() {
               onClick={() => setShowDeleteDialog(true)}
             >
               <Trash2 className="w-4 h-4 me-2" />
-              מחק את החשבון שלי לצמיתות
+              {t('deleteAccountBtn')}
             </Button>
           </div>
         </div>
@@ -388,19 +450,19 @@ export default function UserSettings() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400 text-start">
               <AlertTriangle className="w-5 h-5" />
-              אישור מחיקת חשבון
+              {t('confirmDeleteTitle')}
             </DialogTitle>
             <DialogDescription className="text-gray-600 dark:text-slate-300 text-start">
-              האם אתה בטוח? פעולה זו תמחק לצמיתות את כל הנתונים שלך ולא ניתן יהיה לשחזר אותם.
+              {t('confirmDeleteDesc')}
             </DialogDescription>
           </DialogHeader>
           <div className="bg-red-50 dark:bg-red-950 rounded-lg p-4 my-2 text-start border border-red-200 dark:border-red-900">
-            <p className="text-sm text-red-800 dark:text-red-300 font-semibold">⚠️ זוהי אזהרה אחרונה!</p>
+            <p className="text-sm text-red-800 dark:text-red-300 font-semibold">{t('finalWarning')}</p>
           </div>
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)} disabled={isDeleting}>ביטול</Button>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)} disabled={isDeleting}>{t('cancel')}</Button>
             <Button variant="destructive" onClick={handleDeleteAccount} disabled={isDeleting}>
-              {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : "כן, מחק את החשבון שלי"}
+              {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : t('yesDeleteAccount')}
             </Button>
           </DialogFooter>
         </DialogContent>
