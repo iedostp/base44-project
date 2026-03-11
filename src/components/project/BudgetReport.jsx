@@ -239,9 +239,9 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
       return {
         name: s.title.length > 10 ? s.title.slice(0, 10) + "…" : s.title,
         fullName: s.title,
-        מתוכנן: Math.round(s.planned),
-        בפועל: Math.round(stageActual),
-        סטייה: deviation,
+        planned: Math.round(s.planned),
+        actual: Math.round(stageActual),
+        deviation,
         completed: s.completed,
         hasActivity: s.rawActual > 0 || s.completed,
       };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { Plus, GitCompare, MapPin, Map, RefreshCw } from "lucide-react";
+import { Plus, GitCompare, MapPin, Map, RefreshCw, LayoutList, LayoutGrid, Star, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -13,10 +13,20 @@ import MapLocationPicker from "./MapLocationPicker";
 import AddSupplierDialog from "./AddSupplierDialog";
 import EditSupplierDialog from "./EditSupplierDialog";
 
+
 export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, projectId }) {
   const { t } = useTranslation();
+  const getCategoryText = (category) => t(`supplierCat_${category}`, category);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedForCompare, setSelectedForCompare] = useState([]);
+  const [viewMode, setViewMode] = useState(
+    () => localStorage.getItem('suppliers-view-mode') || 'list'
+  );
+
+  const handleViewMode = (mode) => {
+    setViewMode(mode);
+    localStorage.setItem('suppliers-view-mode', mode);
+  };
   const [editingSupplier, setEditingSupplier] = useState(null);
   
   // Use URL-based modal state
@@ -154,21 +164,38 @@ export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, proje
         </div>
       </div>
 
-      {/* Category Filter */}
-      <div dir="rtl" className="flex flex-wrap gap-2 mb-6 pb-6 border-b border-gray-200">
+      {/* Category Filter + View Toggle */}
+      <div dir="rtl" className="flex flex-wrap items-center gap-2 mb-6 pb-6 border-b border-gray-200 dark:border-slate-700">
         {categories.map(cat => (
           <button
             key={cat.value}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
-              selectedCategory === cat.value 
-                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md scale-105' 
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              selectedCategory === cat.value
+                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md scale-105'
+                : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600'
             }`}
             onClick={() => setSelectedCategory(cat.value)}
           >
             {cat.label}
           </button>
         ))}
+        {/* View mode toggle — same style as DocumentsTab */}
+        <div className="me-auto flex items-center border border-gray-200 dark:border-slate-600 rounded-lg overflow-hidden">
+          <button
+            onClick={() => handleViewMode('grid')}
+            className={`p-2 ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300'}`}
+            title="תצוגת רשת"
+          >
+            <LayoutGrid className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => handleViewMode('list')}
+            className={`p-2 ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300'}`}
+            title="תצוגת רשימה"
+          >
+            <LayoutList className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Compare Bar */}
@@ -197,26 +224,72 @@ export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, proje
         </div>
       )}
 
-      {/* Suppliers Grid */}
+      {/* Suppliers — Grid or List */}
       {filteredSuppliers.length > 0 ? (
-        <div className="grid md:grid-cols-2 gap-5">
-          {filteredSuppliers.map(supplier => (
-            <SupplierCard 
-              key={supplier.id} 
-              supplier={supplier}
-              isSelected={selectedForCompare.some(s => s.id === supplier.id)}
-              onToggleCompare={handleToggleCompare}
-              onUpdate={(s) => setEditingSupplier(s)}
-              onDelete={(s) => {
-                if (confirm(`${t('confirmDeleteSupplier')} "${s.name}"?`)) {
-                  base44.entities.Supplier.delete(s.id).then(() => {
-                    if (onUpdate) onUpdate();
-                  });
-                }
-              }}
-            />
-          ))}
-        </div>
+        viewMode === 'grid' ? (
+          <div className="grid md:grid-cols-2 gap-5">
+            {filteredSuppliers.map(supplier => (
+              <SupplierCard
+                key={supplier.id}
+                supplier={supplier}
+                isSelected={selectedForCompare.some(s => s.id === supplier.id)}
+                onToggleCompare={handleToggleCompare}
+                onUpdate={(s) => setEditingSupplier(s)}
+                onDelete={(s) => {
+                  if (confirm(`${t('confirmDeleteSupplier')} "${s.name}"?`)) {
+                    base44.entities.Supplier.delete(s.id).then(() => {
+                      if (onUpdate) onUpdate();
+                    });
+                  }
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          /* List view */
+          <div dir="rtl" className="divide-y divide-gray-100 dark:divide-slate-700 border border-gray-100 dark:border-slate-700 rounded-xl overflow-hidden">
+            {filteredSuppliers.map(supplier => (
+              <div
+                key={supplier.id}
+                className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-750 transition-colors"
+              >
+                {/* Name */}
+                <span className="font-semibold text-gray-800 dark:text-slate-100 flex-1 min-w-0 truncate">
+                  {supplier.name}
+                </span>
+                {/* Category badge */}
+                <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0">
+                  {getCategoryText(supplier.category)}
+                </span>
+                {/* Rating */}
+                {supplier.rating && (
+                  <div className="flex items-center gap-0.5 flex-shrink-0">
+                    <Star className="w-3.5 h-3.5 text-amber-500 fill-current" />
+                    <span className="text-sm text-amber-700 dark:text-amber-400">{supplier.rating}</span>
+                  </div>
+                )}
+                {/* Location */}
+                {supplier.address && (
+                  <div className="hidden sm:flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400 flex-shrink-0 max-w-[140px]">
+                    <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span className="truncate">{supplier.address}</span>
+                  </div>
+                )}
+                {/* Phone */}
+                {supplier.contact_phone && (
+                  <a
+                    href={`tel:${supplier.contact_phone}`}
+                    className="hidden md:flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex-shrink-0"
+                    dir="ltr"
+                  >
+                    <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>{supplier.contact_phone}</span>
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        )
       ) : (
         <div className="text-center py-12">
           <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
