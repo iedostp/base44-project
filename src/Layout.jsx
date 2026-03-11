@@ -128,7 +128,7 @@ export default function Layout({ children, currentPageName }) {
         triggered.current = true;
         setIsRefreshing(true);
         setPullDistance(0);
-        setTimeout(() => window.location.reload(), 800);
+        setTimeout(() => console.log("pull-to-refresh disabled"), 800);
       }, HOLD_DURATION);
     } else if (clamped < PULL_THRESHOLD) {
       clearTimeout(holdTimer.current);
