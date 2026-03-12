@@ -92,8 +92,6 @@ const PULL_MAX = 120;           // max visual pull distance
 const HOLD_DURATION = 600;      // ms of sustained pull needed to trigger
 
 export default function Layout({ children, currentPageName }) {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState('light');
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { t, i18n } = useTranslation();
@@ -102,11 +100,6 @@ export default function Layout({ children, currentPageName }) {
   const touchStartY = useRef(0);
   const holdTimer = useRef(null);
   const triggered = useRef(false);
-
-  useEffect(() => {
-    setMounted(true);
-    setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-  }, []);
 
   const handleTouchStart = (e) => {
     touchStartY.current = e.touches[0].clientY;
@@ -151,8 +144,6 @@ export default function Layout({ children, currentPageName }) {
 
   const progress = Math.min(pullDistance / PULL_THRESHOLD, 1);
   const ready = pullDistance >= PULL_THRESHOLD;
-
-  if (!mounted) return <>{children}</>;
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>

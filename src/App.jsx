@@ -29,7 +29,12 @@ const AuthenticatedApp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    // Don't redirect while Supabase is still processing an OAuth callback hash.
+    // The hash contains access_token and will be consumed by onAuthStateChange
+    // which will then set isAuthenticated=true without a redirect loop.
+    const hasOAuthHash = window.location.hash.includes('access_token') ||
+                         window.location.hash.includes('error_description');
+    if (!isLoading && !isAuthenticated && !hasOAuthHash) {
       navigate('/login', { replace: true });
     }
   }, [isLoading, isAuthenticated]);

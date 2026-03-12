@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -7,7 +7,15 @@ const TABS = { password: 'password', otp: 'otp' };
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { signInWithGoogle, signInWithEmail, signUp, sendOtp, verifyOtp } = useAuth();
+  const { signInWithGoogle, signInWithEmail, signUp, sendOtp, verifyOtp, isAuthenticated, isLoading: isAuthLoading } = useAuth();
+
+  // If session is already active (e.g. after OAuth redirect processed by
+  // onAuthStateChange), go straight to the app.
+  useEffect(() => {
+    if (!isAuthLoading && isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, isAuthLoading]);
 
   const [tab, setTab] = useState(TABS.password);
   const [isRegister, setIsRegister] = useState(false);

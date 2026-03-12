@@ -9,14 +9,10 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-    });
-
-    // Listen for auth state changes (fixes Android reload loop)
+    // onAuthStateChange is the single source of truth for session state.
+    // It fires INITIAL_SESSION on subscribe (handles stored sessions) and
+    // SIGNED_IN after OAuth redirect hash processing (fixes the race where
+    // getSession() would resolve null before the hash was exchanged).
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
