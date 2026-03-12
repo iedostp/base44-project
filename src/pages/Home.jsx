@@ -408,8 +408,7 @@ export default function Home() {
 
       <div className="p-0 md:p-8 pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-8 pb-24 md:pb-8">
       <div className="max-w-7xl mx-auto px-0 md:px-0">
-        {project?.id ? (
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             {/* Desktop TabsList */}
             <TabsList className="hidden md:grid w-full grid-cols-8 mb-6 bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-md border border-gray-100 dark:border-slate-700 h-auto gap-0.5" dir={isRTL ? 'rtl' : 'ltr'}>
               <TabsTrigger value="home" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_home')}</TabsTrigger>
@@ -431,82 +430,119 @@ export default function Home() {
                 transition={{ duration: 0.22, ease: "easeOut" }}
               >
                 {activeTab === 'home' && (
-                  <div className="space-y-6">
-                    <DashboardSummary
-                      project={project}
-                      stages={stages}
-                      tasks={allTasks}
-                      expenses={expenses}
-                    />
-                    <div className="flex justify-center">
-                      <GlobalSearch
+                  project?.id ? (
+                    <div className="space-y-6">
+                      <DashboardSummary
+                        project={project}
                         stages={stages}
                         tasks={allTasks}
                         expenses={expenses}
-                        suppliers={suppliers}
-                        documents={documents}
-                        onNavigate={setActiveTab}
+                      />
+                      <div className="flex justify-center">
+                        <GlobalSearch
+                          stages={stages}
+                          tasks={allTasks}
+                          expenses={expenses}
+                          suppliers={suppliers}
+                          documents={documents}
+                          onNavigate={setActiveTab}
+                        />
+                      </div>
+                      <ProjectHeader
+                        project={project}
+                        onUpdate={handleProjectUpdate}
+                        overallProgress={calculateProgress()}
+                        budgetProgress={calculateBudgetProgress()}
                       />
                     </div>
-                    <ProjectHeader 
-                      project={project}
-                      onUpdate={handleProjectUpdate}
-                      overallProgress={calculateProgress()}
-                      budgetProgress={calculateBudgetProgress()}
-                    />
-                  </div>
+                  ) : (
+                    <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 mt-8">
+                      <ProjectHeader
+                        project={project}
+                        onUpdate={handleProjectUpdate}
+                        overallProgress={calculateProgress()}
+                        budgetProgress={calculateBudgetProgress()}
+                      />
+                      <p className="text-lg text-gray-600 dark:text-slate-300 mb-2 mt-8">👋 {t('noProject')}</p>
+                      <p className="text-gray-500 dark:text-slate-400">{t('fillProjectDetails')}</p>
+                    </div>
+                  )
                 )}
                 {activeTab === 'stages' && (
-                  <StagesTab 
-                    stages={stages}
-                    tasks={allTasks}
-                    subtopics={allSubtopics}
-                    expenses={expenses}
-                    suppliers={suppliers}
-                    projectId={project.id}
-                    onTaskToggle={handleTaskToggle}
-                    onUpdate={handleDataUpdate}
-                    user={user}
-                  />
+                  project?.id ? (
+                    <StagesTab
+                      stages={stages}
+                      tasks={allTasks}
+                      subtopics={allSubtopics}
+                      expenses={expenses}
+                      suppliers={suppliers}
+                      projectId={project.id}
+                      onTaskToggle={handleTaskToggle}
+                      onUpdate={handleDataUpdate}
+                      user={user}
+                    />
+                  ) : (
+                    <div className="text-center py-16 text-gray-400 dark:text-slate-500"><p className="text-4xl mb-4">🏗️</p><p>{t('noProject')}</p></div>
+                  )
                 )}
                 {activeTab === 'budget' && (
-                  <BudgetTab 
-                    project={project}
-                    stages={stages}
-                    suppliers={suppliers}
-                    expenses={expenses}
-                  />
+                  project?.id ? (
+                    <BudgetTab
+                      project={project}
+                      stages={stages}
+                      suppliers={suppliers}
+                      expenses={expenses}
+                    />
+                  ) : (
+                    <div className="text-center py-16 text-gray-400 dark:text-slate-500"><p className="text-4xl mb-4">💰</p><p>{t('noProject')}</p></div>
+                  )
                 )}
                 {activeTab === 'suppliers' && (
-                  <SuppliersTab 
-                    suppliers={suppliers}
-                    projectId={project.id}
-                    onUpdate={() => queryClient.invalidateQueries({ queryKey: ['suppliers'] })}
-                  />
+                  project?.id ? (
+                    <SuppliersTab
+                      suppliers={suppliers}
+                      projectId={project.id}
+                      onUpdate={() => queryClient.invalidateQueries({ queryKey: ['suppliers'] })}
+                    />
+                  ) : (
+                    <div className="text-center py-16 text-gray-400 dark:text-slate-500"><p className="text-4xl mb-4">👷</p><p>{t('noProject')}</p></div>
+                  )
                 )}
                 {activeTab === 'documents' && (
-                  <DocumentsTab
-                    documents={documents}
-                    stages={stages}
-                    suppliers={suppliers}
-                    projectId={project.id}
-                    project={project}
-                    onDocumentAdded={handleDocumentAdded}
-                    onDocumentDeleted={handleDocumentDeleted}
-                  />
+                  project?.id ? (
+                    <DocumentsTab
+                      documents={documents}
+                      stages={stages}
+                      suppliers={suppliers}
+                      projectId={project.id}
+                      project={project}
+                      onDocumentAdded={handleDocumentAdded}
+                      onDocumentDeleted={handleDocumentDeleted}
+                    />
+                  ) : (
+                    <div className="text-center py-16 text-gray-400 dark:text-slate-500"><p className="text-4xl mb-4">📄</p><p>{t('noProject')}</p></div>
+                  )
                 )}
                 {activeTab === 'timeline' && (
-                  <GanttChart
-                    project={project}
-                    stages={stages}
-                    tasks={allTasks}
-                    suppliers={suppliers}
-                    onStageUpdate={(stageId, updates) => updateStageMutation.mutate({ stageId, updates })}
-                    onProjectUpdate={handleProjectUpdate}
-                  />
+                  project?.id ? (
+                    <GanttChart
+                      project={project}
+                      stages={stages}
+                      tasks={allTasks}
+                      suppliers={suppliers}
+                      onStageUpdate={(stageId, updates) => updateStageMutation.mutate({ stageId, updates })}
+                      onProjectUpdate={handleProjectUpdate}
+                    />
+                  ) : (
+                    <div className="text-center py-16 text-gray-400 dark:text-slate-500"><p className="text-4xl mb-4">📅</p><p>{t('noProject')}</p></div>
+                  )
                 )}
                 {activeTab === 'photos' && (
-                  <PhotoUpload projectId={project?.id} uploadedBy={user?.email} />
+                  project?.id ? (
+                    <PhotoUpload projectId={project.id} uploadedBy={user?.email} />
+                  ) : (
+                    <div className="text-center py-16 text-gray-400 dark:text-slate-500"><p className="text-4xl mb-4">📸</p><p>{t('noProject')}</p></div>
+                  )
                 )}
                 {activeTab === 'settings' && (
                   <SettingsTab user={user} project={project} />
@@ -514,18 +550,6 @@ export default function Home() {
               </motion.div>
             </AnimatePresence>
           </Tabs>
-        ) : (
-          <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 mt-8">
-            <ProjectHeader 
-              project={project}
-              onUpdate={handleProjectUpdate}
-              overallProgress={calculateProgress()}
-              budgetProgress={calculateBudgetProgress()}
-            />
-            <p className="text-lg text-gray-600 dark:text-slate-300 mb-2 mt-8">👋 {t('noProject')}</p>
-            <p className="text-gray-500 dark:text-slate-400">{t('fillProjectDetails')}</p>
-          </div>
-        )}
 
         {project?.id && (
           <div className="mt-8 text-center hidden md:block">
