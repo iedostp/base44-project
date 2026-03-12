@@ -540,8 +540,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      {project?.id && (
+      {/* Mobile Bottom Navigation — always visible so nav is available even before project data loads */}
+      {(
         <div className="md:hidden fixed bottom-0 inset-x-0 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 shadow-lg z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
           <div className="grid grid-cols-8 h-16 w-full" role="tablist" aria-label={t('appName')}>
             {[

@@ -32,9 +32,11 @@ const AuthenticatedApp = () => {
     // Don't redirect while Supabase is still processing an OAuth callback hash.
     // The hash contains access_token and will be consumed by onAuthStateChange
     // which will then set isAuthenticated=true without a redirect loop.
-    const hasOAuthHash = window.location.hash.includes('access_token') ||
-                         window.location.hash.includes('error_description');
-    if (!isLoading && !isAuthenticated && !hasOAuthHash) {
+    // Supabase v2 PKCE flow uses ?code= query param; implicit flow uses #access_token hash
+    const hasOAuthCallback = window.location.hash.includes('access_token') ||
+                             window.location.hash.includes('error_description') ||
+                             window.location.search.includes('code=');
+    if (!isLoading && !isAuthenticated && !hasOAuthCallback) {
       navigate('/login', { replace: true });
     }
   }, [isLoading, isAuthenticated]);
