@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Building2, Users, FileText, Calendar, Settings, Layers, Home as HomeIcon, PieChart, Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../components/i18n";
@@ -59,6 +59,7 @@ export default function Home() {
   const [slideDir, setSlideDir] = React.useState(0); // -1 left, 1 right
 
   const setActiveTab = (tab) => {
+    window.scrollTo({ top: 0, behavior: "instant" });
     const prevIndex = TAB_ORDER.indexOf(activeTab);
     const nextIndex = TAB_ORDER.indexOf(tab);
     setSlideDir(nextIndex > prevIndex ? (isRTL ? 1 : -1) : (isRTL ? -1 : 1));
@@ -421,102 +422,97 @@ export default function Home() {
               <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_settings')}</TabsTrigger>
             </TabsList>
 
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, x: slideDir * 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: slideDir * -60 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-            >
-              <TabsContent value="home" className="mt-0">
-                <div className="space-y-6">
-                  <DashboardSummary
-                    project={project}
-                    stages={stages}
-                    tasks={allTasks}
-                    expenses={expenses}
-                  />
-                  <div className="flex justify-center">
-                    <GlobalSearch
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, x: slideDir * 60 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: slideDir * -60 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+              >
+                {activeTab === 'home' && (
+                  <div className="space-y-6">
+                    <DashboardSummary
+                      project={project}
                       stages={stages}
                       tasks={allTasks}
                       expenses={expenses}
-                      suppliers={suppliers}
-                      documents={documents}
-                      onNavigate={setActiveTab}
+                    />
+                    <div className="flex justify-center">
+                      <GlobalSearch
+                        stages={stages}
+                        tasks={allTasks}
+                        expenses={expenses}
+                        suppliers={suppliers}
+                        documents={documents}
+                        onNavigate={setActiveTab}
+                      />
+                    </div>
+                    <ProjectHeader 
+                      project={project}
+                      onUpdate={handleProjectUpdate}
+                      overallProgress={calculateProgress()}
+                      budgetProgress={calculateBudgetProgress()}
                     />
                   </div>
-                  <ProjectHeader 
-                    project={project}
-                    onUpdate={handleProjectUpdate}
-                    overallProgress={calculateProgress()}
-                    budgetProgress={calculateBudgetProgress()}
+                )}
+                {activeTab === 'stages' && (
+                  <StagesTab 
+                    stages={stages}
+                    tasks={allTasks}
+                    subtopics={allSubtopics}
+                    expenses={expenses}
+                    suppliers={suppliers}
+                    projectId={project.id}
+                    onTaskToggle={handleTaskToggle}
+                    onUpdate={handleDataUpdate}
+                    user={user}
                   />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="stages" className="mt-0">
-                <StagesTab 
-                  stages={stages}
-                  tasks={allTasks}
-                  subtopics={allSubtopics}
-                  expenses={expenses}
-                  suppliers={suppliers}
-                  projectId={project.id}
-                  onTaskToggle={handleTaskToggle}
-                  onUpdate={handleDataUpdate}
-                  user={user}
-                />
-              </TabsContent>
-
-              <TabsContent value="budget" className="mt-0">
-                 <BudgetTab 
-                   project={project}
-                   stages={stages}
-                   suppliers={suppliers}
-                   expenses={expenses}
-                 />
-              </TabsContent>
-
-              <TabsContent value="suppliers" className="mt-0">
-                <SuppliersTab 
-                  suppliers={suppliers}
-                  projectId={project.id}
-                  onUpdate={() => queryClient.invalidateQueries({ queryKey: ['suppliers'] })}
-                />
-              </TabsContent>
-
-              <TabsContent value="documents" className="mt-0">
-                <DocumentsTab
-                  documents={documents}
-                  stages={stages}
-                  suppliers={suppliers}
-                  projectId={project.id}
-                  project={project}
-                  onDocumentAdded={handleDocumentAdded}
-                  onDocumentDeleted={handleDocumentDeleted}
-                />
-              </TabsContent>
-
-              <TabsContent value="timeline" className="mt-0">
-                <GanttChart
-                  project={project}
-                  stages={stages}
-                  tasks={allTasks}
-                  suppliers={suppliers}
-                  onStageUpdate={(stageId, updates) => updateStageMutation.mutate({ stageId, updates })}
-                  onProjectUpdate={handleProjectUpdate}
-                />
-              </TabsContent>
-
-              <TabsContent value="photos" className="mt-0">
-                <PhotoUpload projectId={project?.id} uploadedBy={user?.email} />
-              </TabsContent>
-
-              <TabsContent value="settings" className="mt-0">
-                <SettingsTab user={user} project={project} />
-              </TabsContent>
-            </motion.div>
+                )}
+                {activeTab === 'budget' && (
+                  <BudgetTab 
+                    project={project}
+                    stages={stages}
+                    suppliers={suppliers}
+                    expenses={expenses}
+                  />
+                )}
+                {activeTab === 'suppliers' && (
+                  <SuppliersTab 
+                    suppliers={suppliers}
+                    projectId={project.id}
+                    onUpdate={() => queryClient.invalidateQueries({ queryKey: ['suppliers'] })}
+                  />
+                )}
+                {activeTab === 'documents' && (
+                  <DocumentsTab
+                    documents={documents}
+                    stages={stages}
+                    suppliers={suppliers}
+                    projectId={project.id}
+                    project={project}
+                    onDocumentAdded={handleDocumentAdded}
+                    onDocumentDeleted={handleDocumentDeleted}
+                  />
+                )}
+                {activeTab === 'timeline' && (
+                  <GanttChart
+                    project={project}
+                    stages={stages}
+                    tasks={allTasks}
+                    suppliers={suppliers}
+                    onStageUpdate={(stageId, updates) => updateStageMutation.mutate({ stageId, updates })}
+                    onProjectUpdate={handleProjectUpdate}
+                  />
+                )}
+                {activeTab === 'photos' && (
+                  <PhotoUpload projectId={project?.id} uploadedBy={user?.email} />
+                )}
+                {activeTab === 'settings' && (
+                  <SettingsTab user={user} project={project} />
+                )}
+              </motion.div>
+            </AnimatePresence>
           </Tabs>
         ) : (
           <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 mt-8">
