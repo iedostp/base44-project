@@ -16,9 +16,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function SettingsTab({ user, project }) {
   const { t } = useTranslation();
+  const { signOut } = useAuth();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -72,7 +74,7 @@ export default function SettingsTab({ user, project }) {
           <Button
             variant="outline"
             className="w-full mt-6 select-none"
-            onClick={() => base44.auth.logout()}
+            onClick={() => { signOut(); base44.auth.logout?.(); }}
           >
             <LogOut className="w-4 h-4 me-2" />
             {t('logout')}

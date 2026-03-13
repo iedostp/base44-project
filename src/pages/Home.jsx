@@ -103,7 +103,16 @@ export default function Home() {
 
   // Merge: prefer Base44 profile (has whatsapp fields), fall back to Supabase
   // so email-based project filtering always works regardless of access origin.
-  const user = base44Profile ?? (supabaseUser ? { email: supabaseUser.email, id: supabaseUser.id } : null);
+  // Build merged user: Base44 profile has whatsapp/role fields; Supabase
+  // user_metadata carries Google OAuth data (full_name, avatar_url).
+  const user = base44Profile ?? (supabaseUser ? {
+    email: supabaseUser.email,
+    id: supabaseUser.id,
+    full_name: supabaseUser.user_metadata?.full_name
+               ?? supabaseUser.user_metadata?.name
+               ?? supabaseUser.email,
+    avatar_url: supabaseUser.user_metadata?.avatar_url,
+  } : null);
 
   // Fetch project
   const { data: projects = [], isLoading: projectsLoading } = useQuery({
