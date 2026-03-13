@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Building2, Users, FileText, Calendar, Settings, Layers, Home as HomeIcon, PieChart, Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -88,20 +89,29 @@ export default function Home() {
   };
   const queryClient = useQueryClient();
 
-  // Fetch current user
-  const { data: user, isLoading: userLoading } = useQuery({
+  // Supabase auth user — always available after login on Vercel/PWA
+  const { user: supabaseUser } = useAuth();
+
+  // Base44 user profile — has extra fields (whatsapp settings) but only
+  // available when accessed via Base44 platform with an injected token.
+  // Falls back to null on direct Vercel access.
+  const { data: base44Profile, isLoading: userLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me(),
     retry: false,
   });
 
+  // Merge: prefer Base44 profile (has whatsapp fields), fall back to Supabase
+  // so email-based project filtering always works regardless of access origin.
+  const user = base44Profile ?? (supabaseUser ? { email: supabaseUser.email, id: supabaseUser.id } : null);
+
   // Fetch project
   const { data: projects = [], isLoading: projectsLoading } = useQuery({
-    queryKey: ['projects'],
+    queryKey: ['projects', user?.email],
     queryFn: () => user?.email
       ? base44.entities.Project.filter({ created_by: user.email })
       : base44.entities.Project.list(),
-    enabled: true,
+    enabled: !!user?.email,
   });
 
   const project = projects[0];
@@ -372,7 +382,9 @@ export default function Home() {
     }
   };
 
-  if (userLoading || projectsLoading) {
+  // userLoading (base44.auth.me) is no longer gating — supabaseUser is available
+  // immediately from React state, so project queries start right away.
+  if (projectsLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="text-center">
