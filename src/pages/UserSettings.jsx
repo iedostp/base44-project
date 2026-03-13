@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/settings/LanguageSwitcher";
@@ -70,13 +71,27 @@ export default function UserSettings() {
     setMounted(true);
   }, []);
 
-  // ── Data fetching ──────────────────────────────────────────────────────────
-  const { data: user } = useQuery({
+  // ── Dual-auth identity ─────────────────────────────────────────────────────
+  // Base44 profile available on Base44 platform only.
+  // Falls back to Supabase user so the page loads on Vercel/PWA too.
+  const { user: supabaseUser, signOut } = useAuth();
+
+  const { data: base44Profile } = useQuery({
     queryKey: ["user"],
     queryFn: () => base44.auth.me(),
     retry: false,
   });
 
+  const user = base44Profile ?? (supabaseUser ? {
+    email: supabaseUser.email,
+    id: supabaseUser.id,
+    full_name: supabaseUser.user_metadata?.full_name
+               ?? supabaseUser.user_metadata?.name
+               ?? supabaseUser.email,
+    avatar_url: supabaseUser.user_metadata?.avatar_url,
+  } : null);
+
+  // ── Data fetching ──────────────────────────────────────────────────────────
   const { data: settingsList = [] } = useQuery({
     queryKey: ["notification_settings", user?.email],
     queryFn: () => base44.entities.NotificationSettings.filter({ user_email: user.email }),
@@ -94,12 +109,23 @@ export default function UserSettings() {
         phone: user.phone || "",
         job_title: user.job_title || "",
       });
+    }
+  }, [user?.email]);
+
+  // Load WhatsApp from entity first (cross-device); fallback to Base44 profile
+  useEffect(() => {
+    if (existingSettings) {
+      setWhatsapp({
+        phone: existingSettings.whatsapp_phone || user?.whatsapp_phone || "",
+        enabled: existingSettings.whatsapp_notifications ?? user?.whatsapp_notifications ?? false,
+      });
+    } else if (user?.whatsapp_phone !== undefined) {
       setWhatsapp({
         phone: user.whatsapp_phone || "",
         enabled: user.whatsapp_notifications ?? false,
       });
     }
-  }, [user]);
+  }, [existingSettings, user?.email]);
 
   // ── Notification form ──────────────────────────────────────────────────────
   const defaultNotif = {
@@ -130,7 +156,10 @@ export default function UserSettings() {
 
   // ── Mutations ──────────────────────────────────────────────────────────────
   const saveProfileMutation = useMutation({
-    mutationFn: () => base44.auth.updateMe(profile),
+    mutationFn: async () => {
+      // base44.auth.updateMe only works on Base44 platform; graceful no-op on Vercel
+      try { await base44.auth.updateMe(profile); } catch { /* ignore on Vercel */ }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       setProfileSaved(true);
@@ -138,14 +167,31 @@ export default function UserSettings() {
     },
   });
 
+  // WhatsApp: store in NotificationSettings entity — cross-device, no Base44 session needed
   const saveWhatsappMutation = useMutation({
-    mutationFn: () =>
-      base44.auth.updateMe({
+    mutationFn: async () => {
+      const data = {
+        user_email: user.email,
         whatsapp_phone: whatsapp.phone,
         whatsapp_notifications: whatsapp.enabled,
-      }),
+        // preserve existing notification prefs
+        ...(existingSettings ? {} : {
+          task_overdue_inapp: notif.task_overdue_inapp,
+          task_overdue_email: notif.task_overdue_email,
+          task_upcoming_inapp: notif.task_upcoming_inapp,
+          task_upcoming_email: notif.task_upcoming_email,
+          budget_alert_inapp: notif.budget_alert_inapp,
+          budget_alert_email: notif.budget_alert_email,
+          upcoming_days_ahead: notif.upcoming_days_ahead,
+        }),
+      };
+      if (existingSettings?.id) {
+        return base44.entities.NotificationSettings.update(existingSettings.id, data);
+      }
+      return base44.entities.NotificationSettings.create(data);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["notification_settings"] });
       setWhatsappSaved(true);
       setTimeout(() => setWhatsappSaved(false), 2500);
     },
@@ -153,7 +199,13 @@ export default function UserSettings() {
 
   const saveNotifMutation = useMutation({
     mutationFn: async () => {
-      const data = { ...notif, user_email: user.email };
+      const data = {
+        ...notif,
+        user_email: user.email,
+        // preserve whatsapp fields so they are not lost on notif save
+        whatsapp_phone: existingSettings?.whatsapp_phone ?? whatsapp.phone,
+        whatsapp_notifications: existingSettings?.whatsapp_notifications ?? whatsapp.enabled,
+      };
       if (existingSettings?.id) {
         return base44.entities.NotificationSettings.update(existingSettings.id, data);
       }
@@ -170,13 +222,15 @@ export default function UserSettings() {
     setIsDeleting(true);
     try {
       alert(t('accountDeletedSuccess'));
-      base44.auth.logout();
+      signOut();
+      base44.auth.logout?.();
     } finally {
       setIsDeleting(false);
     }
   };
 
-  if (!user) {
+  // Block render only when both auth systems have no user yet
+  if (!user && !supabaseUser) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
@@ -258,7 +312,7 @@ export default function UserSettings() {
                   <><Save className="w-4 h-4 me-1.5" /> {t('saveProfileBtn')}</>
                 )}
               </Button>
-              <Button variant="outline" onClick={() => base44.auth.logout()} className="select-none">
+              <Button variant="outline" onClick={() => { signOut(); base44.auth.logout?.(); }} className="select-none">
                 <LogOut className="w-4 h-4 me-1.5" />
                 {t('logoutShort')}
               </Button>
