@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,10 @@ export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // show/hide password — avoids Chrome Android screenshot restriction
+  // that triggers whenever type="password" is in the DOM
+  const [showPassword, setShowPassword] = useState(false);
 
   // Email+Password form
   const [email, setEmail] = useState('');
@@ -208,26 +213,50 @@ export default function LoginPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">סיסמה</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                    placeholder="••••••••"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      required
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                      style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' }}
+                      className="w-full px-4 py-3 pe-11 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(v => !v)}
+                      className="absolute inset-y-0 end-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
                 {isRegister && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">אימות סיסמה</label>
-                    <input
-                      type="password"
-                      value={confirmPassword}
-                      onChange={e => setConfirmPassword(e.target.value)}
-                      required
-                      placeholder="••••••••"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all"
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={confirmPassword}
+                        onChange={e => setConfirmPassword(e.target.value)}
+                        required
+                        placeholder="••••••••"
+                        autoComplete="new-password"
+                        style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' }}
+                        className="w-full px-4 py-3 pe-11 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(v => !v)}
+                        className="absolute inset-y-0 end-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
                   </div>
                 )}
                 <Button
