@@ -29,16 +29,11 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 const AuthenticatedApp = () => {
   const { isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  // Guard: only attempt Base44 redirect once per session
   const base44RedirectAttempted = useRef(false);
   const [redirectingToBase44, setRedirectingToBase44] = useState(false);
 
-  // Redirect to Supabase login if not authenticated
+  // Redirect to Supabase login when not authenticated
   useEffect(() => {
-    // Don't redirect while Supabase is still processing an OAuth callback hash.
-    // The hash contains access_token and will be consumed by onAuthStateChange
-    // which will then set isAuthenticated=true without a redirect loop.
-    // Supabase v2 PKCE flow uses ?code= query param; implicit flow uses #access_token hash
     const hasOAuthCallback = window.location.hash.includes('access_token') ||
                              window.location.hash.includes('error_description') ||
                              window.location.search.includes('code=');
@@ -47,20 +42,43 @@ const AuthenticatedApp = () => {
     }
   }, [isLoading, isAuthenticated]);
 
-  // After Supabase auth, ensure Base44 auth token exists.
-  // On the Base44 platform the token arrives via ?access_token= URL param and is
-  // stored in localStorage by app-params.js. On a standalone Vercel deployment it
-  // is absent, so we redirect through Base44 Google OAuth which returns the token
-  // in the same URL-param format.
+  // After Supabase auth, ensure a valid Base44 token exists.
+  //
+  // Token resolution order (see app-params.js):
+  //   1. ?access_token= URL param (injected by Base44 platform)
+  //   2. localStorage["base44_access_token"] (persisted from prior session)
+  //   3. import.meta.env.VITE_BASE44_TOKEN (Vercel env var — set this in Vercel dashboard)
+  //
+  // If none of the above is present, OR if the stored token is expired,
+  // we redirect through Base44 Google OAuth. On return, ?access_token=xxx
+  // is stored in localStorage by app-params.js and the client is initialized.
+  //
+  // NOTE: base44Client.js must pass appBaseUrl: serverUrl to createClient()
+  // so that loginWithProvider redirects to https://base44.app (not a relative path).
   useEffect(() => {
     if (!isLoading && isAuthenticated && !base44RedirectAttempted.current) {
-      const hasToken = !!appParams.token;
-      if (!hasToken) {
+      const token = appParams.token;
+
+      if (!token) {
+        // No token at all → redirect immediately
         base44RedirectAttempted.current = true;
         setRedirectingToBase44(true);
-        // Redirect to Base44 Google OAuth. On return the URL will contain
-        // ?access_token=xxx which app-params.js reads and stores in localStorage.
         base44.auth.loginWithProvider('google', window.location.href);
+      } else {
+        // Token exists but may be expired — verify with a lightweight API call
+        base44.auth.isAuthenticated().then(valid => {
+          if (!valid && !base44RedirectAttempted.current) {
+            // Stale token → clear it and re-authenticate
+            localStorage.removeItem('base44_access_token');
+            localStorage.removeItem('token');
+            base44RedirectAttempted.current = true;
+            setRedirectingToBase44(true);
+            base44.auth.loginWithProvider('google', window.location.href);
+          }
+        }).catch(() => {
+          // Base44 unreachable (network error) — proceed without blocking the app.
+          // Entity queries will return empty but the app remains usable.
+        });
       }
     }
   }, [isLoading, isAuthenticated]);
