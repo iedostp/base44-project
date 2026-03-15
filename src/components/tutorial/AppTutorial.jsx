@@ -98,7 +98,7 @@ export function useTutorial() {
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function AppTutorial({ onDismiss, onTabChange }) {
   const [step, setStep] = useState(0);
-  const [neverShow, setNeverShow] = useState(false);
+  const [neverShow, setNeverShow] = useState(() => localStorage.getItem("tutorial_never_show") === "true");
   const [dir, setDir] = useState(1); // 1=forward, -1=back
 
   const current = STEPS[step];
@@ -237,7 +237,7 @@ export default function AppTutorial({ onDismiss, onTabChange }) {
             <input
               type="checkbox"
               checked={neverShow}
-              onChange={e => setNeverShow(e.target.checked)}
+              onChange={e => { setNeverShow(e.target.checked); if (e.target.checked) { localStorage.setItem("tutorial_never_show", "true"); } else { localStorage.removeItem("tutorial_never_show"); } }}
               className="rounded text-blue-500"
             />
             <span className="text-xs text-gray-500 dark:text-slate-400">אל תראה שוב</span>

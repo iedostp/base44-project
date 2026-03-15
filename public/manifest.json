@@ -3,10 +3,10 @@
   "short_name": "בונים בית",
   "description": "ניהול בנייה - עקוב אחרי הפרויקט שלך",
   "start_url": "/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "lang": "he",
   "dir": "rtl",
   "icons": [

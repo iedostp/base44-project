@@ -34,10 +34,10 @@ export default defineConfig({
         short_name: 'בונים בית',
         description: 'ניהול בנייה - עקוב אחרי הפרויקט שלך',
         start_url: '/',
-        display: 'standalone',
+        display: 'minimal-ui',
         background_color: '#ffffff',
         theme_color: '#1e40af',
-        orientation: 'portrait-primary',
+        orientation: 'any',
         lang: 'he',
         dir: 'rtl',
         icons: [
