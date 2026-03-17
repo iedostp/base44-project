@@ -1,75 +1,72 @@
 name: Build Android APK
 
 on:
-  workflow_dispatch:          # Manual trigger from GitHub UI
+  workflow_dispatch:
   push:
     branches: [master]
     paths:
-      - 'public/.well-known/assetlinks.json'
+      - 'twa/**'
       - '.github/workflows/build-apk.yml'
 
 jobs:
   build:
     name: Build TWA APK
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
 
-      # ── Java 17 (required by Bubblewrap / Gradle) ──────────────────────
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # ── Node 20 (required by @bubblewrap/cli) ──────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # ── Android SDK ─────────────────────────────────────────────────────
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses
 
-      # ── Bubblewrap CLI ──────────────────────────────────────────────────
       - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
       - name: Configure Bubblewrap paths
         run: |
           mkdir -p ~/.bubblewrap
-          cat > ~/.bubblewrap/config.json << BBCFG
-          {
-            "jdkPath": "$JAVA_HOME",
-            "androidSdkPath": "$ANDROID_HOME"
-          }
-          BBCFG
+          echo "{\"jdkPath\":\"$JAVA_HOME\",\"androidSdkPath\":\"$ANDROID_HOME\"}" > ~/.bubblewrap/config.json
+          cat ~/.bubblewrap/config.json
 
-      # ── Generate TWA project from live manifest ─────────────────────────
-      - name: Init TWA project
+      - name: Init TWA project (non-interactive)
         run: |
           mkdir -p twa-build && cd twa-build
-          # Use 'yes' to accept all default values derived from the manifest
-          yes '' | npx @bubblewrap/cli init \
-            --manifest="https://base44-migration.vercel.app/manifest.webmanifest" \
-            2>&1 || true
-          # If init created twa-manifest.json, override key settings
+
+          # Send 50 newlines to accept ALL default values from the manifest
+          # plus auto-accept key generation prompts
+          printf '\n%.0s' {1..50} | timeout 180 \
+            npx @bubblewrap/cli init \
+              --manifest="https://base44-migration.vercel.app/manifest.webmanifest" \
+              2>&1 || true
+
+          # Check if project was generated
           if [ -f twa-manifest.json ]; then
-            echo "✅ twa-manifest.json created by init"
+            echo "✅ twa-manifest.json created"
+            cat twa-manifest.json
           else
-            echo "⚠️ Init did not create twa-manifest.json, creating manually..."
+            echo "⚠️ Init did not create twa-manifest.json — creating manually"
             cat > twa-manifest.json << 'TWAM'
           {
             "packageId": "com.bonimbayit.app",
             "host": "base44-migration.vercel.app",
-            "name": "בונים בית",
-            "launcherName": "בונים בית",
-            "display": "minimal-ui",
+            "name": "\u05d1\u05d5\u05e0\u05d9\u05dd \u05d1\u05d9\u05ea",
+            "launcherName": "Bonim Bayit",
+            "display": "standalone",
             "themeColor": "#1e40af",
             "themeColorDark": "#1e40af",
             "navigationColor": "#ffffff",
@@ -89,75 +86,89 @@ jobs:
             "isChromeOSOnly": false,
             "splashScreenFadeOutDuration": 300,
             "enableSiteSettingsShortcut": true,
-            "orientation": "any",
+            "orientation": "default",
             "fingerprints": [],
             "appVersionCode": 1,
-            "appVersionName": "1.0.0"
+            "appVersionName": "1.0.0",
+            "signingMode": "new",
+            "fallbackType": "customtabs",
+            "features": {},
+            "enableGooglePlayBilling": false,
+            "alphaDependencies": { "enabled": false },
+            "generatorApp": "bubblewrap-cli"
           }
           TWAM
+            # Run update to generate Android project from manual manifest
+            printf '\n%.0s' {1..20} | timeout 120 \
+              npx @bubblewrap/cli update 2>&1 || true
           fi
 
-      # ── Build APK ──────────────────────────────────────────────────────
+      - name: Generate debug keystore
+        working-directory: twa-build
+        run: |
+          # Only generate if bubblewrap didn't already create one
+          if [ ! -f android.keystore ] && [ ! -f debug.keystore ] && [ ! -f my.keystore ]; then
+            keytool -genkeypair \
+              -alias debug \
+              -keypass android \
+              -keystore android.keystore \
+              -storepass android \
+              -dname "CN=Debug,O=BonimBayit,C=IL" \
+              -validity 10000 \
+              -keyalg RSA \
+              -keysize 2048
+            echo "✅ Debug keystore generated"
+          else
+            echo "✅ Keystore already exists"
+            ls -la *.keystore 2>/dev/null
+          fi
+
       - name: Build APK
         working-directory: twa-build
         run: |
-          # Generate a debug keystore for testing
-          keytool -genkeypair \
-            -alias debug \
-            -keypass android \
-            -keystore debug.keystore \
-            -storepass android \
-            -dname "CN=Debug,O=BonimBayit,C=IL" \
-            -validity 10000 \
-            -keyalg RSA \
-            -keysize 2048
+          # Find the keystore file (bubblewrap may name it differently)
+          KS=$(ls *.keystore 2>/dev/null | head -1)
+          KS_ALIAS=$(grep -o '"alias"[[:space:]]*:[[:space:]]*"[^"]*"' twa-manifest.json 2>/dev/null | head -1 | sed 's/.*"alias"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || echo "debug")
+          echo "Using keystore: $KS, alias: $KS_ALIAS"
 
-          # Build the APK (non-interactive via env vars)
-          yes '' | npx @bubblewrap/cli build \
+          npx @bubblewrap/cli build \
             --skipPwaValidation \
-            --signingKeyPath ./debug.keystore \
-            --signingKeyAlias debug \
+            --signingKeyPath "./$KS" \
+            --signingKeyAlias "$KS_ALIAS" \
             2>&1 || true
 
-          # List generated files
           echo "=== Generated files ==="
-          ls -la *.apk *.aab 2>/dev/null || echo "No APK/AAB files found"
-          ls -la app/build/outputs/apk/ 2>/dev/null || true
+          find . -name "*.apk" -o -name "*.aab" 2>/dev/null | head -20
+          ls -la *.apk *.aab 2>/dev/null || echo "No APK/AAB in root"
+          ls -la app/build/outputs/apk/**/*.apk 2>/dev/null || true
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: android
           BUBBLEWRAP_KEY_PASSWORD: android
 
-      # ── Extract signing fingerprint for assetlinks.json ─────────────────
       - name: Print SHA-256 fingerprint
         working-directory: twa-build
         run: |
+          KS=$(ls *.keystore 2>/dev/null | head -1)
+          KS_ALIAS=$(grep -o '"alias"[[:space:]]*:[[:space:]]*"[^"]*"' twa-manifest.json 2>/dev/null | head -1 | sed 's/.*"alias"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || echo "debug")
           echo "=== SHA-256 Certificate Fingerprint ==="
-          echo "(Use this to update public/.well-known/assetlinks.json)"
-          keytool -list -v \
-            -keystore debug.keystore \
-            -alias debug \
-            -storepass android 2>/dev/null | grep "SHA256:" || \
-          keytool -list -v \
-            -keystore debug.keystore \
-            -alias debug \
-            -storepass android 2>/dev/null | grep "SHA-256:"
+          echo "(Update public/.well-known/assetlinks.json with this)"
+          keytool -list -v -keystore "./$KS" -alias "$KS_ALIAS" -storepass android 2>/dev/null | grep -i "sha.*256"
 
-      # ── Upload APK artifact ─────────────────────────────────────────────
       - name: Upload APK
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: bonim-bayit-debug-apk
           path: |
-            twa-build/app-release-signed.apk
-            twa-build/app-release-unsigned.apk
             twa-build/*.apk
+            twa-build/app/build/outputs/apk/**/*.apk
           if-no-files-found: warn
 
       - name: Upload AAB (Play Store bundle)
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: bonim-bayit-debug-aab
           path: |
-            twa-build/app-release-bundle.aab
             twa-build/*.aab
           if-no-files-found: warn
