@@ -27,10 +27,11 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(System.getenv("KEYSTORE_PATH") ?: "debug.keystore")
-            storePassword System.getenv("KEYSTORE_PASSWORD") ?: "android"
-            keyAlias System.getenv("KEY_ALIAS") ?: "debug"
-            keyPassword System.getenv("KEY_PASSWORD") ?: "android"
+            def ksPath = System.getenv("KEYSTORE_PATH") ?: findProperty("KEYSTORE_PATH") ?: "../debug.keystore"
+            storeFile file(ksPath)
+            storePassword System.getenv("KEYSTORE_PASSWORD") ?: findProperty("KEYSTORE_PASSWORD") ?: "android"
+            keyAlias System.getenv("KEY_ALIAS") ?: findProperty("KEY_ALIAS") ?: "debug"
+            keyPassword System.getenv("KEY_PASSWORD") ?: findProperty("KEY_PASSWORD") ?: "android"
         }
     }
 
