@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.bonimbayit.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.bonimbayit.app"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        // TWA: The URL that the TWA will open
+        manifestPlaceholders = [
+            hostName      : "base44-migration.vercel.app",
+            defaultUrl    : "https://base44-migration.vercel.app/",
+            launcherName  : "Bonim Bayit",
+            assetStatements: '[{"relation": ["delegate_permission/common.handle_all_urls"],' +
+                             '"target": {"namespace": "android_app",' +
+                             '"package_name": "com.bonimbayit.app",' +
+                             '"sha256_cert_fingerprints": ["TODO"]}}]'
+        ]
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_PATH") ?: "debug.keystore")
+            storePassword System.getenv("KEYSTORE_PASSWORD") ?: "android"
+            keyAlias System.getenv("KEY_ALIAS") ?: "debug"
+            keyPassword System.getenv("KEY_PASSWORD") ?: "android"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.browser:browser:1.8.0'
+    implementation 'androidx.core:core:1.12.0'
+}
