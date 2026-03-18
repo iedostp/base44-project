@@ -1,6 +1,8 @@
 package com.bonimbayit.app;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -30,9 +33,11 @@ public class LauncherActivity extends Activity {
 
     private static final String APP_URL = "https://base44-migration.vercel.app/";
     private static final int TOOLBAR_COLOR = 0xFF1E40AF;
+    private static final int FILE_CHOOSER_REQUEST = 1001;
 
     private WebView mWebView;
     private ProgressBar mProgressBar;
+    private ValueCallback<Uri[]> mFileUploadCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,12 +123,16 @@ public class LauncherActivity extends Activity {
                     return false; // load inside WebView
                 }
 
-                // External links: open in default browser
-                return false; // keep everything in WebView for now
+                // External links: open in system browser
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, url);
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ignored) {}
+                return true; // we handled it
             }
         });
 
-        // Show progress bar while loading
+        // Chrome client: progress bar + file upload support
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -133,6 +142,25 @@ public class LauncherActivity extends Activity {
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                 }
+            }
+
+            // Handle <input type="file"> for document uploads
+            @Override
+            public boolean onShowFileChooser(WebView webView,
+                    ValueCallback<Uri[]> filePathCallback,
+                    FileChooserParams fileChooserParams) {
+                if (mFileUploadCallback != null) {
+                    mFileUploadCallback.onReceiveValue(null);
+                }
+                mFileUploadCallback = filePathCallback;
+                try {
+                    Intent intent = fileChooserParams.createIntent();
+                    startActivityForResult(intent, FILE_CHOOSER_REQUEST);
+                } catch (ActivityNotFoundException e) {
+                    mFileUploadCallback = null;
+                    return false;
+                }
+                return true;
             }
         });
 
@@ -157,6 +185,25 @@ public class LauncherActivity extends Activity {
             mWebView.goBack();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FILE_CHOOSER_REQUEST) {
+            if (mFileUploadCallback != null) {
+                Uri[] results = null;
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    String dataString = data.getDataString();
+                    if (dataString != null) {
+                        results = new Uri[]{Uri.parse(dataString)};
+                    }
+                }
+                mFileUploadCallback.onReceiveValue(results);
+                mFileUploadCallback = null;
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
