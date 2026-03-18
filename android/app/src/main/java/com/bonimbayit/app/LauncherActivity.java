@@ -4,28 +4,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
+import android.graphics.Color;
 
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.browser.trusted.TrustedWebActivityIntentBuilder;
-import androidx.browser.trusted.TwaLauncher;
 
 /**
- * Launches the PWA as a Trusted Web Activity.
+ * Launches the PWA in a Chrome Custom Tab.
  *
- * Uses TwaLauncher which properly manages the CustomTabsSession lifecycle.
- * If Chrome supports TWA and Digital Asset Links are verified,
- * the PWA runs full-screen without any browser UI.
- * Otherwise, it falls back to a Custom Tab with a thin toolbar.
+ * The Custom Tab opens with the app's theme color in the toolbar,
+ * providing a near-native experience. If the Digital Asset Links
+ * (assetlinks.json) are properly configured, Chrome may promote
+ * this to a full Trusted Web Activity automatically.
  */
 public class LauncherActivity extends Activity {
 
     private static final String TAG = "BonimBayitTWA";
     private static final Uri LAUNCH_URI =
             Uri.parse("https://base44-migration.vercel.app/");
-
-    private TwaLauncher mTwaLauncher;
+    private static final int TOOLBAR_COLOR = 0xFF1E40AF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +30,28 @@ public class LauncherActivity extends Activity {
 
         CustomTabColorSchemeParams colorScheme =
                 new CustomTabColorSchemeParams.Builder()
-                        .setToolbarColor(0xFF1E40AF)
-                        .setNavigationBarColor(0xFFFFFFFF)
+                        .setToolbarColor(TOOLBAR_COLOR)
+                        .setNavigationBarColor(Color.WHITE)
                         .build();
 
-        TrustedWebActivityIntentBuilder twaBuilder =
-                new TrustedWebActivityIntentBuilder(LAUNCH_URI)
-                        .setDefaultColorSchemeParams(colorScheme);
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                .setDefaultColorSchemeParams(colorScheme)
+                .setShowTitle(true)
+                .setShareState(CustomTabsIntent.SHARE_STATE_ON)
+                .setUrlBarHidingEnabled(true)
+                .build();
 
-        mTwaLauncher = new TwaLauncher(this);
-        mTwaLauncher.launch(twaBuilder, null, null);
-    }
+        // Prefer Chrome for best PWA support
+        customTabsIntent.intent.setPackage("com.android.chrome");
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mTwaLauncher != null) {
-            mTwaLauncher.destroy();
+        try {
+            customTabsIntent.launchUrl(this, LAUNCH_URI);
+        } catch (Exception e) {
+            // If Chrome isn't available, try without specifying package
+            customTabsIntent.intent.setPackage(null);
+            customTabsIntent.launchUrl(this, LAUNCH_URI);
         }
+
+        finish();
     }
 }
