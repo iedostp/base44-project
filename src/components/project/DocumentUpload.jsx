@@ -238,7 +238,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
             /* File selected - show preview + AI status */
             <div className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700/30">
               {previewUrl ? (
-                <img src={previewUrl} alt="תצוגה מקדימה" className="w-full max-h-40 object-cover" />
+                <img src={previewUrl} alt={t('docUploadPreviewAlt')} className="w-full max-h-40 object-cover" />
               ) : (
                 <div className="flex items-center gap-3 p-4">
                   <FileText className="w-8 h-8 text-blue-500 flex-shrink-0" />
@@ -263,7 +263,7 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
               </AnimatePresence>
 
               <button onClick={() => { setSelectedFile(null); setPreviewUrl(null); setAiPhase(null); setAiSuggestions(null); }}
-                className="absolute top-2 start-2 bg-white/80 dark:bg-slate-800/80 rounded-full p-1 hover:bg-white transition-colors">
+                className="absolute top-2 end-2 bg-white/80 dark:bg-slate-800/80 rounded-full p-1 hover:bg-white transition-colors">
                 <X className="w-4 h-4 text-gray-600" />
               </button>
             </div>
@@ -281,8 +281,8 @@ export default function DocumentUpload({ isOpen, onClose, projectId, stages, sup
                 <p className="text-xs text-purple-600 dark:text-purple-400 pe-6">{aiSuggestions.reason}</p>
                 {extractedData?.amount && (
                   <p className="text-xs text-purple-700 dark:text-purple-400 pe-6 font-medium">
-                    💰 סכום שזוהה: ₪{extractedData.amount.toLocaleString('he-IL')}
-                    {extractedData.reference_number && ` · מס׳ ${extractedData.reference_number}`}
+                    {t('docUploadAmountDetected', { amount: extractedData.amount.toLocaleString('he-IL') })}
+                    {extractedData.reference_number && ` ${t('docUploadRefNum', { ref: extractedData.reference_number })}`}
                   </p>
                 )}
               </motion.div>

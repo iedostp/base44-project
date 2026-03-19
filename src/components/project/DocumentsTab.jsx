@@ -89,13 +89,13 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
   useEffect(() => {
     if (folders.length === 0) {
       saveFolders([
-        { id: 'f-cert',  name: 'אישורים',   docIds: [] },
-        { id: 'f-plan',  name: 'תוכניות',   docIds: [] },
-        { id: 'f-corr',  name: 'התכתבויות', docIds: [] },
-        { id: 'f-inv',   name: 'חשבוניות',  docIds: [] },
-        { id: 'f-cont',  name: 'חוזים',     docIds: [] },
-        { id: 'f-perm',  name: 'היתרים',    docIds: [] },
-        { id: 'f-other', name: 'אחר',       docIds: [] },
+        { id: 'f-cert',  name: t('docCat_certificate'),   docIds: [] },
+        { id: 'f-plan',  name: t('docCat_plan'),          docIds: [] },
+        { id: 'f-corr',  name: t('docCat_correspondence'), docIds: [] },
+        { id: 'f-inv',   name: t('docCat_invoice'),       docIds: [] },
+        { id: 'f-cont',  name: t('docCat_contract'),      docIds: [] },
+        { id: 'f-perm',  name: t('docCat_permit'),        docIds: [] },
+        { id: 'f-other', name: t('docCat_other'),         docIds: [] },
       ]);
     }
   }, []);
@@ -338,7 +338,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedFolder === folder.id ? 'bg-amber-500 text-white' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-amber-100'} ${dragOverFolderId === folder.id ? 'ring-2 ring-amber-400 scale-105' : ''}`}>
                 <Folder className="w-3.5 h-3.5" />{folder.name} ({folder.docIds.length})
               </button>
-              <button onClick={() => deleteFolder(folder.id)} className="absolute -top-1.5 -start-1.5 hidden group-hover:flex w-4 h-4 bg-red-500 text-white rounded-full items-center justify-center text-xs leading-none">×</button>
+              <button onClick={() => deleteFolder(folder.id)} className="absolute -top-1.5 -end-1.5 hidden group-hover:flex w-4 h-4 bg-red-500 text-white rounded-full items-center justify-center text-xs leading-none">×</button>
             </div>
           ))}
         </div>
