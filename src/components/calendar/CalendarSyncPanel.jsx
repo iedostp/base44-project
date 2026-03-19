@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   CalendarDays, Loader2, RefreshCw, Plus, X, ExternalLink,
-  AlertCircle, WifiOff, Trash2, CheckCircle2, Upload
+  AlertCircle, WifiOff, Trash2, CheckCircle2, Upload, Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
@@ -131,7 +131,7 @@ export default function CalendarSyncPanel({ user, project }) {
       // Only auto-sync if last sync was more than 30 min ago
       const lastSync = settings?.last_synced ? new Date(settings.last_synced) : null;
       const now = new Date();
-      const diffMinutes = lastSync ? (now - lastSync) / 60000 : Infinity;
+      const diffMinutes = lastSync ? (now.getTime() - lastSync.getTime()) / 60000 : Infinity;
       if (diffMinutes > 30) {
         handleSync(true);
       }

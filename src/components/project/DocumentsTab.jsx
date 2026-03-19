@@ -11,7 +11,7 @@ import { format } from "date-fns";
 
 function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onSelect, onDragStart, onDragEnd }) {
   const { t } = useTranslation();
-  const getCategoryText = (cat) => t(`docCat_${cat}_single`, t(`docCat_${cat}`, cat));
+  const getCategoryText = (cat) => t(`docCat_${cat}_single`, { defaultValue: /** @type {string} */ (t(`docCat_${cat}`, cat)) });
 
   const getCategoryColor = (cat) => ({
     contract:'bg-purple-100 text-purple-800', permit:'bg-green-100 text-green-800',
@@ -184,12 +184,12 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
     return categoryMatch && stageMatch && searchMatch && dateFromMatch && dateToMatch && folderMatch;
   }).sort((a, b) => {
     switch (sortBy) {
-      case 'date-asc':  return new Date(a.created_date) - new Date(b.created_date);
+      case 'date-asc':  return new Date(a.created_date).getTime() - new Date(b.created_date).getTime();
       case 'name-asc':  return a.name.localeCompare(b.name, 'he');
       case 'name-desc': return b.name.localeCompare(a.name, 'he');
       case 'size-desc': return (b.file_size || 0) - (a.file_size || 0);
       case 'size-asc':  return (a.file_size || 0) - (b.file_size || 0);
-      default:          return new Date(b.created_date) - new Date(a.created_date);
+      default:          return new Date(b.created_date).getTime() - new Date(a.created_date).getTime();
     }
   });
 
@@ -215,7 +215,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
       const end = Math.max(lastSelectedIndex, index);
       const rangeIds = new Set(filteredDocuments.slice(start, end + 1).map(d => d.id));
       const merged = [...new Set([...selectedForCompare.map(d => d.id), ...rangeIds])];
-      setSelectedForCompare(filteredDocuments.filter(d => merged.has(d.id)));
+      setSelectedForCompare(filteredDocuments.filter(d => merged.includes(d.id)));
     } else {
       toggleCompare(doc);
       setLastSelectedIndex(index);

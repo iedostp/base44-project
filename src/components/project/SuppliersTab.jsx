@@ -14,7 +14,7 @@ import AddSupplierDialog from "./AddSupplierDialog";
 import EditSupplierDialog from "./EditSupplierDialog";
 
 
-export default function SuppliersTab({ suppliers, onAddSupplier, onUpdate, projectId }) {
+export default function SuppliersTab({ suppliers, onAddSupplier = () => {}, onUpdate, projectId }) {
   const { t } = useTranslation();
   const getCategoryText = (category) => t(`supplierCat_${category}`, category);
   const [selectedCategory, setSelectedCategory] = useState('all');

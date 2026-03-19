@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 
-export default function SupplierCard({ supplier, onStatusChange, isSelected, onToggleCompare, onUpdate, onDelete }) {
+export default function SupplierCard({ supplier, onStatusChange = () => {}, isSelected, onToggleCompare, onUpdate, onDelete }) {
   // Get current user
   const { data: user } = useQuery({
     queryKey: ['user'],
@@ -23,7 +23,7 @@ export default function SupplierCard({ supplier, onStatusChange, isSelected, onT
     // Check if less than 24 hours have passed since creation
     const createdDate = new Date(supplier.created_date);
     const now = new Date();
-    const hoursPassed = (now - createdDate) / (1000 * 60 * 60);
+    const hoursPassed = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60);
     
     return hoursPassed < 24;
   };

@@ -118,7 +118,7 @@ export default function ExpenseAnalyticsPage() {
   }));
 
   // Timeline
-  const sortedExpenses = [...expenses].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortedExpenses = [...expenses].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const timelineData = {};
   sortedExpenses.forEach((e) => {
     const date = e.date;
