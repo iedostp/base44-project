@@ -118,8 +118,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo / Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-lg">
-            <span className="text-white text-2xl font-bold">🏗</span>
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-3xl mb-4 shadow-lg border border-gray-100">
+            <img src="/icons/icon-192.png" alt="בונים בית" className="w-20 h-20 rounded-2xl" />
           </div>
           <h1 className="text-3xl font-bold text-gray-800">בונים בית</h1>
           <p className="text-gray-500 mt-1 text-sm">מערכת ניהול בנייה</p>
