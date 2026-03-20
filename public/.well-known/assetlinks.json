@@ -1,12 +1,10 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.bonimbayit.app",
-      "sha256_cert_fingerprints": [
-        "BA:0B:7D:B6:42:F6:9F:AA:39:1F:CB:D8:90:FF:70:B6:A4:C1:0F:79:DB:F4:50:28:BE:F7:F3:44:88:BF:6E:16"
-      ]
-    }
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.bonimbayit.app",
+    "sha256_cert_fingerprints": [
+      "BE:48:5C:96:1C:BC:73:11:E4:48:76:AC:F3:76:83:3E:D1:C4:ED:C2:44:DD:CF:BD:69:3C:1F:39:68:08:ED:94"
+    ]
   }
-]
+}]

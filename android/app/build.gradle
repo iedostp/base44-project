@@ -21,7 +21,7 @@ android {
             assetStatements: '[{"relation": ["delegate_permission/common.handle_all_urls"],' +
                              '"target": {"namespace": "android_app",' +
                              '"package_name": "com.bonimbayit.app",' +
-                             '"sha256_cert_fingerprints": ["TODO"]}}]'
+                             '"sha256_cert_fingerprints": ["BE:48:5C:96:1C:BC:73:11:E4:48:76:AC:F3:76:83:3E:D1:C4:ED:C2:44:DD:CF:BD:69:3C:1F:39:68:08:ED:94"]}}]'
         ]
     }
 

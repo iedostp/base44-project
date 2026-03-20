@@ -17,6 +17,7 @@
 
         <activity
             android:name=".LauncherActivity"
+            android:launchMode="singleTask"
             android:exported="true"
             android:theme="@style/Theme.SplashTheme"
             android:configChanges="orientation|screenSize|keyboardHidden">

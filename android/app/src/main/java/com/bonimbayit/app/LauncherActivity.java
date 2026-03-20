@@ -8,18 +8,27 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
+import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import androidx.browser.customtabs.CustomTabsIntent;
 
 /**
  * Native Android wrapper for the Bonim Bayit PWA.
@@ -43,7 +52,11 @@ public class LauncherActivity extends Activity {
     private WebView mWebView;
     private ProgressBar mProgressBar;
     private View mSplashView;
+    private LinearLayout mErrorView;
+    private TextView mErrorText;
     private ValueCallback<Uri[]> mFileUploadCallback;
+    private final Handler mTimeoutHandler = new Handler(Looper.getMainLooper());
+    private boolean mPageLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,14 +115,52 @@ public class LauncherActivity extends Activity {
         mProgressBar.setVisibility(View.GONE);
 
         // === Splash overlay (shown until first page finishes loading) ===
-        mSplashView = new View(this);
-        mSplashView.setBackgroundColor(Color.WHITE);
-        mSplashView.setLayoutParams(new FrameLayout.LayoutParams(
+        LinearLayout splashLayout = new LinearLayout(this);
+        splashLayout.setOrientation(LinearLayout.VERTICAL);
+        splashLayout.setGravity(Gravity.CENTER);
+        splashLayout.setBackgroundColor(STATUS_BAR_COLOR); // blue — visually distinct from blank WebView
+        splashLayout.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+        TextView splashText = new TextView(this);
+        splashText.setText("בונים בית\nטוען...");
+        splashText.setTextColor(Color.WHITE);
+        splashText.setTextSize(20);
+        splashText.setGravity(Gravity.CENTER);
+        splashLayout.addView(splashText);
+        mSplashView = splashLayout;
+
+        // === Error view (shown when page fails to load) ===
+        mErrorView = new LinearLayout(this);
+        mErrorView.setOrientation(LinearLayout.VERTICAL);
+        mErrorView.setGravity(Gravity.CENTER);
+        mErrorView.setBackgroundColor(Color.WHITE);
+        mErrorView.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
+        mErrorView.setVisibility(View.GONE);
+
+        mErrorText = new TextView(this);
+        mErrorText.setTextSize(16);
+        mErrorText.setTextColor(Color.DKGRAY);
+        mErrorText.setGravity(Gravity.CENTER);
+        mErrorText.setPadding(48, 0, 48, 32);
+        mErrorText.setText("לא ניתן לטעון את האפליקציה");
+
+        Button retryBtn = new Button(this);
+        retryBtn.setText("נסה שוב");
+        retryBtn.setOnClickListener(v -> {
+            mErrorView.setVisibility(View.GONE);
+            mSplashView.setVisibility(View.VISIBLE);
+            mWebView.reload();
+        });
+
+        mErrorView.addView(mErrorText);
+        mErrorView.addView(retryBtn);
 
         root.addView(mWebView);
         root.addView(mProgressBar);
+        root.addView(mErrorView);
         root.addView(mSplashView);
         setContentView(root);
 
@@ -118,7 +169,8 @@ public class LauncherActivity extends Activity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);              // localStorage for auth
         settings.setDatabaseEnabled(true);                // IndexedDB
-        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        mWebView.clearCache(true); // force fresh load after each APK update
         settings.setAllowFileAccess(false);               // security
         settings.setMediaPlaybackRequiresUserGesture(false);
         settings.setLoadWithOverviewMode(true);
@@ -149,11 +201,30 @@ public class LauncherActivity extends Activity {
                 Uri url = request.getUrl();
                 String host = url.getHost();
 
-                // Keep our app URLs + auth flows inside the WebView
+                // Google OAuth must open in Chrome Custom Tab — WebView is blocked by Google
+                if (host != null && (
+                        host.contains("accounts.google.com") ||
+                        host.contains("accounts.youtube.com") ||
+                        host.endsWith("google.com") && url.getPath() != null && url.getPath().startsWith("/o/oauth2")
+                )) {
+                    try {
+                        new CustomTabsIntent.Builder()
+                            .setShowTitle(true)
+                            .build()
+                            .launchUrl(LauncherActivity.this, url);
+                    } catch (Exception e) {
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, url));
+                        } catch (ActivityNotFoundException ignored) {}
+                    }
+                    return true;
+                }
+
+                // Keep our app URLs + Supabase auth flows inside the WebView
                 if (host != null && (
                         host.contains("base44-migration.vercel.app") ||
                         host.contains("base44.app") ||
-                        host.contains("accounts.google.com") ||
+                        host.contains("supabase.co") ||
                         host.contains("googleapis.com") ||
                         host.contains("firebaseapp.com") ||
                         host.contains("firebaseauth.com")
@@ -178,6 +249,8 @@ public class LauncherActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                mPageLoaded = true;
+                mTimeoutHandler.removeCallbacksAndMessages(null);
                 mProgressBar.setVisibility(View.GONE);
 
                 // Hide splash screen on first load
@@ -192,6 +265,28 @@ public class LauncherActivity extends Activity {
                     "document.documentElement.style.webkitTouchCallout = 'none';",
                     null
                 );
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request,
+                    WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                // Only show error for the main frame (not sub-resources)
+                if (request.isForMainFrame()) {
+                    mTimeoutHandler.removeCallbacksAndMessages(null);
+                    mSplashView.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.GONE);
+                    String msg = "שגיאה בטעינה\n\n" + error.getDescription()
+                            + "\n\nURL: " + request.getUrl();
+                    mErrorText.setText(msg);
+                    mErrorView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, android.net.http.SslError error) {
+                // Proceed anyway — debug APK, self-signed or cert chain issues
+                handler.proceed();
             }
         });
 
@@ -234,6 +329,16 @@ public class LauncherActivity extends Activity {
         } else {
             mWebView.loadUrl(APP_URL);
         }
+
+        // 15-second timeout: if page never loaded, show diagnostic error
+        mTimeoutHandler.postDelayed(() -> {
+            if (!mPageLoaded) {
+                mSplashView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
+                mErrorText.setText("הטעינה נכשלה אחרי 15 שניות\n\nבדוק חיבור לאינטרנט\nURL: " + APP_URL);
+                mErrorView.setVisibility(View.VISIBLE);
+            }
+        }, 15000);
     }
 
     @Override
@@ -288,6 +393,18 @@ public class LauncherActivity extends Activity {
             mWebView.onPause();
         }
         CookieManager.getInstance().flush();
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        Uri data = intent.getData();
+        if (data != null && mWebView != null) {
+            // OAuth redirect back into the app — load the URL in our WebView
+            mWebView.loadUrl(data.toString());
+        }
     }
 
     @Override
