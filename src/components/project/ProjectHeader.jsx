@@ -54,7 +54,7 @@ export default function ProjectHeader({ project, onUpdate, overallProgress, budg
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{t('startDate')}</label>
-          <Input type="date" value={localProject?.start_date || ''} onChange={(e) => handleChange('start_date', e.target.value)} className="border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all" style={{ direction: 'rtl' }} />
+          <Input type="date" dir="rtl" value={localProject?.start_date || ''} onChange={(e) => handleChange('start_date', e.target.value)} className="border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all" style={{ direction: 'rtl', textAlign: 'right' }} />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{t('location')}</label>
