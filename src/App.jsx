@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import './components/i18n'
 import { Toaster } from "@/components/ui/toaster"
@@ -13,17 +13,31 @@ import { setupIframeMessaging } from './lib/iframe-messaging';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import LoginPage from '@/pages/LoginPage';
-import { base44 } from '@/api/base44Client';
-import { appParams } from '@/lib/app-params';
 
-const SplashScreen = () => (
-  <div className="fixed inset-0 bg-gradient-to-br from-blue-600 to-indigo-700 flex flex-col items-center justify-center z-50">
-    <img src="/icons/icon-192.png" alt="בונים בית" className="w-24 h-24 rounded-2xl shadow-2xl mb-6" />
-    <h1 className="text-white text-3xl font-bold" dir="rtl">בונים בית</h1>
-    <p className="text-blue-200 text-sm mt-2" dir="rtl">מערכת ניהול בנייה</p>
-    <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin mt-8" />
-  </div>
-);
+const SplashScreen = ({ visible }) => {
+  const [mounted, setMounted] = useState(true);
+
+  useEffect(() => {
+    if (!visible) {
+      const t = setTimeout(() => setMounted(false), 350);
+      return () => clearTimeout(t);
+    }
+  }, [visible]);
+
+  if (!mounted) return null;
+
+  return (
+    <div
+      className="fixed inset-0 bg-gradient-to-br from-blue-600 to-indigo-700 flex flex-col items-center justify-center z-50 transition-opacity duration-300"
+      style={{ opacity: visible ? 1 : 0 }}
+    >
+      <img src="/icons/icon-192.png" alt="בונים בית" className="w-24 h-24 rounded-2xl shadow-2xl mb-6" />
+      <h1 className="text-white text-3xl font-bold" dir="rtl">בונים בית</h1>
+      <p className="text-blue-200 text-sm mt-2" dir="rtl">מערכת ניהול בנייה</p>
+      <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin mt-8" />
+    </div>
+  );
+};
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -38,8 +52,6 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 const AuthenticatedApp = () => {
   const { isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const base44RedirectAttempted = useRef(false);
-  const [redirectingToBase44, setRedirectingToBase44] = useState(false);
 
   // Redirect to Supabase login when not authenticated
   useEffect(() => {
@@ -51,48 +63,12 @@ const AuthenticatedApp = () => {
     }
   }, [isLoading, isAuthenticated]);
 
-  // After Supabase auth, ensure a valid Base44 token exists.
-  //
-  // Token resolution order (see app-params.js):
-  //   1. ?access_token= URL param (injected by Base44 platform)
-  //   2. localStorage["base44_access_token"] (persisted from prior session)
-  //   3. import.meta.env.VITE_BASE44_TOKEN (Vercel env var — set this in Vercel dashboard)
-  //
-  // If none of the above is present, OR if the stored token is expired,
-  // we redirect through Base44 Google OAuth. On return, ?access_token=xxx
-  // is stored in localStorage by app-params.js and the client is initialized.
-  //
-  // NOTE: base44Client.js must pass appBaseUrl: serverUrl to createClient()
-  // so that loginWithProvider redirects to https://base44.app (not a relative path).
-  useEffect(() => {
-    if (!isLoading && isAuthenticated && !base44RedirectAttempted.current) {
-      const token = appParams.token;
+  // Base44 token is optional — user identity comes from Supabase.
+  // Redirecting to Base44 Google OAuth breaks native WebView (Google blocks
+  // OAuth from embedded WebViews). The app uses requiresAuth:false and
+  // filters entities by user.email derived from the Supabase session.
 
-      if (!token) {
-        // No token at all → redirect immediately
-        base44RedirectAttempted.current = true;
-        setRedirectingToBase44(true);
-        base44.auth.loginWithProvider('google', window.location.href);
-      } else {
-        // Token exists but may be expired — verify with a lightweight API call
-        base44.auth.isAuthenticated().then(valid => {
-          if (!valid && !base44RedirectAttempted.current) {
-            // Stale token → clear it and re-authenticate
-            localStorage.removeItem('base44_access_token');
-            localStorage.removeItem('token');
-            base44RedirectAttempted.current = true;
-            setRedirectingToBase44(true);
-            base44.auth.loginWithProvider('google', window.location.href);
-          }
-        }).catch(() => {
-          // Base44 unreachable (network error) — proceed without blocking the app.
-          // Entity queries will return empty but the app remains usable.
-        });
-      }
-    }
-  }, [isLoading, isAuthenticated]);
-
-  if (isLoading || redirectingToBase44) {
+  if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
@@ -118,25 +94,31 @@ const AuthenticatedApp = () => {
 
 const AppContent = () => {
   const { isLoading } = useAuth();
-  const [splashDone, setSplashDone] = useState(false);
+  const [minDone, setMinDone] = useState(false);
+  const [splashVisible, setSplashVisible] = useState(true);
 
+  // Minimum splash duration — always show for at least 1.5s
   useEffect(() => {
-    if (!isLoading) {
-      const t = setTimeout(() => setSplashDone(true), 600);
-      return () => clearTimeout(t);
-    }
-  }, [isLoading]);
+    const t = setTimeout(() => setMinDone(true), 1500);
+    return () => clearTimeout(t);
+  }, []);
 
-  if (!splashDone) return <SplashScreen />;
+  // Hide splash only when both auth has resolved AND minimum time has passed
+  useEffect(() => {
+    if (!isLoading && minDone) setSplashVisible(false);
+  }, [isLoading, minDone]);
 
   return (
-    <Router>
-      <NavigationTracker />
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/*" element={<AuthenticatedApp />} />
-      </Routes>
-    </Router>
+    <>
+      <SplashScreen visible={splashVisible} />
+      <Router>
+        <NavigationTracker />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/*" element={<AuthenticatedApp />} />
+        </Routes>
+      </Router>
+    </>
   );
 };
 
