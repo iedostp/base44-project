@@ -8,13 +8,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-query': ['@tanstack/react-query'],
-          'vendor-charts': ['recharts'],
-          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tooltip'],
-          'vendor-date': ['date-fns'],
-          'vendor-i18n': ['i18next', 'react-i18next'],
+        manualChunks(id) {
+          if (id.includes('react-router-dom') || (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/'))) return 'vendor-react';
+          if (id.includes('@tanstack/react-query')) return 'vendor-query';
+          if (id.includes('recharts')) return 'vendor-charts';
+          if (id.includes('@radix-ui/react-dialog') || id.includes('@radix-ui/react-select') || id.includes('@radix-ui/react-tooltip')) return 'vendor-ui';
+          if (id.includes('date-fns')) return 'vendor-date';
+          if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
         },
       },
     },
@@ -34,7 +34,7 @@ export default defineConfig({
         short_name: 'בונים בית',
         description: 'ניהול בנייה - עקוב אחרי הפרויקט שלך',
         start_url: '/',
-        display: 'minimal-ui',
+        display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#1e40af',
         orientation: 'any',
@@ -43,6 +43,7 @@ export default defineConfig({
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+          { src: '/icons/icon-192.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
         ],
       },
       workbox: {

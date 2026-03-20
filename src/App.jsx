@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import './components/i18n'
 import { Toaster } from "@/components/ui/toaster"
@@ -15,6 +15,15 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import LoginPage from '@/pages/LoginPage';
 import { base44 } from '@/api/base44Client';
 import { appParams } from '@/lib/app-params';
+
+const SplashScreen = () => (
+  <div className="fixed inset-0 bg-gradient-to-br from-blue-600 to-indigo-700 flex flex-col items-center justify-center z-50">
+    <img src="/icons/icon-192.png" alt="בונים בית" className="w-24 h-24 rounded-2xl shadow-2xl mb-6" />
+    <h1 className="text-white text-3xl font-bold" dir="rtl">בונים בית</h1>
+    <p className="text-blue-200 text-sm mt-2" dir="rtl">מערכת ניהול בנייה</p>
+    <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin mt-8" />
+  </div>
+);
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -107,6 +116,30 @@ const AuthenticatedApp = () => {
 };
 
 
+const AppContent = () => {
+  const { isLoading } = useAuth();
+  const [splashDone, setSplashDone] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading) {
+      const t = setTimeout(() => setSplashDone(true), 600);
+      return () => clearTimeout(t);
+    }
+  }, [isLoading]);
+
+  if (!splashDone) return <SplashScreen />;
+
+  return (
+    <Router>
+      <NavigationTracker />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/*" element={<AuthenticatedApp />} />
+      </Routes>
+    </Router>
+  );
+};
+
 function App() {
   const { i18n } = useTranslation();
 
@@ -119,13 +152,7 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <NavigationTracker />
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/*" element={<AuthenticatedApp />} />
-          </Routes>
-        </Router>
+        <AppContent />
         <Toaster />
         <VisualEditAgent />
       </QueryClientProvider>

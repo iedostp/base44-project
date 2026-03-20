@@ -3,9 +3,9 @@
   "short_name": "בונים בית",
   "description": "ניהול בנייה - עקוב אחרי הפרויקט שלך",
   "start_url": "/",
-  "display": "minimal-ui",
+  "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "theme_color": "#1e40af",
   "orientation": "any",
   "lang": "he",
   "dir": "rtl",
@@ -21,6 +21,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }

@@ -1,4 +1,21 @@
-<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'>
-  <rect width='512' height='512' rx='80' fill='#3b82f6'/>
-  <text x='256' y='340' font-size='260' text-anchor='middle' fill='white'>🏠</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="white"/>
+  <rect x="4" y="4" width="504" height="504" rx="76" fill="none" stroke="#e2e8f0" stroke-width="4"/>
+  <polygon points="256,58 458,250 54,250" fill="#2563eb"/>
+  <rect x="320" y="112" width="42" height="102" rx="6" fill="#1d4ed8"/>
+  <rect x="74" y="250" width="364" height="210" fill="white" stroke="#e2e8f0" stroke-width="4"/>
+  <rect x="100" y="282" width="96" height="74" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="4"/>
+  <line x1="148" y1="282" x2="148" y2="356" stroke="#93c5fd" stroke-width="4"/>
+  <line x1="100" y1="319" x2="196" y2="319" stroke="#93c5fd" stroke-width="4"/>
+  <rect x="316" y="282" width="96" height="74" rx="8" fill="#dbeafe" stroke="#93c5fd" stroke-width="4"/>
+  <line x1="364" y1="282" x2="364" y2="356" stroke="#93c5fd" stroke-width="4"/>
+  <line x1="316" y1="319" x2="412" y2="319" stroke="#93c5fd" stroke-width="4"/>
+  <rect x="202" y="320" width="86" height="140" rx="10" fill="#93c5fd"/>
+  <circle cx="274" cy="390" r="8" fill="#2563eb"/>
+  <rect x="74" y="400" width="364" height="60" fill="#eff6ff"/>
+  <line x1="74" y1="416" x2="438" y2="416" stroke="#bfdbfe" stroke-width="3"/>
+  <line x1="74" y1="432" x2="438" y2="432" stroke="#bfdbfe" stroke-width="3"/>
+  <line x1="160" y1="400" x2="160" y2="460" stroke="#bfdbfe" stroke-width="3"/>
+  <line x1="256" y1="400" x2="256" y2="460" stroke="#bfdbfe" stroke-width="3"/>
+  <line x1="352" y1="400" x2="352" y2="460" stroke="#bfdbfe" stroke-width="3"/>
 </svg>
