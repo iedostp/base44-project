@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import './components/i18n'
 import { Toaster } from "@/components/ui/toaster"
@@ -8,11 +8,40 @@ import { queryClientInstance } from '@/lib/query-client'
 import VisualEditAgent from '@/lib/VisualEditAgent'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { setupIframeMessaging } from './lib/iframe-messaging';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import LoginPage from '@/pages/LoginPage';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 24, background: '#1e40af', color: 'white', minHeight: '100vh', direction: 'ltr' }}>
+          <h2 style={{ fontSize: 20, marginBottom: 12 }}>App Error</h2>
+          <pre style={{ fontSize: 12, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+            {this.state.error?.message}{'\n\n'}{this.state.error?.stack}
+          </pre>
+          <button
+            onClick={() => window.location.reload()}
+            style={{ marginTop: 16, padding: '8px 16px', background: 'white', color: '#1e40af', border: 'none', borderRadius: 8, fontSize: 16 }}
+          >
+            Reload
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const SplashScreen = ({ visible }) => {
   const [mounted, setMounted] = useState(true);
@@ -51,22 +80,6 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 
 const AuthenticatedApp = () => {
   const { isLoading, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
-  // Redirect to Supabase login when not authenticated
-  useEffect(() => {
-    const hasOAuthCallback = window.location.hash.includes('access_token') ||
-                             window.location.hash.includes('error_description') ||
-                             window.location.search.includes('code=');
-    if (!isLoading && !isAuthenticated && !hasOAuthCallback) {
-      navigate('/login', { replace: true });
-    }
-  }, [isLoading, isAuthenticated]);
-
-  // Base44 token is optional — user identity comes from Supabase.
-  // Redirecting to Base44 Google OAuth breaks native WebView (Google blocks
-  // OAuth from embedded WebViews). The app uses requiresAuth:false and
-  // filters entities by user.email derived from the Supabase session.
 
   if (isLoading) {
     return (
@@ -76,7 +89,13 @@ const AuthenticatedApp = () => {
     );
   }
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) {
+    const hasOAuthCallback = window.location.hash.includes('access_token') ||
+                             window.location.hash.includes('error_description') ||
+                             window.location.search.includes('code=');
+    if (!hasOAuthCallback) return <Navigate to="/login" replace />;
+    return null;
+  }
 
   return (
     <LayoutWrapper currentPageName={mainPageKey}>
@@ -132,13 +151,15 @@ function App() {
   }, [i18n.language]);
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <AppContent />
-        <Toaster />
-        <VisualEditAgent />
-      </QueryClientProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <QueryClientProvider client={queryClientInstance}>
+          <AppContent />
+          <Toaster />
+          <VisualEditAgent />
+        </QueryClientProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
 
