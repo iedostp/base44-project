@@ -58,7 +58,7 @@ export default function ProjectHeader({ project, onUpdate, overallProgress, budg
           <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{t('startDate')}</label>
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center justify-end gap-2 w-full h-9 rounded-md border border-gray-200 bg-transparent px-3 py-1 text-sm shadow-sm text-right">
+              <button className="flex items-center justify-start gap-2 w-full h-9 rounded-md border border-gray-200 bg-transparent px-3 py-1 text-sm shadow-sm">
                 <span>{localProject?.start_date ? new Date(localProject.start_date).toLocaleDateString('he-IL') : t('selectDate', 'בחר תאריך')}</span>
                 <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
               </button>
