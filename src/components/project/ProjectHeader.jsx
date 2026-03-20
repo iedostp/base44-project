@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Building2, AlertCircle } from "lucide-react";
+import { Building2, AlertCircle, CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { debounce } from "lodash";
 import { useTranslation } from "react-i18next";
 import { getCurrencySymbol } from "../utils/currencyFormatter";
@@ -54,7 +56,22 @@ export default function ProjectHeader({ project, onUpdate, overallProgress, budg
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{t('startDate')}</label>
-          <Input type="date" dir="rtl" value={localProject?.start_date || ''} onChange={(e) => handleChange('start_date', e.target.value)} className="border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all" style={{ direction: 'rtl', textAlign: 'right' }} />
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center justify-end gap-2 w-full h-9 rounded-md border border-gray-200 bg-transparent px-3 py-1 text-sm shadow-sm text-right">
+                <span>{localProject?.start_date ? new Date(localProject.start_date).toLocaleDateString('he-IL') : t('selectDate', 'בחר תאריך')}</span>
+                <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                mode="single"
+                selected={localProject?.start_date ? new Date(localProject.start_date) : undefined}
+                onSelect={(date) => date && handleChange('start_date', date.toISOString().split('T')[0])}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{t('location')}</label>
