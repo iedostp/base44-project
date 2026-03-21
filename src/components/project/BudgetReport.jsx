@@ -383,7 +383,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
               <LineChart data={monthlyData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#6b7280" }} />
-                <YAxis tickFormatter={(v) => `₪${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 11, fill: "#6b7280" }} />
+                <YAxis tickFormatter={(v) => formatCurrency(v, i18n.language)} tick={{ fontSize: 11, fill: "#6b7280" }} />
                 <Tooltip formatter={(v) => [formatNIS(v), "הוצאה"]} />
                 <Line type="monotone" dataKey="total" stroke="#6366f1" strokeWidth={2.5} dot={{ r: 4, fill: "#6366f1" }} />
               </LineChart>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "@/components/utils/currencyFormatter";
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from "recharts";
 import { TrendingUp, Package, DollarSign, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -163,7 +164,7 @@ export default function ExpenseAnalyticsPage() {
             </div>
             <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">{t('totalExpenses')}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-slate-100 text-start">
-              {totalExpenses.toLocaleString()} ₪
+              {formatCurrency(totalExpenses, i18n.language)}
             </p>
           </div>
 
@@ -175,7 +176,7 @@ export default function ExpenseAnalyticsPage() {
             </div>
             <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">{t('paidExpenses')}</p>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400 text-start">
-              {paidExpenses.toLocaleString()} ₪
+              {formatCurrency(paidExpenses, i18n.language)}
             </p>
           </div>
 
@@ -187,7 +188,7 @@ export default function ExpenseAnalyticsPage() {
             </div>
             <p className="text-sm text-gray-600 dark:text-slate-400 mb-1 text-start">{t('unpaid')}</p>
             <p className="text-2xl font-bold text-red-600 dark:text-red-400 text-start">
-              {unpaidExpenses.toLocaleString()} ₪
+              {formatCurrency(unpaidExpenses, i18n.language)}
             </p>
           </div>
 
@@ -216,7 +217,7 @@ export default function ExpenseAnalyticsPage() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, value }) => `${name}: ${value} ₪`}
+                  label={({ name, value }) => `${name}: ${formatCurrency(value, i18n.language)}`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"

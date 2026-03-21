@@ -1,8 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, Calendar, Tag } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { formatCurrency } from "../utils/currencyFormatter";
 
 export default function SupplierExpenseHistory({ expenses, supplier }) {
+  const { i18n } = useTranslation();
   if (expenses.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
@@ -35,7 +38,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
         <div className="text-start">
           <p className="text-xs text-gray-600 dark:text-slate-400 mb-1">סה"כ הוצאות</p>
           <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-            {totalSpending.toLocaleString()} ₪
+            {formatCurrency(totalSpending, i18n.language)}
           </p>
         </div>
         <div className="text-start">
@@ -45,7 +48,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
         <div className="text-start">
           <p className="text-xs text-gray-600 dark:text-slate-400 mb-1">ממוצע הוצאה</p>
           <p className="text-lg font-bold text-purple-600 dark:text-purple-400">
-            {Math.round(avgExpense).toLocaleString()} ₪
+            {formatCurrency(avgExpense, i18n.language)}
           </p>
         </div>
       </div>
@@ -80,7 +83,7 @@ export default function SupplierExpenseHistory({ expenses, supplier }) {
               </div>
               <div className="text-start">
                 <p className="font-bold text-lg text-gray-900 dark:text-slate-100">
-                  {expense.amount.toLocaleString()} ₪
+                  {formatCurrency(expense.amount, i18n.language)}
                 </p>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { he } from "date-fns/locale";
 import AIDocumentAnalyzer from "./AIDocumentAnalyzer";
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "../utils/currencyFormatter";
 
 export default function DocumentCard({ document, stage, supplier, project, stages, onDelete, isSelected, onToggleCompare }) {
   const { i18n } = useTranslation();
@@ -116,7 +117,7 @@ export default function DocumentCard({ document, stage, supplier, project, stage
                   <div className="flex items-center gap-2 text-sm">
                     <DollarSign className="w-4 h-4 text-purple-600 shrink-0" />
                     <span className="text-gray-600">סכום:</span>
-                    <span className="font-medium text-gray-800">{document.extracted_data.amount.toLocaleString()} ₪</span>
+                    <span className="font-medium text-gray-800">{formatCurrency(document.extracted_data.amount, i18n.language)}</span>
                   </div>
                 )}
                 {document.extracted_data.parties && document.extracted_data.parties.length > 0 && (

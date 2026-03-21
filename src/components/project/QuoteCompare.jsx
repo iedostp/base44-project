@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
+import { formatCurrency } from "../utils/currencyFormatter";
 
 const CATEGORY_LABELS = {
   contract: 'חוזה',
@@ -26,6 +28,7 @@ const BUILT_IN_FIELDS = [
 ];
 
 export default function QuoteCompare({ documents, suppliers, onClose }) {
+  const { i18n } = useTranslation();
   const [customFields, setCustomFields] = useState([]);
   const [newFieldLabel, setNewFieldLabel] = useState('');
   const [customValues, setCustomValues] = useState({});
@@ -134,7 +137,7 @@ export default function QuoteCompare({ documents, suppliers, onClose }) {
                           {val ? (
                             field.isAmount ? (
                               <div className={`font-semibold ${isLowest ? 'text-green-700' : 'text-gray-800'}`}>
-                                {Number(val).toLocaleString()} ₪
+                                {formatCurrency(Number(val), i18n.language)}
                                 {isLowest && <span className="me-1 text-xs text-green-600">✓ הנמוך</span>}
                               </div>
                             ) : (

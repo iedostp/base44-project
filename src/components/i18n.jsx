@@ -881,7 +881,7 @@ const resources = {
       // ExpenseAnalytics page
       paidExpenses: 'Paid',
       budgetInUse: 'Budget in use',
-      expenseBarLabel: 'Expense (₪)',
+      expenseBarLabel: 'Expense ($)',
 
       // InitializeTasks page
       initStartBtn: 'Initialize Tasks',
@@ -961,7 +961,7 @@ const resources = {
       docUploadLinkingPhase: 'Linking to stages and suppliers...',
       docUploadError: 'Error saving document',
       docUploadPreviewAlt: 'Preview',
-      docUploadAmountDetected: '💰 Amount detected: ₪{{amount}}',
+      docUploadAmountDetected: '💰 Amount detected: ${{amount}}',
       docUploadRefNum: '· Ref# {{ref}}',
 
       // DocumentsTab sort options
@@ -1099,7 +1099,7 @@ const resources = {
       plotNumber: 'رقم القطعة',
       startDate: 'تاريخ البدء',
       location: 'الموقع',
-      totalBudget: 'الميزانية الإجمالية شاملة ضريبة القيمة المضافة (₪)',
+      totalBudget: 'الميزانية الإجمالية شاملة ضريبة القيمة المضافة (د.إ)',
       totalBudgetLabel: 'الميزانية الإجمالية',
       professionalTeam: 'الفريق المهني',
       contractor: 'المقاول',
@@ -1391,7 +1391,7 @@ const resources = {
       // ExpenseAnalytics page
       paidExpenses: 'مدفوع',
       budgetInUse: 'الميزانية المستخدمة',
-      expenseBarLabel: 'المصروف (₪)',
+      expenseBarLabel: 'المصروف (د.إ)',
 
       // InitializeTasks page
       initStartBtn: 'تهيئة المهام',
@@ -1457,7 +1457,7 @@ const resources = {
       plotNumber: 'Номер участка',
       startDate: 'Дата начала',
       location: 'Местоположение',
-      totalBudget: 'Общий бюджет с НДС (₪)',
+      totalBudget: 'Общий бюджет с НДС (₽)',
       totalBudgetLabel: 'Общий бюджет',
       professionalTeam: 'Профессиональная команда',
       contractor: 'Подрядчик',
@@ -1749,7 +1749,7 @@ const resources = {
       // ExpenseAnalytics page
       paidExpenses: 'Оплачено',
       budgetInUse: 'Использование бюджета',
-      expenseBarLabel: 'Расход (₪)',
+      expenseBarLabel: 'Расход (₽)',
 
       // InitializeTasks page
       initStartBtn: 'Инициализировать задачи',

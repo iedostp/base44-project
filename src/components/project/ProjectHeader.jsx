@@ -79,7 +79,7 @@ export default function ProjectHeader({ project, onUpdate, overallProgress, budg
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{t('totalBudget')}</label>
-          <Input type="text" placeholder={t('totalBudget')} value={localProject?.total_budget ? localProject.total_budget.toLocaleString('he-IL') : ''} onChange={(e) => { const numValue = parseFloat(e.target.value.replace(/,/g, '')); handleChange('total_budget', isNaN(numValue) ? null : numValue); }} className="border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all text-center" />
+          <Input type="text" placeholder={t('totalBudget')} value={localProject?.total_budget ? localProject.total_budget.toLocaleString() : ''} onChange={(e) => { const numValue = parseFloat(e.target.value.replace(/,/g, '')); handleChange('total_budget', isNaN(numValue) ? null : numValue); }} className="border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all text-center" />
         </div>
       </div>
 

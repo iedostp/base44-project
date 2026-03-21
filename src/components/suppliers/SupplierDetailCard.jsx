@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Star, Phone, Mail, MapPin, Trash2, Edit, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { formatCurrency } from "../utils/currencyFormatter";
 
 export default function SupplierDetailCard({ supplier, stats, categoryLabel, onEdit, onDelete }) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { i18n } = useTranslation();
 
   const getStatusColor = (status) => {
     const colors = {
@@ -105,7 +108,7 @@ export default function SupplierDetailCard({ supplier, stats, categoryLabel, onE
           </div>
           <div className="text-end">
             <p className="font-bold text-blue-600 dark:text-blue-400">
-              {stats.spending.toLocaleString()} ₪
+              {formatCurrency(stats.spending, i18n.language)}
             </p>
             <p className="text-xs text-gray-600 dark:text-slate-400">{stats.expenseCount} הוצאות</p>
           </div>
