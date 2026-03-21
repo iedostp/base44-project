@@ -93,7 +93,7 @@ export default function DashboardSummary({ project, stages, tasks, expenses }) {
   return (
     <div className="space-y-4" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {cards.map((card, i) => (
           <div key={i} className={`bg-gradient-to-br ${card.color} rounded-2xl p-4 text-white shadow-lg`}>
             <div className="flex items-center justify-between mb-2 flex-row-reverse">

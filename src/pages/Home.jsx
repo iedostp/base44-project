@@ -414,8 +414,21 @@ export default function Home() {
           />
         )}
       </AnimatePresence>
-      <div className="p-0 md:p-8">
-      <div className="max-w-7xl mx-auto px-0 md:px-0">
+      {/* Mobile Header */}
+      <div className="md:hidden fixed top-0 inset-x-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 z-50 shadow-sm" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+        <div className="relative flex items-center justify-center h-14 px-4 w-full">
+          <div className="flex items-center gap-2">
+            <img src="/icons/icon-192.png" alt={t('appName')} className="w-6 h-6" />
+            <h1 className="text-lg font-bold text-gray-800 dark:text-slate-100">{t('appName')}</h1>
+          </div>
+          <div className="absolute end-2 inset-y-0 flex items-center">
+            <NotificationBell user={user} project={project} />
+          </div>
+        </div>
+      </div>
+
+      <div className="p-0 md:p-4 pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-4 pb-24 md:pb-8">
+      <div className="w-full mx-auto px-0 md:px-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 
 

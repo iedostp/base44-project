@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { initThemeFromStorage } from './components/useAppTheme';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './components/i18n';
 
 const APP_TABS = [
@@ -18,15 +18,16 @@ const APP_TABS = [
 
 function AppNav() {
   const location = useLocation();
-  const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
   const activeTab = new URLSearchParams(location.search).get('tab') || 'home';
 
   const setTab = (key) => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(window.location.search);
     params.set('tab', key);
     params.delete('modal');
-    navigate(`/?${params.toString()}`, { replace: true });
+    // Use replaceState directly so Home.jsx's popstate listener fires correctly
+    window.history.replaceState({ tab: key }, '', `/?${params.toString()}`);
+    window.dispatchEvent(new PopStateEvent('popstate', { state: { tab: key } }));
   };
 
   return (
