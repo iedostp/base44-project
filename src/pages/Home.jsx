@@ -558,6 +558,31 @@ export default function Home() {
         )}
       </div>
 
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 shadow-lg z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <div className="grid grid-cols-8 h-16 w-full" role="tablist" aria-label={t('appName')}>
+          {[
+            { key: 'home', Icon: HomeIcon, label: t('tab_home') },
+            { key: 'stages', Icon: Layers, label: t('tab_stages') },
+            { key: 'budget', Icon: PieChart, label: t('tab_budget') },
+            { key: 'suppliers', Icon: Users, label: t('tab_suppliers') },
+            { key: 'documents', Icon: FileText, label: t('tab_documents') },
+            { key: 'timeline', Icon: Calendar, label: t('tab_timeline') },
+            { key: 'photos', Icon: Camera, label: t('tab_photos') },
+            { key: 'settings', Icon: Settings, label: t('tab_settings') },
+          ].map(({ key, Icon, label }) => (
+            <button key={key} onClick={() => setActiveTab(key)}
+              aria-label={label}
+              aria-selected={activeTab === key}
+              role="tab"
+              className={`flex flex-col items-center justify-center gap-1 select-none transition-colors ${activeTab === key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-slate-400'}`}
+            >
+              <Icon className="w-6 h-6" aria-hidden="true" />
+              <span className="text-[10px] font-medium" aria-hidden="true">{label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
     </div>
   );

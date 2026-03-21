@@ -32,17 +32,17 @@ function AppNav() {
   return (
     <header
       dir="rtl"
-      className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 flex items-center gap-2 px-3 h-11 shadow-sm"
+      className="hidden md:flex sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 items-center px-4 h-11 shadow-sm"
     >
-      {/* Logo */}
-      <div className="flex items-center gap-1.5 shrink-0">
+      {/* Logo — far right in RTL */}
+      <div className="flex items-center gap-1.5 shrink-0 me-4">
         <img src="/icons/icon-192.png" alt="בונים בית" className="w-6 h-6 rounded" />
         <span className="font-bold text-blue-700 dark:text-blue-400 text-sm whitespace-nowrap">בונים בית</span>
       </div>
 
-      {/* Pill tabs — only on Home page */}
+      {/* Pill tabs — centered, only on Home page */}
       {isHomePage && (
-        <div className="flex items-center gap-1 overflow-x-auto flex-1 py-1" style={{ scrollbarWidth: 'none' }}>
+        <div className="flex items-center justify-center gap-1 flex-1 py-1">
           {APP_TABS.map(({ key, label }) => (
             <button
               key={key}
@@ -186,7 +186,7 @@ export default function Layout({ children, currentPageName }) {
         )}
 
         <div
-          className=""
+          className="pb-16 md:pb-0"
           style={{
             transform: pullDistance > 0 ? `translateY(${pullDistance * 0.4}px)` : 'none',
             transition: pullDistance === 0 ? 'transform 0.3s ease' : 'none',
