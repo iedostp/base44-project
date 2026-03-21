@@ -2,78 +2,63 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { initThemeFromStorage } from './components/useAppTheme';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useLocation } from 'react-router-dom';
-import { Home as HomeIcon, PieChart, Settings, Hammer, Users, BarChart2 } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './components/i18n';
 
-const NAV_ITEMS = [
-  { to: '/',                 Icon: HomeIcon,  labelKey: 'navHome',      exact: true },
-  { to: '/Suppliers',        Icon: Users,     labelKey: 'navSuppliers'             },
-  { to: '/ExpenseAnalytics', Icon: BarChart2, labelKey: 'navAnalytics'             },
-  { to: '/UserSettings',     Icon: Settings,  labelKey: 'navSettings'              },
+const APP_TABS = [
+  { key: 'home',      label: 'ראשי'    },
+  { key: 'stages',    label: 'שלבים'   },
+  { key: 'budget',    label: 'תקציב'   },
+  { key: 'suppliers', label: 'ספקים'   },
+  { key: 'documents', label: 'מסמכים'  },
+  { key: 'timeline',  label: 'ציר זמן' },
+  { key: 'photos',    label: 'תמונות'  },
+  { key: 'settings',  label: 'הגדרות'  },
 ];
 
-function AppNav({ isRtl }) {
-  const { t } = useTranslation();
+function AppNav() {
   const location = useLocation();
-
-  // Home.jsx renders its own 8-tab mobile bottom nav — hide ours there to avoid overlap
+  const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
+  const activeTab = new URLSearchParams(location.search).get('tab') || 'home';
 
-  const linkClass = (to, exact) => {
-    const active = exact ? location.pathname === to : location.pathname.startsWith(to);
-    return active
-      ? 'flex flex-col items-center gap-0.5 text-blue-600 dark:text-blue-400'
-      : 'flex flex-col items-center gap-0.5 text-gray-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors';
+  const setTab = (key) => {
+    const params = new URLSearchParams(location.search);
+    params.set('tab', key);
+    params.delete('modal');
+    navigate(`/?${params.toString()}`, { replace: true });
   };
 
   return (
-    <>
-      {/* ── Mobile bottom nav (hidden on Home which has its own 8-tab nav) ── */}
-      {!isHomePage && (
-        <nav
-          dir={isRtl ? 'rtl' : 'ltr'}
-          className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 flex justify-around items-center h-16 px-2 safe-area-bottom"
-        >
-          {NAV_ITEMS.map(({ to, Icon, labelKey, exact }) => (
-            <NavLink key={to} to={to} className={linkClass(to, exact)}>
-              <Icon className="w-5 h-5" />
-              <span className="text-[10px] font-medium">{t(labelKey, labelKey.replace('nav', ''))}</span>
-            </NavLink>
-          ))}
-        </nav>
-      )}
+    <header
+      dir="rtl"
+      className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 flex items-center gap-2 px-3 h-11 shadow-sm"
+    >
+      {/* Logo */}
+      <div className="flex items-center gap-1.5 shrink-0">
+        <img src="/icons/icon-192.png" alt="בונים בית" className="w-6 h-6 rounded" />
+        <span className="font-bold text-blue-700 dark:text-blue-400 text-sm whitespace-nowrap">בונים בית</span>
+      </div>
 
-      {/* ── Desktop top nav ───────────────────────────────────────────────── */}
-      <header
-        dir={isRtl ? 'rtl' : 'ltr'}
-        className="hidden md:flex sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 h-14 items-center px-6 gap-6 shadow-sm"
-      >
-        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg me-4 select-none">
-          <Hammer className="w-5 h-5" />
-          <span>בונים בית</span>
+      {/* Pill tabs — only on Home page */}
+      {isHomePage && (
+        <div className="flex items-center gap-1 overflow-x-auto flex-1 py-1" style={{ scrollbarWidth: 'none' }}>
+          {APP_TABS.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className={`shrink-0 px-3 py-1 rounded-full text-sm font-medium border transition-colors whitespace-nowrap ${
+                activeTab === key
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-white dark:bg-slate-900 text-gray-700 dark:text-slate-300 border-gray-300 dark:border-slate-600 hover:border-blue-400'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
-        <div className="flex items-center gap-1">
-          {NAV_ITEMS.map(({ to, Icon, labelKey, exact }) => {
-            const active = exact ? location.pathname === to : location.pathname.startsWith(to);
-            return (
-              <NavLink
-                key={to}
-                to={to}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  active
-                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                    : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                {t(labelKey, labelKey.replace('nav', ''))}
-              </NavLink>
-            );
-          })}
-        </div>
-      </header>
-    </>
+      )}
+    </header>
   );
 }
 
@@ -154,7 +139,7 @@ export default function Layout({ children, currentPageName }) {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <AppNav isRtl={isRtl} />
+        <AppNav />
         {/* Pull-to-refresh indicator */}
         {(pullDistance > 0 || isRefreshing) && (
           <div
@@ -201,7 +186,7 @@ export default function Layout({ children, currentPageName }) {
         )}
 
         <div
-          className="pb-16 md:pb-0"
+          className=""
           style={{
             transform: pullDistance > 0 ? `translateY(${pullDistance * 0.4}px)` : 'none',
             transition: pullDistance === 0 ? 'transform 0.3s ease' : 'none',

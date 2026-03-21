@@ -414,33 +414,10 @@ export default function Home() {
           />
         )}
       </AnimatePresence>
-      {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 inset-x-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 z-50 shadow-sm" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-        <div className="relative flex items-center justify-center h-14 px-4 w-full">
-          <div className="flex items-center gap-2">
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/690514d00122f9b7b00f4a5d/cb08ea9f1_image.png" alt={t('appName')} className="w-6 h-6" />
-            <h1 className="text-lg font-bold text-gray-800 dark:text-slate-100">{t('appName')}</h1>
-          </div>
-          <div className="absolute end-2 inset-y-0 flex items-center">
-            <NotificationBell user={user} project={project} />
-          </div>
-        </div>
-      </div>
-
-      <div className="p-0 md:p-8 pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-8 pb-24 md:pb-8">
+      <div className="p-0 md:p-8">
       <div className="max-w-7xl mx-auto px-0 md:px-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            {/* Desktop TabsList */}
-            <TabsList className="hidden md:grid w-full grid-cols-8 mb-6 bg-white dark:bg-slate-800 p-1.5 rounded-xl shadow-md border border-gray-100 dark:border-slate-700 h-auto gap-0.5" dir={isRTL ? 'rtl' : 'ltr'}>
-              <TabsTrigger value="home" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_home')}</TabsTrigger>
-              <TabsTrigger value="stages" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_stages')}</TabsTrigger>
-              <TabsTrigger value="budget" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_budget')}</TabsTrigger>
-              <TabsTrigger value="suppliers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_suppliers')}</TabsTrigger>
-              <TabsTrigger value="documents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_documents')}</TabsTrigger>
-              <TabsTrigger value="timeline" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_timeline')}</TabsTrigger>
-              <TabsTrigger value="photos" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_photos')}</TabsTrigger>
-              <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:text-white rounded-lg font-medium transition-all select-none">{t('tab_settings')}</TabsTrigger>
-            </TabsList>
+
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -581,34 +558,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* Mobile Bottom Navigation — always visible so nav is available even before project data loads */}
-      {(
-        <div className="md:hidden fixed bottom-0 inset-x-0 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 shadow-lg z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-          <div className="grid grid-cols-8 h-16 w-full" role="tablist" aria-label={t('appName')}>
-            {[
-              { key: 'home', Icon: HomeIcon, label: t('tab_home') },
-              { key: 'stages', Icon: Layers, label: t('tab_stages') },
-              { key: 'budget', Icon: PieChart, label: t('tab_budget') },
-              { key: 'suppliers', Icon: Users, label: t('tab_suppliers') },
-              { key: 'documents', Icon: FileText, label: t('tab_documents') },
-              { key: 'timeline', Icon: Calendar, label: t('tab_timeline') },
-              { key: 'photos', Icon: Camera, label: t('tab_photos') },
-              { key: 'settings', Icon: Settings, label: t('tab_settings') },
-            ].map(({ key, Icon, label }) => (
-              <button key={key} onClick={() => setActiveTab(key)}
-                aria-label={label}
-                aria-selected={activeTab === key}
-                role="tab"
-                className={`flex flex-col items-center justify-center gap-1 select-none transition-colors ${activeTab === key ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-slate-400'}`}
-              >
-                <Icon className="w-6 h-6" aria-hidden="true" />
-                <span className="text-[10px] font-medium" aria-hidden="true">{label}</span>
-              </button>
-            ))}
-          </div>
-          {/* Modal backdrop - on Android back, popstate fires and URL modal param is gone → modal closes automatically */}
-        </div>
-      )}
     </div>
     </div>
   );
