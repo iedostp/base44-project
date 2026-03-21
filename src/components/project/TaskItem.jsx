@@ -42,7 +42,7 @@ export default function TaskItem({ task, onToggle, onDelete, projectId, user }) 
   };
 
   return (
-    <div dir="rtl" className="bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-sm transition-all duration-200 p-2.5">
+    <div dir={isRtl ? 'rtl' : 'ltr'} className="bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-sm transition-all duration-200 p-2.5">
       <div className="flex flex-row items-start gap-2">
         {/* Text column — first child → RIGHT in RTL */}
         <div className="flex-1 min-w-0">

@@ -6,18 +6,20 @@ import { useLocation } from 'react-router-dom';
 import './components/i18n';
 
 const APP_TABS = [
-  { key: 'home',      label: 'ראשי'    },
-  { key: 'stages',    label: 'שלבים'   },
-  { key: 'budget',    label: 'תקציב'   },
-  { key: 'suppliers', label: 'ספקים'   },
-  { key: 'documents', label: 'מסמכים'  },
-  { key: 'timeline',  label: 'ציר זמן' },
-  { key: 'photos',    label: 'תמונות'  },
-  { key: 'settings',  label: 'הגדרות'  },
+  { key: 'home',      labelKey: 'tab_home'      },
+  { key: 'stages',    labelKey: 'tab_stages'    },
+  { key: 'budget',    labelKey: 'tab_budget'    },
+  { key: 'suppliers', labelKey: 'tab_suppliers' },
+  { key: 'documents', labelKey: 'tab_documents' },
+  { key: 'timeline',  labelKey: 'tab_timeline'  },
+  { key: 'photos',    labelKey: 'tab_photos'    },
+  { key: 'settings',  labelKey: 'tab_settings'  },
 ];
 
 function AppNav() {
   const location = useLocation();
+  const { t, i18n } = useTranslation();
+  const isRtl = ['he', 'ar'].includes(i18n.language);
   const isHomePage = location.pathname === '/';
   const activeTab = new URLSearchParams(location.search).get('tab') || 'home';
 
@@ -32,7 +34,7 @@ function AppNav() {
 
   return (
     <header
-      dir="rtl"
+      dir={isRtl ? 'rtl' : 'ltr'}
       className="hidden md:flex sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 items-center justify-center px-4 h-11 shadow-sm"
     >
       {/* Logo + Pill tabs — all centered together */}
@@ -47,7 +49,7 @@ function AppNav() {
         {isHomePage && <div className="w-px h-5 bg-gray-200 dark:bg-slate-700 shrink-0" />}
 
         {/* Pill tabs */}
-        {isHomePage && APP_TABS.map(({ key, label }) => (
+        {isHomePage && APP_TABS.map(({ key, labelKey }) => (
           <button
             key={key}
             onClick={() => setTab(key)}
@@ -57,7 +59,7 @@ function AppNav() {
                 : 'bg-white dark:bg-slate-900 text-gray-700 dark:text-slate-300 border-gray-300 dark:border-slate-600 hover:border-blue-400'
             }`}
           >
-            {label}
+            {t(labelKey)}
           </button>
         ))}
       </div>
@@ -71,7 +73,7 @@ try { initThemeFromStorage(); } catch(_e) { /* ignore */ }
 // Apply saved language direction before first render (i18n.jsx handles subsequent changes)
 try {
   const language = localStorage.getItem('language') || 'he';
-  document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
+  document.documentElement.dir = ['he', 'ar'].includes(language) ? 'rtl' : 'ltr';
   document.documentElement.lang = language;
 } catch(_e) { /* ignore */ }
 

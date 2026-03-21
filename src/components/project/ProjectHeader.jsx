@@ -5,12 +5,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { debounce } from "lodash";
 import { useTranslation } from "react-i18next";
-import { getCurrencySymbol } from "../utils/currencyFormatter";
+import { formatCurrency } from "../utils/currencyFormatter";
 import "../i18n";
 
 export default function ProjectHeader({ project, onUpdate, overallProgress, budgetProgress }) {
   const { t, i18n } = useTranslation();
-  const currencySymbol = getCurrencySymbol(i18n.language);
+  const fmt = (v) => formatCurrency(v || 0, i18n.language);
   const isRTL = ['he', 'ar'].includes(i18n.language);
   const [localProject, setLocalProject] = useState(project || {});
 
@@ -113,7 +113,7 @@ export default function ProjectHeader({ project, onUpdate, overallProgress, budg
         <div>
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm font-semibold text-gray-700 dark:text-slate-300">{t('totalBudgetLabel')}</span>
-            <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{localProject?.total_budget ? `${currencySymbol}${localProject.total_budget.toLocaleString()}` : `${currencySymbol}0`}</span>
+            <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{fmt(localProject?.total_budget)}</span>
           </div>
           <div className="w-full bg-gray-100 dark:bg-slate-700 rounded-full h-4 overflow-hidden shadow-inner">
             <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 dark:from-blue-600 dark:via-blue-700 dark:to-indigo-700 h-4 rounded-full transition-all duration-700 ease-out shadow-md" style={{ width: `100%` }}></div>

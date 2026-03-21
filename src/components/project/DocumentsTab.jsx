@@ -21,7 +21,7 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onSe
   })[cat] || 'bg-gray-100 text-gray-800';
 
   return (
-    <div dir="rtl" draggable onDragStart={onDragStart} onDragEnd={onDragEnd}
+    <div draggable onDragStart={onDragStart} onDragEnd={onDragEnd}
       className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-grab active:cursor-grabbing ${isSelected ? 'border-blue-400 bg-blue-50' : 'border-gray-100 bg-white hover:bg-gray-50'}`}>
       <input type="checkbox" className="rounded" checked={isSelected} onChange={e => onSelect && onSelect(e, document)} onClick={e => e.stopPropagation()} />
       <div className="flex-1 min-w-0">
@@ -58,7 +58,8 @@ function DocumentListRow({ document, stage, supplier, onDelete, isSelected, onSe
 }
 
 export default function DocumentsTab({ documents, stages, suppliers, projectId, project, onDocumentAdded, onDocumentDeleted }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
   const uploadModal = useModalState('uploadDocument');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -229,7 +230,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
     <div className="space-y-4 w-full overflow-x-hidden">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-5 border border-gray-100 dark:border-slate-700">
-        <div dir="rtl" className="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-3">
+        <div dir={isRTL ? 'rtl' : 'ltr'} className="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-3">
           <div className="text-right">
             <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">{t('documentManagement')}</h2>
             <p className="text-gray-500 dark:text-slate-400 text-sm">{t('documentManagementDesc')}</p>
@@ -250,12 +251,12 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           </div>
         </div>
 
-        <div dir="rtl" className="relative mb-3">
+        <div className="relative mb-3">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input placeholder={t('searchDocuments')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pr-9 text-right" />
         </div>
 
-        <div dir="rtl" className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3">
           {categories.map(cat => (
             <button key={cat.value} onClick={() => setSelectedCategory(cat.value)}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${selectedCategory === cat.value ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200'}`}>
@@ -264,15 +265,15 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
           ))}
         </div>
 
-        <div dir="rtl" className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {stages.length > 0 && (
-            <select value={selectedStage} onChange={(e) => setSelectedStage(e.target.value)} dir="rtl"
+            <select value={selectedStage} onChange={(e) => setSelectedStage(e.target.value)}
               className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300">
               <option value="all">{t('allStages')}</option>
               {stages.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
             </select>
           )}
-          <select value={sortBy} onChange={e => setSortBy(e.target.value)} dir="rtl"
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)}
             className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300">
             <option value="date-desc">{t('sortDateDesc')}</option>
             <option value="date-asc">{t('sortDateAsc')}</option>
@@ -306,7 +307,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
       {/* Folders */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 shadow-sm">
-        <div dir="rtl" className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-700 dark:text-slate-200 text-sm flex items-center gap-2">
             <Folder className="w-4 h-4 text-amber-500" />{t('folders')}
           </h3>
@@ -321,7 +322,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
             <Button size="sm" variant="ghost" onClick={() => { setShowNewFolder(false); setNewFolderName(''); }} className="h-8">{t('cancel')}</Button>
           </div>
         )}
-        <div dir="rtl" className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           <button onClick={() => setSelectedFolder('all')}
             onDragOver={e => { e.preventDefault(); setDragOverFolderId('all'); }}
             onDragLeave={() => setDragOverFolderId(null)}
@@ -346,10 +347,10 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
 
       {/* Selection toolbar */}
       {selectedForCompare.length > 0 && (
-        <div dir="rtl" className="sticky top-2 z-20 bg-blue-600 text-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl flex-wrap">
+        <div className="sticky top-2 z-20 bg-blue-600 text-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl flex-wrap">
           <span className="font-semibold text-sm shrink-0">{selectedForCompare.length} {t('docsSelectedCount')}</span>
           <div className="flex gap-2 me-auto flex-wrap">
-            <select dir="rtl" defaultValue=""
+            <select defaultValue=""
               onChange={e => { if (!e.target.value) return; assignDocsToFolder(selectedForCompare.map(d => d.id), e.target.value); setSelectedForCompare([]); setLastSelectedIndex(null); e.target.value = ''; }}
               className="text-xs px-2 py-1.5 rounded-lg bg-white/20 text-white border border-white/30 cursor-pointer">
               <option value="">{t('docsMoveTo')}</option>
@@ -397,7 +398,7 @@ export default function DocumentsTab({ documents, stages, suppliers, projectId, 
         ) : (
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm overflow-hidden">
             <div className="p-3 bg-gray-50 dark:bg-slate-700 border-b border-gray-100 dark:border-slate-600">
-              <div dir="rtl" className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <input type="checkbox" className="rounded" checked={allVisibleSelected}
                   ref={el => { if (el) el.indeterminate = selectedForCompare.length > 0 && !allVisibleSelected; }}
                   onChange={handleSelectAll} />

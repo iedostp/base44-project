@@ -46,7 +46,8 @@ function StatusIcon({ status, className = "w-4 h-4 flex-shrink-0" }) {
 
 // ── GanttChart ─────────────────────────────────────────────────────────────────
 export default function GanttChart({ project, stages, tasks, suppliers, onStageUpdate, onProjectUpdate }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
 
   // Build STATUS with translated labels at render time
   const STATUS = {
@@ -230,7 +231,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       <AISchedulingAssistant
         project={project} stages={stages} tasks={tasks} suppliers={suppliers}
         onOptimizationApplied={() => {}}
@@ -243,7 +244,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
           <h3 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-slate-100 text-right mb-3">
             {t('ganttTitle')}
           </h3>
-          <div dir="rtl" className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3">
             {Object.entries(STATUS).map(([k, s]) => (
               <div key={k} className="flex items-center gap-1.5">
                 <div className={`w-3 h-3 rounded-full ${s.dot}`} />
@@ -261,7 +262,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
         </div>
 
         {/* ── Nav bar ────────────────────────────────────────────────────── */}
-        <div dir="rtl" className="flex items-center justify-between px-4 py-2 border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50">
           <div className="flex items-center gap-1">
             <button onClick={() => scrollByMonth(1)} className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="חודש קודם">
               <ChevronRight className="w-4 h-4 text-gray-600 dark:text-slate-400" />
@@ -292,7 +293,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
                   <div className={`bg-white dark:bg-slate-700 rounded-xl p-4 shadow-sm border transition-all ${
                     item.status === "in-progress" ? "border-blue-200 ring-1 ring-blue-100 shadow-md" : "border-gray-100 dark:border-slate-600"
                   }`}>
-                    <div dir="rtl" className="flex justify-between items-start mb-3">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-bold text-lg text-gray-800 dark:text-slate-100">{item.title}</h4>
                         <div className="text-xs text-gray-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 bg-gray-50 dark:bg-slate-600 px-2 py-1 rounded-md">
@@ -305,7 +306,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
                       </span>
                     </div>
                     <div className="mt-3">
-                      <div dir="rtl" className="flex justify-between text-xs text-gray-600 dark:text-slate-300 mb-1 font-medium">
+                      <div className="flex justify-between text-xs text-gray-600 dark:text-slate-300 mb-1 font-medium">
                         <span>{t('ganttTaskProgress')}</span>
                         <span>{Math.round(item.progress)}%</span>
                       </div>
@@ -313,7 +314,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
                         <div className={`h-full rounded-full transition-all duration-700 ${colors.bar}`} style={{ width: `${item.progress}%` }} />
                       </div>
                     </div>
-                    <div dir="rtl" className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-600 flex items-center justify-between text-xs text-gray-400 dark:text-slate-500">
+                    <div className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-600 flex items-center justify-between text-xs text-gray-400 dark:text-slate-500">
                       <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         <span>{item.duration}</span>
@@ -365,7 +366,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
                   return (
                     <div key={item.id} className="flex border-b border-gray-100 dark:border-slate-700" style={{ height: 32 }}>
                       {/* Name column */}
-                      <div dir="rtl" className="flex items-center px-2 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 overflow-hidden" style={{ width: 80, flexShrink: 0 }}>
+                      <div className="flex items-center px-2 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 overflow-hidden" style={{ width: 80, flexShrink: 0 }}>
                         <span className="text-[10px] text-gray-600 dark:text-slate-300 truncate">{item.title}</span>
                       </div>
                       {/* Bar cell */}
@@ -416,13 +417,13 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
                   className="flex flex-col justify-center px-3 border-b border-gray-100 dark:border-slate-700"
                   style={{ height: ROW_H }}
                 >
-                  <div dir="rtl" className="flex items-center gap-2 overflow-hidden">
+                  <div className="flex items-center gap-2 overflow-hidden">
                     <StatusIcon status={item.status} />
                     <span className="font-semibold text-sm text-gray-800 dark:text-slate-100 truncate" title={item.title}>
                       {item.title}
                     </span>
                   </div>
-                  <div dir="rtl" className="text-xs text-gray-400 dark:text-slate-500 mt-0.5 truncate">
+                  <div className="text-xs text-gray-400 dark:text-slate-500 mt-0.5 truncate">
                     {format(item.startDate, "d/M/yy")} – {format(item.endDate, "d/M/yy")}
                   </div>
                 </div>
@@ -548,7 +549,6 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
         <div
           className="fixed z-50 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-xl pointer-events-none whitespace-nowrap"
           style={{ left: tooltip.x + 16, top: tooltip.y - 40 }}
-          dir="rtl"
         >
           {tooltip.text}
         </div>
@@ -556,7 +556,7 @@ export default function GanttChart({ project, stages, tasks, suppliers, onStageU
 
       {/* ── Critical path ─────────────────────────────────────────────────── */}
       <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-e-4 border-amber-500 rounded-xl p-5">
-        <div dir="rtl" className="flex items-start gap-3">
+        <div className="flex items-start gap-3">
           <AlertCircle className="w-6 h-6 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-1" />
           <div className="text-right w-full">
             <h4 className="font-semibold text-amber-900 dark:text-amber-300 mb-2">{t('ganttCriticalPath')}</h4>

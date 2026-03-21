@@ -179,7 +179,7 @@ function ListView({ stagesWithDates, project, currentDate, setCurrentDate, t }) 
 
   return (
     <div>
-      <div dir="rtl" className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4">
         <Button variant="outline" size="sm" onClick={() => setCurrentDate(addDays(currentDate, -7))}>
           <ChevronRight className="w-4 h-4" />
         </Button>
@@ -192,11 +192,11 @@ function ListView({ stagesWithDates, project, currentDate, setCurrentDate, t }) 
       </div>
       <div className="space-y-2">
         {weekEvents.length === 0 ? (
-          <div dir="rtl" className="text-center py-8 text-gray-400 text-sm">{t('calendarNoEvents')}</div>
+          <div className="text-center py-8 text-gray-400 text-sm">{t('calendarNoEvents')}</div>
         ) : weekEvents.map((ev, i) => {
           const isPast = ev.date < today;
           return (
-            <div dir="rtl" key={i} className={`flex items-center gap-3 p-3 rounded-xl border ${
+            <div key={i} className={`flex items-center gap-3 p-3 rounded-xl border ${
               isPast ? 'bg-gray-50 dark:bg-slate-800/50 border-gray-100 dark:border-slate-700 opacity-60'
                      : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 shadow-sm'
             }`}>
@@ -219,7 +219,8 @@ function ListView({ stagesWithDates, project, currentDate, setCurrentDate, t }) 
 }
 
 export default function ProjectCalendar({ project, stages }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
   const isLandscape = useOrientation();
   const [manualView, setManualView] = useState('list'); // default to list view
   const [currentDate, setCurrentDate] = useState(
@@ -310,7 +311,7 @@ export default function ProjectCalendar({ project, stages }) {
   // Portrait mobile or desktop → normal card
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-5">
-      <div dir="rtl" className="flex items-center justify-between mb-5">
+      <div dir={isRTL ? 'rtl' : 'ltr'} className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-500" />
           {t('calendarTitle')}
@@ -364,7 +365,7 @@ export default function ProjectCalendar({ project, stages }) {
       </div>
 
       {/* Desktop: two-panel side by side */}
-      <div dir="rtl" className="hidden md:flex gap-5">
+      <div className="hidden md:flex gap-5">
         {/* Right sidebar: ListView (first child = rightmost in RTL) */}
         <div className="w-72 flex-shrink-0 border-r border-gray-100 dark:border-slate-700 pr-5">
           <h3 className="text-sm font-semibold text-gray-600 dark:text-slate-400 mb-3 text-right">{t('calendarWeekEvents')}</h3>

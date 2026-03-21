@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bonimbayit.app"
+    android:versionCode="1"
+    android:versionName="1.0.0" >
+
+    <uses-sdk
+        android:minSdkVersion="24"
+        android:targetSdkVersion="34" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <permission
+        android:name="com.bonimbayit.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.bonimbayit.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
+    <application
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:debuggable="true"
+        android:extractNativeLibs="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Bonim Bayit"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.LauncherTheme"
+        android:usesCleartextTraffic="false" >
+        <meta-data
+            android:name="asset_statements"
+            android:value="[{&quot;relation&quot;: [&quot;delegate_permission/common.handle_all_urls&quot;],&quot;target&quot;: {&quot;namespace&quot;: &quot;android_app&quot;,&quot;package_name&quot;: &quot;com.bonimbayit.app&quot;,&quot;sha256_cert_fingerprints&quot;: [&quot;BE:48:5C:96:1C:BC:73:11:E4:48:76:AC:F3:76:83:3E:D1:C4:ED:C2:44:DD:CF:BD:69:3C:1F:39:68:08:ED:94&quot;]}}]" />
+
+        <activity
+            android:name="com.bonimbayit.app.LauncherActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.SplashTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="base44-migration.vercel.app"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

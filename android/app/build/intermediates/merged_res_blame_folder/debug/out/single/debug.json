@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "com.bonimbayit.app-merged_res-8:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.bonimbayit.app-main-10:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.bonimbayit.app-merged_res-8:/drawable_splash_background.xml.flat",
+        "source": "com.bonimbayit.app-main-10:/drawable/splash_background.xml"
+    },
+    {
+        "merged": "com.bonimbayit.app-merged_res-8:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.bonimbayit.app-main-10:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.bonimbayit.app-merged_res-8:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.bonimbayit.app-main-10:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.bonimbayit.app-merged_res-8:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.bonimbayit.app-main-10:/mipmap-xhdpi/ic_launcher.png"
+    }
+]

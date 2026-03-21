@@ -6,11 +6,13 @@ import AddExpenseManualDialog from "./AddExpenseManualDialog";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { getCurrencySymbol } from "../utils/currencyFormatter";
+import { formatCurrency, getCurrencySymbol } from "../utils/currencyFormatter";
 import "../i18n";
 
 export default function BudgetTab({ project, stages, suppliers, expenses = [] }) {
   const { i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
+  const fmt = (v) => formatCurrency(v || 0, i18n.language);
   const currencySymbol = getCurrencySymbol(i18n.language);
   const totalBudget = project?.total_budget || 0;
   const queryClient = useQueryClient();
@@ -91,7 +93,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
   const spentPercentage = totalBudget > 0 ? Math.round((spentBudget / totalBudget) * 100) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {showAddExpense && (
         <AddExpenseManualDialog
           projectId={project?.id}
@@ -110,7 +112,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       />
 
       {/* Summary Cards */}
-      <div dir="rtl" className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-xl">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-white/20 p-2 rounded-lg flex items-center justify-center shrink-0">
@@ -118,7 +120,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
             </div>
             <span className="text-xs opacity-90">תקציב כולל</span>
           </div>
-          <p className="text-2xl font-bold text-right">{currencySymbol}{totalBudget.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-right">{fmt(totalBudget)}</p>
         </div>
 
         <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-4 text-white shadow-xl">
@@ -128,7 +130,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
             </div>
             <span className="text-xs opacity-90">הוצאה משוערת</span>
           </div>
-          <p className="text-2xl font-bold text-right">{currencySymbol}{Math.round(spentBudget).toLocaleString()}</p>
+          <p className="text-2xl font-bold text-right">{fmt(spentBudget)}</p>
           <p className="text-xs opacity-90 mt-1 text-right">{spentPercentage}% מהתקציב</p>
         </div>
 
@@ -139,7 +141,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
             </div>
             <span className="text-xs opacity-90">יתרה משוערת</span>
           </div>
-          <p className="text-2xl font-bold text-right">{currencySymbol}{Math.round(remainingBudget).toLocaleString()}</p>
+          <p className="text-2xl font-bold text-right">{fmt(remainingBudget)}</p>
           <p className="text-xs opacity-90 mt-1 text-right">{100 - spentPercentage}% נותר</p>
         </div>
       </div>
@@ -164,7 +166,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
             const stageAmount = Math.round(totalBudget * (parseFloat(stage.budget_percentage) || 0) / 100);
             const isEditing = editingStageId === stage.id;
             return (
-              <div key={stage.id} dir="rtl" className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors gap-3">
+              <div key={stage.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors gap-3">
                 <div dir="ltr" className="flex items-center justify-end gap-3 flex-1 min-w-0">
                   <div className="text-right min-w-0">
                     <span className="text-gray-700 font-medium text-right break-words leading-snug block">{stage.title}</span>
@@ -194,7 +196,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
                       <button onClick={() => startEdit(stage)} className="p-1 rounded-lg hover:bg-gray-200 text-gray-400 hover:text-gray-600 transition-colors">
                         <Pencil className="w-4 h-4" />
                       </button>
-                      <div className="text-gray-900 font-bold">{currencySymbol}{stageAmount.toLocaleString()}</div>
+                      <div className="text-gray-900 font-bold">{fmt(stageAmount)}</div>
                     </>
                   )}
                 </div>
@@ -207,7 +209,7 @@ export default function BudgetTab({ project, stages, suppliers, expenses = [] })
       {/* Progress Visualization */}
       <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
         <h3 className="font-bold text-xl text-gray-800 mb-6 text-center">התפלגות תקציב</h3>
-        <div dir="rtl" className="w-full bg-gray-200 rounded-full h-8 overflow-hidden shadow-inner">
+        <div className="w-full bg-gray-200 rounded-full h-8 overflow-hidden shadow-inner">
           <div 
             className="bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 h-8 flex items-center justify-center text-white font-bold text-sm transition-all duration-700"
             style={{ width: `${spentPercentage}%` }}

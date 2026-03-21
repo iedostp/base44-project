@@ -1,0 +1,12 @@
+R_DEF: Internal format may change without notice
+local
+color backgroundColor
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
+color navigationColor
+drawable splash_background
+mipmap ic_launcher
+string app_name
+style Theme.LauncherTheme
+style Theme.SplashTheme

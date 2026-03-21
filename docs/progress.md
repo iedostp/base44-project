@@ -1,6 +1,6 @@
 # Progress — תיב מינוב 🏗️
 
-_עודכן לאחרונה: 2026-03-03_
+_עודכן לאחרונה: 2026-03-19_
 
 ---
 
@@ -20,13 +20,14 @@ _עודכן לאחרונה: 2026-03-03_
 - [x] NotificationBell + NotificationSettingsPanel
 - [x] ProjectChat + DirectMessagesPanel
 - [x] CalendarSyncPanel
+- [x] Android TWA — native app, splash screen, file upload, WebView
+- [x] DocumentUpload — i18n + RTL complete
+- [x] DocumentsTab — i18n + RTL complete
 
 ---
 
-## 🔄 בעבודה (4 קבצים עם שינויים פתוחים ב-git)
+## 🔄 בעבודה
 
-- [ ] **DocumentUpload** — `src/components/project/DocumentUpload.jsx`
-- [ ] **DocumentsTab** — `src/components/project/DocumentsTab.jsx`
 - [ ] **GanttChart** — `src/components/project/GanttChart.jsx`
 - [ ] **ProjectCalendar** — `src/components/project/ProjectCalendar.jsx`
 
@@ -36,7 +37,6 @@ _עודכן לאחרונה: 2026-03-03_
 
 _מלא לפי העדיפויות שלך:_
 
-- [ ] סיום DocumentUpload + DocumentsTab
 - [ ] סיום GanttChart
 - [ ] סיום ProjectCalendar
 - [ ] דף InitializeTasks — לממש

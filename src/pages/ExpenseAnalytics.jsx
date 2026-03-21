@@ -7,7 +7,8 @@ import { TrendingUp, Package, DollarSign, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function ExpenseAnalyticsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
   const [selectedProject, setSelectedProject] = useState(null);
 
   const { data: projects = [] } = useQuery({
@@ -44,7 +45,7 @@ export default function ExpenseAnalyticsPage() {
 
   if (!selectedProject) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="max-w-6xl mx-auto">
           <div className="mb-8 text-right">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-2">{t('expenseAnalyticsTitle')}</h1>
@@ -136,7 +137,7 @@ export default function ExpenseAnalyticsPage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 p-6" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

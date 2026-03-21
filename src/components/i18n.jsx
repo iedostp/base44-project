@@ -1785,7 +1785,7 @@ i18n
 
 // Keep document dir/lang in sync whenever the language changes
 i18n.on('languageChanged', (lng) => {
-  const isRTL = lng === 'he';
+  const isRTL = ['he', 'ar'].includes(lng);
   document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
   document.documentElement.lang = lng;
 });

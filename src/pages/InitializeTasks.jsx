@@ -8,7 +8,8 @@ import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
 
 export default function InitializeTasks() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
   const [isInitializing, setIsInitializing] = useState(false);
   const [result, setResult] = useState(null);
 
@@ -136,7 +137,7 @@ export default function InitializeTasks() {
 
   if (userLoading || projectsLoading || stagesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir={isRTL ? 'rtl' : 'ltr'}>
         <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
       </div>
     );
@@ -144,7 +145,7 @@ export default function InitializeTasks() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-right">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">{t('initLoginRequired')}</h2>
@@ -156,7 +157,7 @@ export default function InitializeTasks() {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-right">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-800 mb-2 text-center">{t('initNoProjectTitle')}</h2>
@@ -170,7 +171,7 @@ export default function InitializeTasks() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 text-right">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('initPageTitle')}</h1>

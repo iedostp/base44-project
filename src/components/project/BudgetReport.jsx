@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { format, parseISO, startOfMonth } from "date-fns";
 import { he } from "date-fns/locale";
 import { base44 } from "@/api/base44Client";
-import { getCurrencySymbol } from "../utils/currencyFormatter";
+import { formatCurrency } from "../utils/currencyFormatter";
 import { useTranslation } from "react-i18next";
 import "../i18n";
 
@@ -51,10 +51,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
     professional_services: t('budgetCatProfServices'),
     other: t('budgetCatOther'),
   };
-  const formatNIS = (v) => {
-    const sym = getCurrencySymbol(i18n.language);
-    return `${sym}${Number(v).toLocaleString(i18n.language === 'he' ? 'he-IL' : 'en-US')}`;
-  };
+  const formatNIS = (v) => formatCurrency(v || 0, i18n.language);
   const CustomTooltip = makeCustomTooltip(formatNIS);
   const [showTable, setShowTable] = useState(true);
   const [sortColumn, setSortColumn] = useState("title");
@@ -270,8 +267,10 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
     );
   }
 
+  const isRTL = ['he', 'ar'].includes(i18n.language);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* ─── Title ───────────────────────────────────────────────────── */}
       <div className="flex flex-row-reverse items-center gap-3">
         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-xl">
@@ -321,7 +320,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
       )}
 
       {/* ─── KPI Cards ───────────────────────────────────────────────── */}
-      <div dir="rtl" className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-gray-100 dark:border-slate-700 shadow-md text-right">
           <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">{t('budgetTotalBudget')}</p>
           <p className="text-xl font-bold text-gray-800 dark:text-slate-100">{formatNIS(totalBudget)}</p>
@@ -422,7 +421,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
           </div>
         </div>
         {showTable && (
-          <div className="overflow-x-auto" dir="rtl">
+          <div className="overflow-x-auto">
             <table className="w-full text-xs md:text-sm">
               <thead className="bg-gray-50 dark:bg-slate-700">
                 <tr>
@@ -449,7 +448,7 @@ export default function BudgetReport({ project, stages: initialStages, expenses 
                   <React.Fragment key={s.id}>
                   <tr className={`border-t border-gray-100 dark:border-slate-700 ${i % 2 === 0 ? "" : "bg-gray-50/50 dark:bg-slate-700/20"}`}>
                     <td className="px-2 md:px-4 py-2 md:py-3 font-medium text-gray-800 dark:text-slate-200">
-                      <div dir="rtl" className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5">
                         <span>{s.title}</span>
                         <button
                           onClick={() => toggleStage(s.id)}

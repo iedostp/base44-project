@@ -27,7 +27,7 @@
 מיקום: ~/base44-migration/
 
 ## Stack
-React 18 + Vite + TypeScript | shadcn/ui + Tailwind
+React 19 + Vite + TypeScript | shadcn/ui + Tailwind
 TanStack Query | Base44 SDK | i18next
 
 ## Context Files — קרא לפני כל משימה
@@ -51,7 +51,7 @@ TanStack Query | Base44 SDK | i18next
 ## In-Progress
 | קומפוננט | סטטוס |
 |---------|--------|
-| DocumentUpload | 🔄 |
-| DocumentsTab | 🔄 |
+| DocumentUpload | ✅ |
+| DocumentsTab | ✅ |
 | GanttChart | 🔄 |
 | ProjectCalendar | 🔄 |

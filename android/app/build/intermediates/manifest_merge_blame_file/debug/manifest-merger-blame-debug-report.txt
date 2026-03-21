@@ -1,0 +1,94 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.bonimbayit.app"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:4:5-67
+11-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:4:22-64
+12
+13    <permission
+13-->[androidx.core:core:1.12.0] /home/tzvika/.gradle/caches/transforms-3/8f6e9f4ca69ac5774f863c2da99d52ee/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+14        android:name="com.bonimbayit.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+14-->[androidx.core:core:1.12.0] /home/tzvika/.gradle/caches/transforms-3/8f6e9f4ca69ac5774f863c2da99d52ee/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+15        android:protectionLevel="signature" />
+15-->[androidx.core:core:1.12.0] /home/tzvika/.gradle/caches/transforms-3/8f6e9f4ca69ac5774f863c2da99d52ee/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+16
+17    <uses-permission android:name="com.bonimbayit.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+17-->[androidx.core:core:1.12.0] /home/tzvika/.gradle/caches/transforms-3/8f6e9f4ca69ac5774f863c2da99d52ee/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+17-->[androidx.core:core:1.12.0] /home/tzvika/.gradle/caches/transforms-3/8f6e9f4ca69ac5774f863c2da99d52ee/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+18
+19    <application
+20        android:allowBackup="true"
+20-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:10:9-35
+21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+21-->[androidx.core:core:1.12.0] /home/tzvika/.gradle/caches/transforms-3/8f6e9f4ca69ac5774f863c2da99d52ee/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+22        android:debuggable="true"
+23        android:extractNativeLibs="false"
+24        android:icon="@mipmap/ic_launcher"
+24-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:9:9-43
+25        android:label="Bonim Bayit"
+25-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:8:9-40
+26        android:supportsRtl="true"
+26-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:11:9-35
+27        android:theme="@style/Theme.LauncherTheme"
+27-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:12:9-51
+28        android:usesCleartextTraffic="false" >
+28-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:7:9-45
+29        <meta-data
+30            android:name="asset_statements"
+30-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:15:13-44
+31            android:value="[{&quot;relation&quot;: [&quot;delegate_permission/common.handle_all_urls&quot;],&quot;target&quot;: {&quot;namespace&quot;: &quot;android_app&quot;,&quot;package_name&quot;: &quot;com.bonimbayit.app&quot;,&quot;sha256_cert_fingerprints&quot;: [&quot;BE:48:5C:96:1C:BC:73:11:E4:48:76:AC:F3:76:83:3E:D1:C4:ED:C2:44:DD:CF:BD:69:3C:1F:39:68:08:ED:94&quot;]}}]" />
+31-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:16:13-47
+32
+33        <activity
+33-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:18:9-37:20
+34            android:name="com.bonimbayit.app.LauncherActivity"
+34-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:19:13-45
+35            android:configChanges="orientation|screenSize|keyboardHidden"
+35-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:23:13-74
+36            android:exported="true"
+36-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:21:13-36
+37            android:launchMode="singleTask"
+37-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:20:13-44
+38            android:theme="@style/Theme.SplashTheme" >
+38-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:22:13-53
+39            <intent-filter>
+39-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:25:13-28:29
+40                <action android:name="android.intent.action.MAIN" />
+40-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:26:17-69
+40-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:26:25-66
+41
+42                <category android:name="android.intent.category.LAUNCHER" />
+42-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:27:17-77
+42-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:27:27-74
+43            </intent-filter>
+44            <intent-filter android:autoVerify="true" >
+44-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:30:13-36:29
+44-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:30:28-53
+45                <action android:name="android.intent.action.VIEW" />
+45-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:31:17-69
+45-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:31:25-66
+46
+47                <category android:name="android.intent.category.DEFAULT" />
+47-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:32:17-76
+47-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:32:27-73
+48                <category android:name="android.intent.category.BROWSABLE" />
+48-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:33:17-78
+48-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:33:27-75
+49
+50                <data
+51                    android:host="base44-migration.vercel.app"
+51-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:35:23-49
+52                    android:scheme="https" />
+52-->/home/tzvika/base44-migration/android/app/src/main/AndroidManifest.xml:34:23-45
+53            </intent-filter>
+54        </activity>
+55    </application>
+56
+57</manifest>

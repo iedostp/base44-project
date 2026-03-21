@@ -15,7 +15,8 @@ import EditSupplierDialog from "./EditSupplierDialog";
 
 
 export default function SuppliersTab({ suppliers, onAddSupplier = () => {}, onUpdate, projectId }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
   const getCategoryText = (category) => t(`supplierCat_${category}`, category);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedForCompare, setSelectedForCompare] = useState([]);
@@ -134,7 +135,7 @@ export default function SuppliersTab({ suppliers, onAddSupplier = () => {}, onUp
         </motion.div>
       )}
 
-      <div dir="rtl" className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+      <div dir={isRTL ? 'rtl' : 'ltr'} className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
         <div className="text-right">
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-slate-100 mb-1">{t('supplierManagement')}</h2>
           <p className="text-gray-500 dark:text-slate-400 text-sm">{t('supplierManagementDesc')}</p>
@@ -165,7 +166,7 @@ export default function SuppliersTab({ suppliers, onAddSupplier = () => {}, onUp
       </div>
 
       {/* Category Filter + View Toggle */}
-      <div dir="rtl" className="flex flex-wrap items-center gap-2 mb-6 pb-6 border-b border-gray-200 dark:border-slate-700">
+      <div className="flex flex-wrap items-center gap-2 mb-6 pb-6 border-b border-gray-200 dark:border-slate-700">
         {categories.map(cat => (
           <button
             key={cat.value}
@@ -201,7 +202,7 @@ export default function SuppliersTab({ suppliers, onAddSupplier = () => {}, onUp
       {/* Compare Bar */}
       {selectedForCompare.length > 0 && (
         <div className="mb-6 p-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg text-white">
-          <div dir="rtl" className="flex items-center justify-between">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-lg">
                 <GitCompare className="w-5 h-5" />
@@ -247,7 +248,7 @@ export default function SuppliersTab({ suppliers, onAddSupplier = () => {}, onUp
           </div>
         ) : (
           /* List view */
-          <div dir="rtl" className="divide-y divide-gray-100 dark:divide-slate-700 border border-gray-100 dark:border-slate-700 rounded-xl overflow-hidden">
+          <div className="divide-y divide-gray-100 dark:divide-slate-700 border border-gray-100 dark:border-slate-700 rounded-xl overflow-hidden">
             {filteredSuppliers.map(supplier => (
               <div
                 key={supplier.id}

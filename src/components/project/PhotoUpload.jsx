@@ -52,7 +52,8 @@ async function deletePhoto({ id, url }) {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function PhotoUpload({ projectId, uploadedBy }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
   const queryClient = useQueryClient();
   const fileInputRef = useRef(null);
   const [caption, setCaption] = useState('');
@@ -91,7 +92,7 @@ export default function PhotoUpload({ projectId, uploadedBy }) {
   };
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2">
@@ -117,7 +118,6 @@ export default function PhotoUpload({ projectId, uploadedBy }) {
           onChange={e => setCaption(e.target.value)}
           placeholder={t('photos_caption_placeholder')}
           className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 text-sm text-gray-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
-          dir="rtl"
         />
         <Button
           onClick={() => fileInputRef.current?.click()}

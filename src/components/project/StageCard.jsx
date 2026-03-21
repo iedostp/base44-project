@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { getCurrencySymbol } from "../utils/currencyFormatter";
+import { formatCurrency } from "../utils/currencyFormatter";
 import { base44 } from "@/api/base44Client";
 import { 
   CheckCircle2, 
@@ -41,7 +41,8 @@ const iconMap = {
 
 export default function StageCard({ stage, tasks, subtopics, expenses, suppliers, projectId, onTaskToggle, onUpdate, onDelete, user }) {
   const { t, i18n } = useTranslation();
-  const currencySymbol = getCurrencySymbol(i18n.language);
+  const isRTL = ['he', 'ar'].includes(i18n.language);
+  const fmt = (v) => formatCurrency(v || 0, i18n.language);
   const [expanded, setExpanded] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showExpenseDialog, setShowExpenseDialog] = useState(false);
@@ -96,8 +97,8 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300" 
-       
+        className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300"
+        dir={isRTL ? 'rtl' : 'ltr'}
       >
         <div 
           className={`p-4 cursor-pointer transition-all ${
@@ -129,13 +130,12 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
               <span>{stage.duration}</span>
             </div>
             <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-slate-400 bg-gray-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
-              <span className="font-bold leading-none">{currencySymbol}</span>
-              <span>{stage.budget_percentage} {t('ofBudget')}</span>
+              <span>{stage.budget_percentage}% {t('ofBudget')}</span>
             </div>
           </div>
 
           {/* Progress row */}
-          <div dir="rtl" className="flex flex-row items-center justify-between gap-2 mb-1.5">
+          <div className="flex flex-row items-center justify-between gap-2 mb-1.5">
             <div className="text-xs text-gray-500 dark:text-slate-400">{t('progress')}</div>
             <div className="flex items-center gap-1">
               <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{progressPercent}%</span>
@@ -144,7 +144,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
           </div>
 
           {/* Progress bar */}
-          <div dir="rtl" className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
             <div 
               className="bg-gradient-to-r from-blue-500 to-indigo-600 h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
@@ -161,7 +161,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
             className="p-6 bg-gradient-to-b from-gray-50 dark:from-slate-700 to-white dark:to-slate-800 border-t border-gray-100 dark:border-slate-700"
           >
             {/* Action Buttons */}
-            <div dir="rtl" className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-6">
               <div className="flex gap-2 flex-wrap">
                 <Button
                   onClick={(e) => {
@@ -237,7 +237,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-bold text-gray-800 dark:text-slate-100 text-right">{t('actualExpenses')}</h4>
                   <span className="text-lg font-bold text-green-600">
-                    {currencySymbol}{totalExpenses.toLocaleString()}
+                    {fmt(totalExpenses)}
                   </span>
                 </div>
                 <div className="space-y-2">
@@ -261,7 +261,7 @@ export default function StageCard({ stage, tasks, subtopics, expenses, suppliers
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-gray-800 dark:text-slate-100">
-                          {currencySymbol}{expense.amount.toLocaleString()}
+                          {fmt(expense.amount)}
                         </span>
                         <button
                           onClick={(e) => { e.stopPropagation(); handleDeleteExpense(expense); }}

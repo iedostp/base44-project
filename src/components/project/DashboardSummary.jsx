@@ -2,13 +2,9 @@ import React from "react";
 import { TrendingUp, DollarSign, Calendar, CheckSquare, AlertCircle, Clock, Target } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../i18n";
-import { getCurrencySymbol } from "../utils/currencyFormatter";
+import { formatCurrency, getCurrencySymbol } from "../utils/currencyFormatter";
 
-const formatAmount = (v, lang) => {
-  const sym = getCurrencySymbol(lang);
-  if (!v) return `${sym}0`;
-  return lang === 'he' ? `₪${Number(v).toLocaleString("he-IL")}` : `${sym}${Number(v).toLocaleString("en-US")}`;
-};
+const formatAmount = (v, lang) => formatCurrency(v || 0, lang);
 
 export default function DashboardSummary({ project, stages, tasks, expenses }) {
   const { t, i18n } = useTranslation();

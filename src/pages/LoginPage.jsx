@@ -3,11 +3,14 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const TABS = { password: 'password', otp: 'otp' };
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const isRTL = ['he', 'ar'].includes(i18n.language);
   const { signInWithGoogle, signInWithEmail, signUp, sendOtp, verifyOtp, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   // If session is already active (e.g. after OAuth redirect processed by
@@ -114,7 +117,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo / Header */}
         <div className="text-center mb-8">
