@@ -33,32 +33,34 @@ function AppNav() {
   return (
     <header
       dir="rtl"
-      className="hidden md:flex sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 items-center px-4 h-11 shadow-sm"
+      className="hidden md:flex sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 items-center justify-center px-4 h-11 shadow-sm"
     >
-      {/* Logo — far right in RTL */}
-      <div className="flex items-center gap-1.5 shrink-0 me-4">
-        <img src="/icons/icon-192.png" alt="בונים בית" className="w-6 h-6 rounded" />
-        <span className="font-bold text-blue-700 dark:text-blue-400 text-sm whitespace-nowrap">בונים בית</span>
-      </div>
-
-      {/* Pill tabs — centered, only on Home page */}
-      {isHomePage && (
-        <div className="flex items-center justify-center gap-1 flex-1 py-1">
-          {APP_TABS.map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => setTab(key)}
-              className={`shrink-0 px-3 py-1 rounded-full text-sm font-medium border transition-colors whitespace-nowrap ${
-                activeTab === key
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white dark:bg-slate-900 text-gray-700 dark:text-slate-300 border-gray-300 dark:border-slate-600 hover:border-blue-400'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+      {/* Logo + Pill tabs — all centered together */}
+      <div className="flex items-center gap-3 py-1">
+        {/* Logo */}
+        <div className="flex items-center gap-1.5 shrink-0 ms-2">
+          <img src="/icons/icon-192.png" alt="בונים בית" className="w-6 h-6 rounded" />
+          <span className="font-bold text-blue-700 dark:text-blue-400 text-sm whitespace-nowrap">בונים בית</span>
         </div>
-      )}
+
+        {/* Divider */}
+        {isHomePage && <div className="w-px h-5 bg-gray-200 dark:bg-slate-700 shrink-0" />}
+
+        {/* Pill tabs */}
+        {isHomePage && APP_TABS.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setTab(key)}
+            className={`shrink-0 px-4 py-1 rounded-full text-sm font-medium border transition-colors whitespace-nowrap ${
+              activeTab === key
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white dark:bg-slate-900 text-gray-700 dark:text-slate-300 border-gray-300 dark:border-slate-600 hover:border-blue-400'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
     </header>
   );
 }
