@@ -427,7 +427,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="p-0 md:p-4 pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-4 pb-24 md:pb-8">
+      <div className="p-0 md:p-4 pt-[calc(3.5rem+env(safe-area-inset-top)+1rem)] md:pt-4 pb-24 md:pb-8">
       <div className="w-full mx-auto px-0 md:px-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 
