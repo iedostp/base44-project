@@ -15,6 +15,7 @@ import StagesTab from "../components/project/StagesTab";
 import SuppliersTab from "../components/project/SuppliersTab";
 import BudgetTab from "../components/project/BudgetTab";
 import GanttChart from "../components/project/GanttChart";
+import ProjectCalendar from "../components/project/ProjectCalendar";
 import DocumentsTab from "../components/project/DocumentsTab";
 import SettingsTab from "../components/SettingsTab";
 import PhotoUpload from "../components/project/PhotoUpload";
@@ -536,14 +537,17 @@ export default function Home() {
                 )}
                 {activeTab === 'timeline' && (
                   project?.id ? (
-                    <GanttChart
-                      project={project}
-                      stages={stages}
-                      tasks={allTasks}
-                      suppliers={suppliers}
-                      onStageUpdate={(stageId, updates) => updateStageMutation.mutate({ stageId, updates })}
-                      onProjectUpdate={handleProjectUpdate}
-                    />
+                    <div className="space-y-6">
+                      <GanttChart
+                        project={project}
+                        stages={stages}
+                        tasks={allTasks}
+                        suppliers={suppliers}
+                        onStageUpdate={(stageId, updates) => updateStageMutation.mutate({ stageId, updates })}
+                        onProjectUpdate={handleProjectUpdate}
+                      />
+                      <ProjectCalendar project={project} stages={stages} />
+                    </div>
                   ) : (
                     <div className="text-center py-16 text-gray-400 dark:text-slate-500"><p className="text-4xl mb-4">📅</p><p>{t('noProject')}</p></div>
                   )
